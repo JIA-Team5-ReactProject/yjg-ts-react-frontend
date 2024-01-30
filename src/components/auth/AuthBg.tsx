@@ -1,11 +1,7 @@
 import schoolBg from "../../assets/image/school.jpg";
 import jwtLogo from "../../assets/image/simbol.png";
 
-type AuthBgType = {
-  form: JSX.Element;
-};
-
-function AuthBg(props: AuthBgType): JSX.Element {
+function AuthBg(props: { form: JSX.Element }): JSX.Element {
   const { form } = props;
 
   return (
@@ -14,7 +10,7 @@ function AuthBg(props: AuthBgType): JSX.Element {
         className="h-screen bg-cover bg-center"
         style={{ backgroundImage: "url(" + schoolBg + ")" }}
       >
-        <div className="flex justify-center bg-cyan-800/80 h-full p-5 bg-auto overflow-scroll">
+        <div className="flex justify-center bg-cyan-800/80 h-full  bg-auto overflow-scroll">
           <div>
             <img
               src={jwtLogo}

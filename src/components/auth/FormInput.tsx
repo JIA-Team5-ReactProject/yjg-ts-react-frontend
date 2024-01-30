@@ -1,27 +1,38 @@
-type FormInputType = {
-  type: string;
-  name: string;
-  label: string;
-  check?: string;
-};
+import { FormInputPropsType } from "../../types/login";
 
-function FormInput(props: FormInputType): JSX.Element {
-  const { type, name, label, check } = props;
+function FormInput(props: FormInputPropsType): JSX.Element {
+  const { type, name, label, check, placeholder, register, errorMessage } =
+    props;
 
   return (
     <>
-      <label htmlFor={name} className="text-cyan-600 font-bold mb-1">
+      <label
+        htmlFor={name}
+        className="flex items-center text-cyan-600 font-bold mb-1"
+      >
         {label}
+        {errorMessage && (
+          <span className="text-red-500 text-xs translate-x-2 tracking-tight">
+            {errorMessage}
+          </span>
+        )}
       </label>
-      <div className="flex mb-8 p-1 border-b-2 border-cyan-700/50 focus:border-cyan-700">
+      <div className="flex mb-8 p-1 border-b-2 border-cyan-700/50">
         <input
+          name="{name}"
+          {...register}
           type={type}
-          name={name}
-          className="flex-1 pl-1 font-semibold bg-transparent focus:outline-none"
+          placeholder={placeholder}
+          className="flex-1 pl-1 font-semibold bg-transparent focus:outline-none "
+          autoComplete="off"
         />
         {check ? (
-          <button className="flex-initial justify-items-start text-white bg-cyan-600 px-3 py-2 rounded-3xl text-xs">
-            {check}
+          <button
+            type="button"
+            onClick={check.onCheck}
+            className="flex-initial justify-items-start text-white bg-cyan-600 px-3 py-2 rounded-3xl text-xs"
+          >
+            {check.duplicateCheck ? "완료" : check.text}
           </button>
         ) : null}
       </div>
