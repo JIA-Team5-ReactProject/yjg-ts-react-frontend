@@ -4,9 +4,10 @@ export type FormInputPropsType = {
   label: string;
   placeholder: string;
   check?: {
-    text: string;
+    textT: string;
+    textF: string;
     onCheck: () => undefined | void;
-    duplicateCheck: boolean;
+    buttonState: boolean;
   };
   register?: { name: string; RegisterOptions? };
   errorMessage?: string | undefined;
@@ -15,11 +16,25 @@ export type FormInputPropsType = {
 export type JoinFormValues = {
   name: string;
   pwCheck: string;
-  email: string;
   phone: string;
 } & LoginFormValues;
 
 export type LoginFormValues = {
-  id: string;
+  email: string;
   password: string;
+};
+
+export type FindingFormValues = {
+  verificationCode: string;
+} & FindingIdValues &
+  FindingPasswordValues;
+
+export type FindingIdValues = {
+  name: string;
+  phone: string;
+};
+
+export type FindingPasswordValues = {
+  name: string;
+  email: string;
 };

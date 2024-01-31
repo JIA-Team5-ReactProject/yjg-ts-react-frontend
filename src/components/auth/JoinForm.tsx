@@ -3,6 +3,7 @@ import FormInput from "./FormInput";
 import { JoinFormValues } from "../../types/login";
 import { useEffect, useState } from "react";
 import { trimValues } from "../../utils/validate";
+import { customAxios } from "../../services/customAxios";
 
 function JoinForm(): JSX.Element {
   const {
@@ -14,33 +15,37 @@ function JoinForm(): JSX.Element {
   } = useForm<JoinFormValues>();
 
   const password = watch("password");
-  const id = watch("id");
+  const email = watch("email");
+  //중복체크 상태
   const [duplicateCheck, setDuplicateCheck] = useState(false);
 
   useEffect(() => {
     setDuplicateCheck(false);
-  }, [id]);
+  }, [email]);
 
   // 아이디 중복 체크 함수
-  async function idDuplicateCheck(id: string) {
-    const isValid = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/.test(id);
+  async function idDuplicateCheck(email: string) {
+    const isValid = /^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/.test(email);
 
     if (!isValid) {
-      return Promise.reject(
-        new Error(
-          "아이디는 영어와 숫자가 각각 하나 이상 포함된 8~15자여야 합니다."
-        )
-      );
+      return Promise.reject(new Error("이메일을 입력해주세요."));
     }
     //중복체크 API
-    setDuplicateCheck(true);
+    const verifyEmail = await customAxios.get(
+      `api/admin/verify-email/${email}`
+    );
+    if (verifyEmail.data.check) {
+      setDuplicateCheck(verifyEmail.data.check);
+    } else {
+      alert("존재하는 이메일입니다.");
+    }
   }
 
   //회원가입 제출 함수
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
     if (!duplicateCheck) {
       setError(
-        "id",
+        "email",
         { message: "중복 체크를 해주세요." },
         { shouldFocus: true }
       );
@@ -69,27 +74,28 @@ function JoinForm(): JSX.Element {
           errorMessage={errors?.name && errors.name.message}
         />
         <FormInput
-          type="text"
-          name="id"
-          label="아이디"
+          type="email"
+          name="email"
+          label="메일 입력"
           check={{
-            text: "중복체크",
+            textF: "중복체크",
+            textT: "체크완료",
             onCheck: () => {
-              idDuplicateCheck(id).catch((error) => {
+              idDuplicateCheck(email).catch((error) => {
                 alert(error);
               });
             },
-            duplicateCheck: duplicateCheck,
+            buttonState: duplicateCheck,
           }}
-          placeholder="아이디 입력 ( 6~15자 )"
-          register={register("id", {
-            required: "아이디를 입력해주세요.",
+          placeholder="이메일 입력 "
+          register={register("email", {
+            required: "이메일을 입력해주세요.",
             pattern: {
-              value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,15}$/,
-              message: "영문, 숫자를 포함한 6~15자를 입력해주세요.",
+              value: /^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/,
+              message: "@을 포함한 메일 양식을 입력해주세요.",
             },
           })}
-          errorMessage={errors?.id && errors.id.message}
+          errorMessage={errors?.email && errors.email.message}
         />
         <FormInput
           type="password"
@@ -116,20 +122,6 @@ function JoinForm(): JSX.Element {
               value === password || "비밀번호가 일치하지 않습니다.",
           })}
           errorMessage={errors?.pwCheck && errors.pwCheck.message}
-        />
-        <FormInput
-          type="email"
-          name="email"
-          label="메일 입력"
-          placeholder="이메일 입력 "
-          register={register("email", {
-            required: "이메일을 입력해주세요.",
-            pattern: {
-              value: /^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/,
-              message: "@을 포함한 메일 양식을 입력해주세요.",
-            },
-          })}
-          errorMessage={errors?.email && errors.email.message}
         />
         <FormInput
           type="tel"

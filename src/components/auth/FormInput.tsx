@@ -32,7 +32,7 @@ function FormInput(props: FormInputPropsType): JSX.Element {
             onClick={check.onCheck}
             className="flex-initial justify-items-start text-white bg-cyan-600 px-3 py-2 rounded-3xl text-xs"
           >
-            {check.duplicateCheck ? "완료" : check.text}
+            {check.buttonState ? check.textT : check.textF}
           </button>
         ) : null}
       </div>

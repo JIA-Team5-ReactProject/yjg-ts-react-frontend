@@ -1,9 +1,8 @@
-import React, { ReactElement, ReactHTML, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { LoginFormValues } from "../../types/login";
-import { watch } from "fs";
 import { trimValues } from "../../utils/validate";
 
 function LoginForm(): JSX.Element {
@@ -15,21 +14,21 @@ function LoginForm(): JSX.Element {
     formState: { errors },
   } = useForm<LoginFormValues>();
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(["rememberId"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
   const [isRemember, setIsRemember] = useState(false);
 
   useEffect(() => {
-    if (cookies.rememberId !== undefined) {
-      setValue("id", cookies.rememberId);
+    if (cookies.rememberEmail !== undefined) {
+      setValue("email", cookies.rememberEmail);
       setIsRemember(true);
     }
   }, []);
 
   const handleOnChange = () => {
     if (isRemember) {
-      setCookie("rememberId", watch("id"));
+      setCookie("rememberEmail", watch("email"));
     } else {
-      removeCookie("rememberId");
+      removeCookie("rememberEmail");
     }
   };
   //로그인 제출 함수
@@ -43,17 +42,21 @@ function LoginForm(): JSX.Element {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col bg-sky-200/90 rounded-3xl aspect-video p-10 min-w-96 max-w-xl m-auto">
         <p className="font-bold text-3xl text-center mb-14 mt-2">로그인</p>
-        {errors?.id && (
+        {errors?.email && (
           <span className="text-red-500 text-xs font-bold translate-x-2 tracking-tight mb-2">
-            {errors.id.message}
+            {errors.email.message}
           </span>
         )}
         <input
           type="text"
-          placeholder="아이디"
+          placeholder="email"
           className="mb-6 p-3 outline-slate-100"
-          {...register("id", {
-            required: "아이디를 입력해주세요.",
+          {...register("email", {
+            required: "이메일을 입력해주세요.",
+            pattern: {
+              value: /^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/,
+              message: "@을 포함한 메일 양식을 입력해주세요.",
+            },
           })}
         />
         {errors?.password && (
