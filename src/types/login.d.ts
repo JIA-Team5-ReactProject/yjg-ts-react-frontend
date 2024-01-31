@@ -1,0 +1,40 @@
+export type FormInputPropsType = {
+  type: string;
+  name: string;
+  label: string;
+  placeholder: string;
+  check?: {
+    textT: string;
+    textF: string;
+    onCheck: () => undefined | void;
+    buttonState: boolean;
+  };
+  register?: { name: string; RegisterOptions? };
+  errorMessage?: string | undefined;
+};
+
+export type JoinFormValues = {
+  name: string;
+  pwCheck: string;
+  phone: string;
+} & LoginFormValues;
+
+export type LoginFormValues = {
+  email: string;
+  password: string;
+};
+
+export type FindingFormValues = {
+  verificationCode: string;
+} & FindingIdValues &
+  FindingPasswordValues;
+
+export type FindingIdValues = {
+  name: string;
+  phone: string;
+};
+
+export type FindingPasswordValues = {
+  name: string;
+  email: string;
+};
