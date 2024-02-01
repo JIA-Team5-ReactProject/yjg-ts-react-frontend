@@ -1,4 +1,4 @@
-import jwtHeader from "../assets/image/logo_header.png";
+import jwtHeader from "../assets/schoolImg/logo_header.png";
 
 function Header() {
   return (

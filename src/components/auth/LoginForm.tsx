@@ -4,12 +4,15 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { LoginFormValues } from "../../types/login";
 import { trimValues } from "../../utils/validate";
+import { customAxios } from "../../services/customAxios";
+import { emailReg } from "../../utils/regex";
 
 function LoginForm(): JSX.Element {
   const {
     handleSubmit,
     watch,
     setValue,
+    setError,
     register,
     formState: { errors },
   } = useForm<LoginFormValues>();
@@ -23,7 +26,7 @@ function LoginForm(): JSX.Element {
       setIsRemember(true);
     }
   }, []);
-
+  // id저장 기억 함수
   const handleOnChange = () => {
     if (isRemember) {
       setCookie("rememberEmail", watch("email"));
@@ -32,10 +35,23 @@ function LoginForm(): JSX.Element {
     }
   };
   //로그인 제출 함수
-  const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
+  const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     const trimData = trimValues(data);
     handleOnChange();
-    console.log(trimData);
+    customAxios.get("/sanctum/csrf-cookie").then(async () => {
+      try {
+        const registerPost = await customAxios.post("/api/admin/login", {
+          email: trimData.email,
+          password: trimData.password,
+        });
+        if (registerPost) console.log("good");
+      } catch (error) {
+        setError("email", {
+          type: "manual",
+          message: "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
+        });
+      }
+    });
   };
 
   return (
@@ -54,8 +70,8 @@ function LoginForm(): JSX.Element {
           {...register("email", {
             required: "이메일을 입력해주세요.",
             pattern: {
-              value: /^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/,
-              message: "@을 포함한 메일 양식을 입력해주세요.",
+              value: emailReg,
+              message: "이메일 양식에 맞춰 입력해주세요.",
             },
           })}
         />

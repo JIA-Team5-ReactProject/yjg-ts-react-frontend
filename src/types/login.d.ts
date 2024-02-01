@@ -1,3 +1,5 @@
+import { RegisterOptions } from "react-hook-form";
+
 export type FormInputPropsType = {
   type: string;
   name: string;
@@ -9,7 +11,7 @@ export type FormInputPropsType = {
     onCheck: () => undefined | void;
     buttonState: boolean;
   };
-  register?: { name: string; RegisterOptions? };
+  register?: { name: string; RegisterOptions?: RegisterOptions };
   errorMessage?: string | undefined;
 };
 

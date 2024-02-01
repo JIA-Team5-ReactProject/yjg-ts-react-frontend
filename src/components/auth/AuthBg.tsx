@@ -1,5 +1,5 @@
-import schoolBg from "../../assets/image/school.jpg";
-import jwtLogo from "../../assets/image/simbol.png";
+import schoolBg from "../../assets/schoolImg/school.jpg";
+import jwtLogo from "../../assets/schoolImg/simbol.png";
 
 function AuthBg(props: { form: JSX.Element }): JSX.Element {
   const { form } = props;
