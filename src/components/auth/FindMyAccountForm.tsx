@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { FindingFormValues, FindingPasswordValues } from "../../types/login";
 import { trimValues } from "../../utils/validate";
 import { formatTime } from "../../utils/timer";
+import { emailReg, nameReg, phoneNumReg } from "../../utils/regex";
 
 function FindMyAccountForm(): JSX.Element {
   const {
@@ -58,7 +59,7 @@ function FindMyAccountForm(): JSX.Element {
   };
 
   // 인증번호 발송 api
-  async function sendCode(userData: FindingPasswordValues) {
+  const sendCode = async (userData: FindingPasswordValues) => {
     // 존재하는 유저 정보인지 확인 후 인증번호 발송
     if (false) {
       return Promise.reject(new Error("일치하는 유저 정보가 없습니다."));
@@ -66,7 +67,7 @@ function FindMyAccountForm(): JSX.Element {
     setSendCodeCheck(true);
 
     startTimer();
-  }
+  };
 
   // 아이디/비밀번호 찾기 제출 함수
   const onSubmit: SubmitHandler<FindingFormValues> = (data) => {
@@ -118,7 +119,7 @@ function FindMyAccountForm(): JSX.Element {
               register={register("name", {
                 required: "이름을 입력해주세요.",
                 pattern: {
-                  value: /^[가-힣]{2,5}$/,
+                  value: nameReg,
                   message: "한글로 2~5자를 입력해주세요.",
                 },
               })}
@@ -132,7 +133,7 @@ function FindMyAccountForm(): JSX.Element {
               register={register("phone", {
                 required: "전화번호를 입력해주세요.",
                 pattern: {
-                  value: /^\d{11}$/,
+                  value: phoneNumReg,
                   message: "11자리 숫자를 입력해주세요.",
                 },
               })}
@@ -149,7 +150,7 @@ function FindMyAccountForm(): JSX.Element {
               register={register("name", {
                 required: "이름을 입력해주세요.",
                 pattern: {
-                  value: /^[가-힣]{2,5}$/,
+                  value: nameReg,
                   message: "한글로 2~5자를 입력해주세요.",
                 },
               })}
@@ -159,6 +160,7 @@ function FindMyAccountForm(): JSX.Element {
               type="email"
               name="email"
               label="메일"
+              placeholder="메일 입력"
               check={{
                 textF: "인증번호",
                 textT: "재전송",
@@ -169,7 +171,14 @@ function FindMyAccountForm(): JSX.Element {
                 },
                 buttonState: sendCodeCheck,
               }}
-              placeholder="메일 입력"
+              register={register("email", {
+                required: "이메일을 입력해주세요.",
+                pattern: {
+                  value: emailReg,
+                  message: "이메일 양식에 맞춰 입력해주세요.",
+                },
+              })}
+              errorMessage={errors?.email && errors.email.message}
             />
             <FormInput
               type="text"
@@ -182,6 +191,10 @@ function FindMyAccountForm(): JSX.Element {
                 onCheck: () => {},
                 buttonState: onTimer,
               }}
+              register={register("verificationCode", {
+                required: "인증번호를 입력해주세요.",
+              })}
+              errorMessage={errors?.email && errors.email.message}
             />
           </>
         )}

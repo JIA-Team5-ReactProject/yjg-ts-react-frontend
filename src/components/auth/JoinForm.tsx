@@ -4,6 +4,8 @@ import { JoinFormValues } from "../../types/login";
 import { useEffect, useState } from "react";
 import { trimValues } from "../../utils/validate";
 import { customAxios } from "../../services/customAxios";
+import { emailReg, nameReg, passwordReg, phoneNumReg } from "../../utils/regex";
+import { useNavigate } from "react-router-dom";
 
 function JoinForm(): JSX.Element {
   const {
@@ -14,6 +16,7 @@ function JoinForm(): JSX.Element {
     setError,
   } = useForm<JoinFormValues>();
 
+  const navigate = useNavigate();
   const password = watch("password");
   const email = watch("email");
   //중복체크 상태
@@ -24,8 +27,8 @@ function JoinForm(): JSX.Element {
   }, [email]);
 
   // 아이디 중복 체크 함수
-  async function idDuplicateCheck(email: string) {
-    const isValid = /^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/.test(email);
+  const idDuplicateCheck = async (email: string) => {
+    const isValid = emailReg.test(email);
 
     if (!isValid) {
       return Promise.reject(new Error("이메일을 입력해주세요."));
@@ -39,10 +42,10 @@ function JoinForm(): JSX.Element {
     } else {
       alert("존재하는 이메일입니다.");
     }
-  }
+  };
 
   //회원가입 제출 함수
-  const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
+  const onSubmit: SubmitHandler<JoinFormValues> = async (data) => {
     if (!duplicateCheck) {
       setError(
         "email",
@@ -52,7 +55,14 @@ function JoinForm(): JSX.Element {
       return;
     }
     const trimData = trimValues(data);
-    console.log(trimData);
+    const registerPost = await customAxios.post("/api/admin/register", {
+      name: trimData.name,
+      phone_number: trimData.phone,
+      email: trimData.email,
+      password: trimData.password,
+    });
+    alert("회원가입 신청이 완료되었습니다.");
+    navigate("/login");
   };
 
   return (
@@ -67,7 +77,7 @@ function JoinForm(): JSX.Element {
           register={register("name", {
             required: "이름을 입력해주세요.",
             pattern: {
-              value: /^[가-힣]{2,5}$/,
+              value: nameReg,
               message: "한글로 2~5자를 입력해주세요.",
             },
           })}
@@ -91,8 +101,8 @@ function JoinForm(): JSX.Element {
           register={register("email", {
             required: "이메일을 입력해주세요.",
             pattern: {
-              value: /^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/,
-              message: "@을 포함한 메일 양식을 입력해주세요.",
+              value: emailReg,
+              message: "이메일 양식에 맞춰 입력해주세요.",
             },
           })}
           errorMessage={errors?.email && errors.email.message}
@@ -105,7 +115,7 @@ function JoinForm(): JSX.Element {
           register={register("password", {
             required: "비밀번호를 입력해주세요.",
             pattern: {
-              value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{10,}$/,
+              value: passwordReg,
               message: "영문, 숫자를 포함한 10자 이상을 입력해주세요.",
             },
           })}
@@ -131,7 +141,7 @@ function JoinForm(): JSX.Element {
           register={register("phone", {
             required: "전화번호를 입력해주세요.",
             pattern: {
-              value: /^\d{11}$/,
+              value: phoneNumReg,
               message: "11자리 숫자를 입력해주세요.",
             },
           })}
