@@ -6,6 +6,9 @@ import { LoginFormValues } from "../../types/login";
 import { trimValues } from "../../utils/validate";
 import { customAxios } from "../../services/customAxios";
 import { emailReg } from "../../utils/regex";
+import { useSetRecoilState } from "recoil";
+import { UserDataAtom } from "../../recoil/UserDataAtiom";
+import testImg from "../../assets/schoolImg/test.jpg";
 
 function LoginForm(): JSX.Element {
   const {
@@ -19,6 +22,7 @@ function LoginForm(): JSX.Element {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
   const [isRemember, setIsRemember] = useState(false);
+  const setUserData = useSetRecoilState(UserDataAtom);
 
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
@@ -44,7 +48,21 @@ function LoginForm(): JSX.Element {
           email: trimData.email,
           password: trimData.password,
         });
-        if (registerPost) console.log("good");
+        setUserData({
+          name: registerPost.data.name,
+          img: testImg,
+          phone: registerPost.data.phone_number,
+          email: registerPost.data.email,
+          password: registerPost.data.password,
+          approved: registerPost.data.approved,
+          power: {
+            master: registerPost.data.master,
+            salon: registerPost.data.salon_privilege,
+            restaurant: registerPost.data.restaurant_privilege,
+            admin: registerPost.data.admin_privilege,
+          },
+        });
+        navigate("/main");
       } catch (error) {
         setError("email", {
           type: "manual",
