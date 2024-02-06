@@ -40,3 +40,16 @@ export type FindingPasswordValues = {
   name: string;
   email: string;
 };
+
+export type LoginUserData = {
+  img?: string;
+  approved: boolean;
+
+  power: {
+    master: boolean;
+    salon: boolean;
+    restaurant: boolean;
+    admin: boolean;
+  };
+} & LoginFormValues &
+  FindingIdValues;
