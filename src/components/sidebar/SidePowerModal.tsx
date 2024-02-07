@@ -6,7 +6,7 @@ import { Power } from "../../types/adminList";
 function SidePowerModal(props: { power: Power }) {
   const { power } = props;
   const navigate = useNavigate();
-  const [onModal, setOnModal] = useState(true);
+  const [onModal, setOnModal] = useState(false);
 
   return (
     <div className=" bg-cyan-900/75 mx-4 flex-col rounded-t-xl select-none ">

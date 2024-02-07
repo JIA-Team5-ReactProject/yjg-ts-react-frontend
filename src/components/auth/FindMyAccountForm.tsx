@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import FormInput from "./FormInput";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FindingFormValues, FindingPasswordValues } from "../../types/login";
+import { FindingFormValues, FindingPasswordValues } from "../../types/auth";
 import { trimValues } from "../../utils/validate";
 import { formatTime } from "../../utils/timer";
 import { emailReg, nameReg, phoneNumReg } from "../../utils/regex";

@@ -1,6 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import FormInput from "./FormInput";
-import { JoinFormValues } from "../../types/login";
+import { JoinFormValues } from "../../types/auth";
 import { useEffect, useState } from "react";
 import { trimValues } from "../../utils/validate";
 import { customAxios } from "../../services/customAxios";

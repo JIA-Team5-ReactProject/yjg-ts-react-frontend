@@ -6,7 +6,7 @@ function Main() {
   return (
     <div className="h-screen">
       <Header />
-      <div className="flex">
+      <div className="flex gap-6">
         <Sidebar />
         <Outlet />
       </div>

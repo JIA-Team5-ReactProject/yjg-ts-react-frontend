@@ -1,4 +1,4 @@
-import { FormInputPropsType } from "../../types/login";
+import { FormInputPropsType } from "../../types/auth";
 
 function FormInput(props: FormInputPropsType): JSX.Element {
   const { type, name, label, check, placeholder, register, errorMessage } =
