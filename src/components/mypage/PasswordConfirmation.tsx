@@ -26,6 +26,7 @@ function PasswordConfirmation(props: {
       });
       setPasswordCheck(true);
     } catch (error) {
+      console.log(error);
       setError("password", {
         type: "manual",
         message: "인증에 실패했습니다. 비밀번호를 확인해주세요.",

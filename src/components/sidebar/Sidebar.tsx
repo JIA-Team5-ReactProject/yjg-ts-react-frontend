@@ -9,10 +9,17 @@ import {
   salon,
 } from "../../constants/powerList";
 import { useNavigate } from "react-router-dom";
+import { customAxios } from "../../services/customAxios";
 
 function Sidebar() {
   const userData = useRecoilValue(UserDataAtom);
   const navigate = useNavigate();
+
+  //로그아웃 함수
+  const logoutPost = async () => {
+    await customAxios.post("/api/admin/logout");
+    navigate("/login");
+  };
 
   return (
     <div className="bg-cyan-600/70 w-96 min-h-screen p-2 shadow-black/35 shadow-xl flex flex-col gap-10">
@@ -36,6 +43,9 @@ function Sidebar() {
               내정보
             </button>
             <button
+              onClick={() => {
+                logoutPost();
+              }}
               className="flex-1 py-3 rounded-3xl bg-cyan-600 uppercase text-white shadow-md shadow-inherit transition-all hover:shadow-sm hover:shadow-inherit focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               data-ripple-light="true"
             >
@@ -45,9 +55,11 @@ function Sidebar() {
         </div>
       </div>
       {userData.power.master ? <SidePowerModal power={master} /> : null}
-      {userData.power.salon ? <SidePowerModal power={salon} /> : null}
-      {userData.power.restaurant ? <SidePowerModal power={restaurant} /> : null}
-      {userData.power.admin ? (
+      {userData.power.salon_privilege ? <SidePowerModal power={salon} /> : null}
+      {userData.power.restaurant_privilege ? (
+        <SidePowerModal power={restaurant} />
+      ) : null}
+      {userData.power.admin_privilege ? (
         <>
           <SidePowerModal power={admin} />
           <SidePowerModal power={bus} />

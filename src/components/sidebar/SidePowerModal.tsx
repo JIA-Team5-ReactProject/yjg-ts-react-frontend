@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import DropDown from "../../icons/DropDown";
 import { useState } from "react";
-import { Power } from "../../types/adminList";
+import { Power } from "../../types/sidebarList";
 
 function SidePowerModal(props: { power: Power }) {
   const { power } = props;
