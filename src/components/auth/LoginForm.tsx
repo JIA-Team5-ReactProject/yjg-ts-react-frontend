@@ -42,34 +42,34 @@ function LoginForm(): JSX.Element {
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     const trimData = trimValues(data);
     handleOnChange();
-    customAxios.get("/sanctum/csrf-cookie").then(async () => {
-      try {
-        const registerPost = await customAxios.post("/api/admin/login", {
-          email: trimData.email,
-          password: trimData.password,
-        });
-        setUserData({
-          name: registerPost.data.name,
-          img: testImg,
-          phone: registerPost.data.phone_number,
-          email: registerPost.data.email,
-          password: registerPost.data.password,
-          approved: registerPost.data.approved,
-          power: {
-            master: registerPost.data.master,
-            salon: registerPost.data.salon_privilege,
-            restaurant: registerPost.data.restaurant_privilege,
-            admin: registerPost.data.admin_privilege,
-          },
-        });
-        navigate("/main");
-      } catch (error) {
-        setError("email", {
-          type: "manual",
-          message: "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
-        });
-      }
-    });
+    try {
+      await customAxios.get("/sanctum/csrf-cookie");
+      const loginPost = await customAxios.post("/api/admin/login", {
+        email: trimData.email,
+        password: trimData.password,
+      });
+
+      setUserData({
+        name: loginPost.data.name,
+        img: testImg,
+        phone: loginPost.data.phone_number,
+        email: loginPost.data.email,
+        password: loginPost.data.password,
+        approved: loginPost.data.approved,
+        power: {
+          master: loginPost.data.master,
+          salon_privilege: loginPost.data.salon_privilege,
+          restaurant_privilege: loginPost.data.restaurant_privilege,
+          admin_privilege: loginPost.data.admin_privilege,
+        },
+      });
+      navigate("/main");
+    } catch (error) {
+      setError("email", {
+        type: "manual",
+        message: "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
+      });
+    }
   };
 
   return (

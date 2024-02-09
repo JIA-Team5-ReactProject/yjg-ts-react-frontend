@@ -13,9 +13,9 @@ export const UserDataAtom = atom<LoginUserData>({
 
     power: {
       master: false,
-      salon: false,
-      restaurant: false,
-      admin: false,
+      salon_privilege: false,
+      restaurant_privilege: false,
+      admin_privilege: false,
     },
   },
 });
