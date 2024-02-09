@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { customAxios } from "../../services/customAxios";
 import { GetUserData, UserPower } from "../../types/auth";
 import { ListBtn, ListHead, UserList } from "./UserList";
-import CloseIcon from "../../icons/CloseIcon";
 import CheckIcon from "../../icons/CheckIcon";
 
 function Management() {
