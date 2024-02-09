@@ -44,15 +44,22 @@ export type FindingPasswordValues = {
   email: string;
 };
 
+export type UserPower = {
+  master?: boolean;
+  salon_privilege: boolean;
+  restaurant_privilege: boolean;
+  admin_privilege: boolean;
+};
+
 export type LoginUserData = {
   img?: string;
   approved: boolean;
-
-  power: {
-    master: boolean;
-    salon: boolean;
-    restaurant: boolean;
-    admin: boolean;
-  };
+  power: UserPower;
 } & LoginFormValues &
   FindingIdValues;
+
+export type GetUserData = {
+  id: number;
+  phone_number: string;
+} & FindingPasswordValues &
+  UserPower;
