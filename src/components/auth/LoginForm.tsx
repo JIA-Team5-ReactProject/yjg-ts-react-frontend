@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { LoginFormValues } from "../../types/login";
+import { LoginFormValues } from "../../types/auth";
 import { trimValues } from "../../utils/validate";
 import { customAxios } from "../../services/customAxios";
 import { emailReg } from "../../utils/regex";

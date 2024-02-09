@@ -9,12 +9,12 @@ const basePath = (address: string): string => {
 };
 
 export const master = {
-  power: "관리자",
+  power: "총관리자",
   icon: <MasterIcon />,
   path: basePath("master"),
   list: [
     {
-      name: "사용자 관리",
+      name: "전체 사용자 관리",
       path: basePath("master/management"),
     },
   ],

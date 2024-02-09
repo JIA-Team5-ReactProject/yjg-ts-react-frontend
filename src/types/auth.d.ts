@@ -23,6 +23,9 @@ export type JoinFormValues = {
 
 export type LoginFormValues = {
   email: string;
+} & passwordValues;
+
+export type passwordValues = {
   password: string;
 };
 
