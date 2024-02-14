@@ -7,6 +7,10 @@ import FindMyAccount from "./pages/FindMyAccount";
 import Mypage from "./pages/Mypage";
 import Master from "./pages/Master";
 import Management from "./components/master/Management";
+import Salon from "./pages/Salon";
+import SalonPending from "./pages/SalonPending";
+import PriceCorrection from "./components/salon/PriceCorrection";
+import SalonPrice from "./pages/SalonPrice";
 
 function App() {
   return (
@@ -19,7 +23,9 @@ function App() {
           <Route path="mypage" element={<Mypage />} />
           <Route path="master" element={<Master />} />
           <Route path="master/management" element={<Management />} />
-          <Route path="salon" element />
+          <Route path="salon" element={<Salon />} />
+          <Route path="salon/pending" element={<SalonPending />} />
+          <Route path="salon/priceCorrection" element={<SalonPrice />} />
           <Route path="admin" element />
           <Route path="restaurant" element />
         </Route>

@@ -4,6 +4,7 @@ import { LoginUserData } from "../types/auth";
 export const UserDataAtom = atom<LoginUserData>({
   key: "UserData",
   default: {
+    id: 0,
     img: "",
     name: "",
     phone: "",
