@@ -52,6 +52,7 @@ export type UserPower = {
 };
 
 export type LoginUserData = {
+  id: number;
   img?: string;
   approved: boolean;
   power: UserPower;

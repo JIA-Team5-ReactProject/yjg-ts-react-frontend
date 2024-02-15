@@ -26,10 +26,6 @@ export const salon = {
   path: basePath("salon"),
   list: [
     {
-      name: "예약목록",
-      path: basePath("salon/reservation"),
-    },
-    {
       name: "미승인 예약 목록",
       path: basePath("salon/pending"),
     },
