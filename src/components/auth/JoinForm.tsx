@@ -6,6 +6,7 @@ import { trimValues } from "../../utils/validate";
 import { customAxios } from "../../services/customAxios";
 import { emailReg, nameReg, passwordReg, phoneNumReg } from "../../utils/regex";
 import { useNavigate } from "react-router-dom";
+import CloseIcon from "../../icons/CloseIcon";
 
 function JoinForm(): JSX.Element {
   const {
@@ -29,16 +30,16 @@ function JoinForm(): JSX.Element {
   // 아이디 중복 체크 함수
   const idDuplicateCheck = async (email: string) => {
     const isValid = emailReg.test(email);
-
     if (!isValid) {
       return Promise.reject(new Error("이메일을 입력해주세요."));
     }
     //중복체크 API
     const verifyEmail = await customAxios.get(
-      `api/admin/verify-email/${email}`
+      `/api/admin/verify-email/${email}`
     );
     if (verifyEmail.data.check) {
       setDuplicateCheck(verifyEmail.data.check);
+      console.log(verifyEmail.data.check);
     } else {
       alert("존재하는 이메일입니다.");
     }
@@ -67,7 +68,14 @@ function JoinForm(): JSX.Element {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col bg-sky-200/90 rounded-3xl aspect-video p-10 min-w-96 max-w-xl m-auto">
+      <div className="relative flex flex-col bg-sky-200/90 rounded-3xl aspect-video p-10 min-w-96 max-w-xl m-auto">
+        <div className="absolute right-0 top-0">
+          <CloseIcon
+            onClick={() => {
+              navigate("/login");
+            }}
+          />
+        </div>
         <p className="font-bold text-3xl text-center mb-10 mt-2">회원가입</p>
         <FormInput
           type="text"
