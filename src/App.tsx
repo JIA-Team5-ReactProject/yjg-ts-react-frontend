@@ -1,16 +1,16 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Login from "./pages/Login";
+import Login from "./pages/auth/Login";
 import Main from "./pages/Main";
-import Join from "./pages/Join";
-import FindMyAccount from "./pages/FindMyAccount";
+import Join from "./pages/auth/Join";
+import FindMyAccount from "./pages/auth/FindMyAccount";
 import Mypage from "./pages/Mypage";
 import Master from "./pages/Master";
 import Management from "./components/master/Management";
 import Salon from "./pages/Salon";
 import SalonPending from "./pages/SalonPending";
-import PriceCorrection from "./components/salon/PriceCorrection";
 import SalonPrice from "./pages/SalonPrice";
+import FindResult from "./pages/auth/FindResult";
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="/findIdPw" element={<FindMyAccount />} />
+        <Route path="/findIdPw/result" element={<FindResult />} />
         <Route path="/main" element={<Main />}>
           <Route path="mypage" element={<Mypage />} />
           <Route path="master" element={<Master />} />
