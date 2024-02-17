@@ -5,7 +5,7 @@ import "react-calendar/dist/Calendar.css";
 export const CalendarBox = styled.div`
   display: flex;
   align-items: center;
-  justify-content: left;
+  justify-content: center;
 `;
 
 export const StyleCalendar = styled(Calendar)`
