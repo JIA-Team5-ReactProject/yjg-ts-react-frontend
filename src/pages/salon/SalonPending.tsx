@@ -1,4 +1,4 @@
-import UnreservedList from "../components/salon/UnreservedList";
+import UnreservedList from "../../components/salon/UnreservedList";
 
 function SalonPending() {
   return (
