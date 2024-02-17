@@ -39,9 +39,12 @@ function JoinForm(): JSX.Element {
     );
     if (verifyEmail.data.check) {
       setDuplicateCheck(verifyEmail.data.check);
-      console.log(verifyEmail.data.check);
     } else {
-      alert("존재하는 이메일입니다.");
+      setError(
+        "email",
+        { message: "존재하는 이메일 입니다." },
+        { shouldFocus: true }
+      );
     }
   };
 
@@ -56,7 +59,7 @@ function JoinForm(): JSX.Element {
       return;
     }
     const trimData = trimValues(data);
-    const registerPost = await customAxios.post("/api/admin/register", {
+    await customAxios.post("/api/admin", {
       name: trimData.name,
       phone_number: trimData.phone,
       email: trimData.email,

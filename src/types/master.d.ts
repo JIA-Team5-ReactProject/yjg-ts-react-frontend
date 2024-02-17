@@ -11,3 +11,7 @@ export type DataListBtnType = {
   color: string;
   onClick: (number) => void;
 };
+
+export type GetApprovedData = {
+  type?: "approved" | "unapproved";
+};

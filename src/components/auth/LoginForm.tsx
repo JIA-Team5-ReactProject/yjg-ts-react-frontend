@@ -50,6 +50,7 @@ function LoginForm(): JSX.Element {
       });
 
       setUserData({
+        id: loginPost.data.admin_id,
         name: loginPost.data.name,
         img: testImg,
         phone: loginPost.data.phone_number,

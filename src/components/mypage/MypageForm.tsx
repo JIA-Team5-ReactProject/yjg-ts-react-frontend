@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { UserDataAtom } from "../../recoil/UserDataAtiom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { JoinFormValues } from "../../types/auth";
+import { JoinFormValues, PostUserData } from "../../types/auth";
 import { nameReg, passwordReg, phoneNumReg } from "../../utils/regex";
 import { trimValues } from "../../utils/validate";
 import { customAxios } from "../../services/customAxios";
@@ -39,13 +39,22 @@ function MypageForm() {
   //정보수정 제출 함수
   const onSubmit: SubmitHandler<JoinFormValues> = async (data) => {
     const trimData = trimValues(data);
-
-    const changePatch = await customAxios.post("/api/admin", {
-      name: trimData.name,
-      phone_number: trimData.phone,
+    const postData: PostUserData = {
+      admin_id: userData.id,
       password: trimData.password,
-    });
-    alert("수정완료");
+    };
+    if (userData.name !== trimData.name) {
+      postData.name = trimData.name;
+    }
+    if (userData.phone !== trimData.phone) {
+      postData.phone_number = trimData.phone;
+    }
+    try {
+      await customAxios.patch("/api/admin", postData);
+      alert("수정완료");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
