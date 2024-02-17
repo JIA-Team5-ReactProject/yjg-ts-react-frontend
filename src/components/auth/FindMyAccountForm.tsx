@@ -5,6 +5,9 @@ import { FindingFormValues, FindingPasswordValues } from "../../types/auth";
 import { trimValues } from "../../utils/validate";
 import { formatTime } from "../../utils/timer";
 import { emailReg, nameReg, phoneNumReg } from "../../utils/regex";
+import CloseIcon from "../../icons/CloseIcon";
+import { useNavigate } from "react-router-dom";
+import { customAxios } from "../../services/customAxios";
 
 function FindMyAccountForm(): JSX.Element {
   const {
@@ -18,6 +21,8 @@ function FindMyAccountForm(): JSX.Element {
     name: watch("name"),
     email: watch("email"),
   };
+
+  const navigate = useNavigate();
   // 아이디와 비밀번호 어느쪽인지 저장
   const [findingAccount, setFindingAccount] = useState("findingId");
   // 인증번호 발송 체크
@@ -70,11 +75,27 @@ function FindMyAccountForm(): JSX.Element {
   };
 
   // 아이디/비밀번호 찾기 제출 함수
-  const onSubmit: SubmitHandler<FindingFormValues> = (data) => {
-    //인증번호와 유저 정보 확인 함수
-
+  const onSubmit: SubmitHandler<FindingFormValues> = async (data) => {
     const trimData = trimValues(data);
-    console.log(trimData);
+    if (findingAccount === "findingId") {
+      //아이디 찾기 제출 함수
+      try {
+        const checkId = await customAxios.post("/api/admin/find-email", {
+          name: trimData.name,
+          phone_number: trimData.phone,
+        });
+        const userData = {
+          id: checkId.data.admin.id,
+          name: checkId.data.admin.name,
+          email: checkId.data.admin.email,
+        };
+        navigate("/findIdPw/result", { state: { user: userData } });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    //인증번호와 유저 정보 확인 함수
   };
 
   return (
@@ -107,8 +128,15 @@ function FindMyAccountForm(): JSX.Element {
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col bg-sky-200/90 rounded-b-3xl  aspect-video p-10 min-w-96 max-w-xl m-auto "
+        className="relative flex flex-col bg-sky-200/90 rounded-b-3xl  aspect-video p-10 min-w-96 max-w-xl m-auto "
       >
+        <div className="absolute right-0 top-0">
+          <CloseIcon
+            onClick={() => {
+              navigate("/login");
+            }}
+          />
+        </div>
         {findingAccount === "findingId" ? (
           <>
             <FormInput
@@ -194,7 +222,9 @@ function FindMyAccountForm(): JSX.Element {
               register={register("verificationCode", {
                 required: "인증번호를 입력해주세요.",
               })}
-              errorMessage={errors?.email && errors.email.message}
+              errorMessage={
+                errors?.verificationCode && errors.verificationCode.message
+              }
             />
           </>
         )}

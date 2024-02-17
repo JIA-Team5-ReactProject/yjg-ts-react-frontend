@@ -1,5 +1,5 @@
-import AuthBg from "../components/auth/AuthBg";
-import FindMyAccountForm from "../components/auth/FindMyAccountForm";
+import AuthBg from "../../components/auth/AuthBg";
+import FindMyAccountForm from "../../components/auth/FindMyAccountForm";
 
 function FindMyAccount() {
   return (

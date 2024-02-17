@@ -1,5 +1,5 @@
-import AuthBg from "../components/auth/AuthBg";
-import LoginForm from "../components/auth/LoginForm";
+import AuthBg from "../../components/auth/AuthBg";
+import LoginForm from "../../components/auth/LoginForm";
 
 function Login(): JSX.Element {
   return (
