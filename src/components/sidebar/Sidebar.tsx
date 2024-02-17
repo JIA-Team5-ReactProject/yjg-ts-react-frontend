@@ -22,7 +22,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="bg-cyan-600/70 w-96 min-h-screen p-2 shadow-black/35 shadow-xl flex flex-col gap-10">
+    <div className="bg-cyan-600/70 w-96 h-full p-2 shadow-black/35 shadow-xl flex flex-col gap-10 overflow-auto">
       <div className="border-4 border-cyan-900/75 mt-32 mx-4 grid grid-cols-7 p-5 h-44 gap-2">
         <div
           className="col-span-3 bg-cover bg-center rounded-full shadow-md shadow-inherit"

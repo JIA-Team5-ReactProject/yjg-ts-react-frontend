@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { customAxios } from "../../services/customAxios";
 import { GetUserData } from "../../types/auth";
 import { ListHead, UserList } from "./UserList";
+import { GetApprovedData } from "../../types/master";
+import { AxiosRequestConfig } from "axios";
 
 function MasterMain() {
   const headList = ["이름", "전화번호", "메일주소", "승인처리"];
@@ -12,14 +14,14 @@ function MasterMain() {
     [
       {
         value: "승인",
-        color: "bg-blue-300",
+        color: "bg-blue-400",
         onClick: (data: GetUserData) => {
           approval(data.id);
         },
       },
       {
         value: "거절",
-        color: "bg-red-300",
+        color: "bg-red-400",
         onClick: (data: GetUserData) => {
           unapproval(data.id);
         },
@@ -28,13 +30,16 @@ function MasterMain() {
   ];
   const [unapprovedUsers, setUnapprovedUsers] = useState<GetUserData[]>([]);
   useEffect(() => {
-    getData();
+    getData({ type: "unapproved" });
   }, []);
 
-  const getData = async () => {
+  const getData = async (data: GetApprovedData) => {
     try {
+      const config: AxiosRequestConfig = {
+        params: data,
+      };
       // 미승인 유저데이터 가져오기
-      const unapprovedData = await customAxios.get("/api/admin/unapproved");
+      const unapprovedData = await customAxios.get("/api/admin", config);
       setUnapprovedUsers(unapprovedData.data.admins);
     } catch (error) {
       console.log(error);
@@ -48,7 +53,7 @@ function MasterMain() {
         admin_id: data,
         approve: true,
       });
-      getData();
+      getData({ type: "unapproved" });
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +66,7 @@ function MasterMain() {
         admin_id: data,
         approve: false,
       });
-      getData();
+      getData({ type: "unapproved" });
     } catch (error) {
       console.log(error);
     }
@@ -69,7 +74,7 @@ function MasterMain() {
 
   return (
     <div className="grid grid-cols-4 p-12 text-xl font-semibold text-center">
-      <div className="col-span-3 text-4xl font-bold mb-10 tracking-tighter text-left">
+      <div className="col-span-3 text-3xl font-bold mb-10 tracking-tighter text-left">
         관리자 승인 대기 리스트
       </div>
       <div className="col-span-1 self-end text-right p-4 tracking-widest">

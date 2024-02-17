@@ -21,7 +21,7 @@ function PasswordConfirmation(props: {
   const onSubmit: SubmitHandler<passwordValues> = async (data) => {
     const trimData = trimValues(data);
     try {
-      const pwCheckPost = await customAxios.post("/api/admin/verify-password", {
+      await customAxios.post("/api/admin/verify-password", {
         password: trimData.password,
       });
       setPasswordCheck(true);

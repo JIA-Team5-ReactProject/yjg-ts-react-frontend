@@ -3,6 +3,8 @@ import { customAxios } from "../../services/customAxios";
 import { GetUserData, UserPower } from "../../types/auth";
 import { ListBtn, ListHead, UserList } from "./UserList";
 import CheckIcon from "../../icons/CheckIcon";
+import { GetApprovedData } from "../../types/master";
+import { AxiosRequestConfig } from "axios";
 
 function Management() {
   const headList = ["이름", "전화번호", "메일", "관리"];
@@ -41,7 +43,7 @@ function Management() {
 
   useEffect(() => {
     //페이지 접속 시 승인 유저 데이터 받아오기
-    getData();
+    getData({ type: "approved" });
   }, []);
 
   useEffect(() => {
@@ -57,10 +59,13 @@ function Management() {
     }
   }, [onModal]);
 
-  const getData = async () => {
+  const getData = async (data: GetApprovedData) => {
     try {
+      const config: AxiosRequestConfig = {
+        params: data,
+      };
       // 승인 유저데이터 가져오기
-      const approvedData = await customAxios.get("/api/admin/approved");
+      const approvedData = await customAxios.get("/api/admin", config);
       setApprovedUsers(approvedData.data.admins);
     } catch (error) {
       console.log(error);
@@ -69,8 +74,8 @@ function Management() {
   const deleteData = async (data: number) => {
     try {
       // 유저데이터 삭제하기
-      await customAxios.delete(`/api/admin/unregister/${data}`);
-      getData();
+      await customAxios.delete(`/api/admin/${data}`);
+      getData({ type: "approved" });
     } catch (error) {
       console.log(error);
     }
@@ -79,11 +84,10 @@ function Management() {
     try {
       //선택된 유저 권한 변경 요청
       await customAxios.patch("/api/admin/privilege", {
-        // id: Number(userId),
         id: userId.current,
         ...data,
       });
-      getData();
+      getData({ type: "approved" });
     } catch (error) {
       console.log(error);
     }

@@ -10,13 +10,13 @@ function UserList(props: UserListType) {
           <>
             {typeof v === "string" ? (
               <div
-                className="border-b py-5
+                className="border-b py-5 bg-white
               "
               >
                 {user[v]}
               </div>
             ) : (
-              <div className=" m-auto border-b py-4 w-full space-x-5">
+              <div className=" m-auto border-b py-4 w-full space-x-5 bg-white pr-3">
                 {v.map((v) => {
                   return (
                     <ListBtn
@@ -42,7 +42,7 @@ function ListHead(props: { headList: string[] }) {
   return (
     <>
       {headList.map((v) => {
-        return <div className="bg-gray-300/70 py-3">{v}</div>;
+        return <div className="bg-blue-300/70 py-3">{v}</div>;
       })}
     </>
   );
@@ -53,7 +53,7 @@ function ListBtn(props: DataListBtnType) {
   const { value, color, onClick, user } = props;
   return (
     <button
-      className={`middle none center rounded-lg ${color} py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40  focus:shadow-none active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+      className={`middle none center rounded-lg ${color} py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40  focus:shadow-none active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
       data-ripple-light="true"
       onClick={() => {
         onClick(user);

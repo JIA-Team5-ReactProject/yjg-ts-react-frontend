@@ -64,3 +64,10 @@ export type GetUserData = {
   phone_number: string;
 } & FindingPasswordValues &
   UserPower;
+
+export type PostUserData = {
+  admin_id: number;
+  name?: string;
+  phone_number?: string;
+  password: string;
+};
