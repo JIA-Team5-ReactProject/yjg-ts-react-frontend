@@ -62,7 +62,7 @@ function ReservationList() {
   return (
     <div className="flex">
       <div className="flex-col">
-        <div className="flex justify-between px-3">
+        <div className="flex justify-between px-3 gap-6">
           <CountCard header="확정 예약자" count={reservationUser.length} />
           <CountCard header="승인 대기자" count={unreservedUser.length} />
         </div>

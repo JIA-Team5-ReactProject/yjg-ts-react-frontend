@@ -11,6 +11,7 @@ import Salon from "./pages/salon/Salon";
 import SalonPending from "./pages/salon/SalonPending";
 import SalonPrice from "./pages/salon/SalonPrice";
 import FindResult from "./pages/auth/FindResult";
+import Admin from "./pages/admin/Admin";
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
           <Route path="salon" element={<Salon />} />
           <Route path="salon/pending" element={<SalonPending />} />
           <Route path="salon/priceCorrection" element={<SalonPrice />} />
-          <Route path="admin" element />
+          <Route path="admin" element={<Admin />} />
           <Route path="restaurant" element />
         </Route>
       </Routes>
