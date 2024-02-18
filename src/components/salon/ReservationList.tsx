@@ -51,7 +51,6 @@ function ReservationList() {
       if (data.status === "C") {
         //예약 승인 값
         setReservationUser(reservationData.data.reservations);
-        console.log(reservationData);
       } else if (data.status === "S") {
         //예약 미승인 값
         setUnreservedUser(reservationData.data.reservations);

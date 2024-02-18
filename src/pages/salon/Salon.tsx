@@ -1,4 +1,4 @@
-import ReservationList from "../components/salon/ReservationList";
+import ReservationList from "../../components/salon/ReservationList";
 
 function Salon() {
   return (

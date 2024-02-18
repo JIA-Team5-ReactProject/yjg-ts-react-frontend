@@ -7,9 +7,9 @@ import FindMyAccount from "./pages/auth/FindMyAccount";
 import Mypage from "./pages/Mypage";
 import Master from "./pages/Master";
 import Management from "./components/master/Management";
-import Salon from "./pages/Salon";
-import SalonPending from "./pages/SalonPending";
-import SalonPrice from "./pages/SalonPrice";
+import Salon from "./pages/salon/Salon";
+import SalonPending from "./pages/salon/SalonPending";
+import SalonPrice from "./pages/salon/SalonPrice";
 import FindResult from "./pages/auth/FindResult";
 
 function App() {

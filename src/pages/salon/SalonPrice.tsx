@@ -1,4 +1,4 @@
-import PriceCorrection from "../components/salon/PriceCorrection";
+import PriceCorrection from "../../components/salon/PriceCorrection";
 
 function SalonPrice() {
   return (
