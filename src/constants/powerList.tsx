@@ -42,7 +42,7 @@ export const admin = {
   path: basePath("admin"),
   list: [
     {
-      name: "외박 외출 승인",
+      name: "외박 / 외출",
       path: basePath("admin/aNightOut"),
     },
     {
@@ -50,23 +50,11 @@ export const admin = {
       path: basePath("admin/repair"),
     },
     {
-      name: "공지 게시판",
-      path: basePath("admin/announcement"),
-    },
-    {
-      name: "회의실 승인",
+      name: "회의실",
       path: basePath("admin/meetingRoom"),
     },
-  ],
-};
-
-export const bus = {
-  power: "버스",
-  icon: <BusIcon />,
-  path: basePath("admin"),
-  list: [
     {
-      name: "시간표 추가",
+      name: "버스 시간표",
       path: basePath("admin/busTimetable"),
     },
   ],

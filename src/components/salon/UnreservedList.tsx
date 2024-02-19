@@ -78,7 +78,7 @@ function UnreservedList() {
     }
   };
   return (
-    <div className="flex gap-14">
+    <div className="flex gap-4">
       <div className="flex-none flex flex-col text-center">
         <div className=" text-black font-bold text-2xl">🕐 예약 목록 확인</div>
         <div className="flex flex-col gap-4 p-8 ml-10 mt-2 bg-sky-200 rounded-md ">
@@ -124,7 +124,7 @@ function UnreservedList() {
           <div className="text-3xl font-bold mb-10 tracking-tighter text-left">
             9 : 00
           </div>
-          <div className="grid grid-cols-4 text-xl font-semibold text-center w-full">
+          <div className="grid grid-cols-4 w-full">
             <ListHead headList={headList} />
             {unreservedUser.map((user) => {
               return <UserList user={user} dataList={dataList} />;

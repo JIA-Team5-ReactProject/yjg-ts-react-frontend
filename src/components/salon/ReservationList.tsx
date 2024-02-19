@@ -62,7 +62,7 @@ function ReservationList() {
   return (
     <div className="flex">
       <div className="flex-col">
-        <div className="flex justify-between px-3">
+        <div className="flex justify-between px-3 gap-6">
           <CountCard header="확정 예약자" count={reservationUser.length} />
           <CountCard header="승인 대기자" count={unreservedUser.length} />
         </div>
@@ -75,7 +75,7 @@ function ReservationList() {
         </S.CalendarBox>
       </div>
 
-      <div className=" flex-1 h-fit grid grid-cols-3 p-12 text-xl font-semibold text-center">
+      <div className=" flex-1 h-fit grid grid-cols-3 p-12">
         <div className="col-span-3 text-4xl font-bold mb-10 tracking-tighter text-left">
           예약 확정 목록
         </div>
