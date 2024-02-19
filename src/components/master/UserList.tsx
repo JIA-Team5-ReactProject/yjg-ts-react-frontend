@@ -10,13 +10,13 @@ function UserList(props: UserListType) {
           <>
             {typeof v === "string" ? (
               <div
-                className="border-b py-5 bg-white
+                className="border-b py-5 bg-white text-center font-semibold text-lg
               "
               >
                 {user[v]}
               </div>
             ) : (
-              <div className=" m-auto border-b py-4 w-full space-x-5 bg-white pr-3">
+              <div className=" m-auto border-b py-4 w-full space-x-5 bg-white pr-3 text-center">
                 {v.map((v) => {
                   return (
                     <ListBtn
@@ -42,7 +42,11 @@ function ListHead(props: { headList: string[] }) {
   return (
     <>
       {headList.map((v) => {
-        return <div className="bg-blue-300/70 py-3">{v}</div>;
+        return (
+          <div className="bg-blue-300/70 py-3 text-xl font-bold text-center">
+            {v}
+          </div>
+        );
       })}
     </>
   );

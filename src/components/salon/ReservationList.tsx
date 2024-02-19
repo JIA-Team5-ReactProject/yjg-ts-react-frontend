@@ -75,7 +75,7 @@ function ReservationList() {
         </S.CalendarBox>
       </div>
 
-      <div className=" flex-1 h-fit grid grid-cols-3 p-12 text-xl font-semibold text-center">
+      <div className=" flex-1 h-fit grid grid-cols-3 p-12">
         <div className="col-span-3 text-4xl font-bold mb-10 tracking-tighter text-left">
           예약 확정 목록
         </div>

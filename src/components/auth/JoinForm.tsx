@@ -72,7 +72,7 @@ function JoinForm(): JSX.Element {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="relative flex flex-col bg-sky-200/90 rounded-3xl aspect-video p-10 min-w-96 max-w-xl m-auto">
-        <div className="absolute right-0 top-0">
+        <div className="absolute right-1 top-1">
           <CloseIcon
             onClick={() => {
               navigate("/login");

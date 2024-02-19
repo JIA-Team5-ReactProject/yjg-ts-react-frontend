@@ -45,7 +45,7 @@ function AdminMain() {
           <div className="flex-1"></div>
           <ListBtn value="작성" color="bg-cyan-600" onClick={() => {}} />
         </div>
-        <div className="grid grid-cols-3 text-xl font-bold text-center">
+        <div className="grid grid-cols-3">
           {<ListHead headList={headList} />}
         </div>
       </div>

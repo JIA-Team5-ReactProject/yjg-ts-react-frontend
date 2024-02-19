@@ -145,11 +145,11 @@ function Management() {
           </div>
         </div>
       ) : null}
-      <div className="grid grid-cols-4 p-12 text-xl font-semibold text-center">
+      <div className="grid grid-cols-4 p-12">
         <div className="col-span-3 text-3xl font-bold mb-10 tracking-tighter text-left">
           관리자 리스트
         </div>
-        <div className="col-span-1 self-end text-right p-4 tracking-widest">
+        <div className="col-span-1 self-end text-right p-4 tracking-widest font-semibold">
           {approvedUsers.length}명
         </div>
         <ListHead headList={headList} />

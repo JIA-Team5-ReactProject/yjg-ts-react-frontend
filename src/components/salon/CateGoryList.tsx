@@ -74,7 +74,7 @@ function ServiceList(props: any) {
   return (
     <>
       {dropdown ? (
-        <div className="relative grid grid-cols-4 mt-4 text-center font-bold text-lg">
+        <div className="relative grid grid-cols-4 mt-4">
           {<ListHead headList={headList} />}
           <div className="absolute right-0 pt-1 pr-2">
             <PlusIcon />
