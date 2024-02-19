@@ -1,13 +1,7 @@
 import { useRecoilValue } from "recoil";
 import SidePowerModal from "./SidePowerModal";
 import { UserDataAtom } from "../../recoil/UserDataAtiom";
-import {
-  admin,
-  bus,
-  master,
-  restaurant,
-  salon,
-} from "../../constants/powerList";
+import { admin, master, restaurant, salon } from "../../constants/powerList";
 import { useNavigate } from "react-router-dom";
 import { customAxios } from "../../services/customAxios";
 
@@ -59,12 +53,7 @@ function Sidebar() {
       {userData.power.restaurant_privilege ? (
         <SidePowerModal power={restaurant} />
       ) : null}
-      {userData.power.admin_privilege ? (
-        <>
-          <SidePowerModal power={admin} />
-          <SidePowerModal power={bus} />
-        </>
-      ) : null}
+      {userData.power.admin_privilege ? <SidePowerModal power={admin} /> : null}
     </div>
   );
 }
