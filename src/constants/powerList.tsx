@@ -43,7 +43,7 @@ export const admin = {
   list: [
     {
       name: "외박 / 외출",
-      path: basePath("admin/aNightOut"),
+      path: basePath("admin/stayOut"),
     },
     {
       name: "A/S",
@@ -55,7 +55,7 @@ export const admin = {
     },
     {
       name: "버스 시간표",
-      path: basePath("admin/busTimetable"),
+      path: basePath("admin/busTimeTable"),
     },
   ],
 };
