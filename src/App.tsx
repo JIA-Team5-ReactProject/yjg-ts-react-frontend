@@ -14,6 +14,8 @@ import FindResult from "./pages/auth/FindResult";
 import Admin from "./pages/admin/Admin";
 import Repair from "./pages/admin/Repair";
 import Reading from "./pages/post/Reading";
+import StayOut from "./pages/admin/StayOut";
+import MeetingRoom from "./pages/admin/MeetingRoom";
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
           <Route path="salon/priceCorrection" element={<SalonPrice />} />
           <Route path="admin" element={<Admin />} />
           <Route path="admin/repair" element={<Repair />} />
+          <Route path="admin/stayOut" element={<StayOut />} />
+          <Route path="admin/meetingRoom" element={<MeetingRoom />} />
           <Route path="post/reading/:id" element={<Reading />} />
           <Route path="restaurant" element />
         </Route>
