@@ -55,7 +55,7 @@ export const admin = {
     },
     {
       name: "버스 시간표",
-      path: basePath("admin/busTimetable"),
+      path: basePath("admin/busTimeTable"),
     },
   ],
 };
