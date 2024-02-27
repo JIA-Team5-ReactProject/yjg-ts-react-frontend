@@ -17,22 +17,25 @@ function ReservationList() {
   //예약이 미승인된 유저 리스트
   const [unreservedUser, setUnreservedUser] = useState([]);
   //리스트 헤드, 데이터 틀
-  const headList = ["이름", "시간", "시술유형"];
-  const dataList = ["user_name", "reservation_date", "service_name"];
+  const headList = ["이름", "휴대폰", "시간", "시술유형"];
+  const dataList = [
+    "user_name",
+    "phone_number",
+    "reservation_time",
+    "service_name",
+  ];
 
   useEffect(() => {
     // 날짜 변경 시 발생
     if (clickDay instanceof Date) {
       const formattedData = dayjs(clickDay).format("YYYY-MM-DD");
       getData({
-        status: "C",
-        start_date: formattedData,
-        end_date: formattedData,
+        status: "confirm",
+        r_date: formattedData,
       });
       getData({
-        status: "S",
-        start_date: formattedData,
-        end_date: formattedData,
+        status: "submit",
+        r_date: formattedData,
       });
     }
   }, [clickDay]);
@@ -48,10 +51,10 @@ function ReservationList() {
         "/api/admin/salon-reservation",
         config
       );
-      if (data.status === "C") {
+      if (data.status === "confirm") {
         //예약 승인 값
         setReservationUser(reservationData.data.reservations);
-      } else if (data.status === "S") {
+      } else if (data.status === "submit") {
         //예약 미승인 값
         setUnreservedUser(reservationData.data.reservations);
       }
@@ -75,8 +78,8 @@ function ReservationList() {
         </S.CalendarBox>
       </div>
 
-      <div className=" flex-1 h-fit grid grid-cols-3 p-12">
-        <div className="col-span-3 text-4xl font-bold mb-10 tracking-tighter text-left">
+      <div className=" flex-1 h-fit grid grid-cols-4 p-12">
+        <div className="col-span-4 text-4xl font-bold mb-10 tracking-tighter text-left">
           예약 확정 목록
         </div>
         <ListHead headList={headList} />
