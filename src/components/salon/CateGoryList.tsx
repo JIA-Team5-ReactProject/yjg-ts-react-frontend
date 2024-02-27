@@ -1,15 +1,69 @@
-import { useState } from "react";
-import PlusIcon from "../../icons/PlusIcon";
-import { ListBtn, ListHead } from "../master/UserList";
+import { useEffect, useState } from "react";
+import { ListBtn } from "../master/UserList";
+import { CategoryType, GetServiceType, ServiceType } from "../../types/salon";
+import { customAxios } from "../../services/customAxios";
+import ServiceList from "./ServiceList";
+import { AxiosRequestConfig } from "axios";
 
-function CateGoryList(props: any) {
-  const { name } = props;
+function CateGoryList(props: CategoryType) {
+  const {
+    id,
+    category,
+    gender,
+    deleteCategoryFuc,
+    modifyCategoryFuc,
+    getCategoryFuc,
+  } = props;
   // 카테고리 이름 수정 상태
   const [modify, setModify] = useState(false);
   // 수정 내용
   const [newName, setNewName] = useState("");
   // 서비스 드롭다운 상태
   const [dropdown, setDropdown] = useState(false);
+  // 서비스 리스트
+  const [service, setService] = useState<ServiceType[]>([]);
+
+  // 서비스 리스트 가져오기
+  const getServiceData = async (data: GetServiceType) => {
+    try {
+      const config: AxiosRequestConfig = {
+        params: data,
+      };
+      const serviceData = await customAxios.get(
+        "/api/admin/salon-service/",
+        config
+      );
+      setService(serviceData.data.services);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 서비스 리스트 추가하기
+  const createService = async (id: string, service: string, price: string) => {
+    try {
+      await customAxios.post("/api/admin/salon-service", {
+        category_id: id,
+        service_name: service,
+        gender: gender,
+        price: price,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 서비스 리스트 삭제하기
+  const deleteService = async (service_id: string) => {
+    try {
+      await customAxios.delete(`/api/admin/salon-service/${service_id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getServiceData({ category_id: id, gender: gender });
+  }, [gender]);
 
   return (
     <div>
@@ -29,6 +83,9 @@ function CateGoryList(props: any) {
               color="bg-sky-500"
               onClick={() => {
                 setModify(false);
+                modifyCategoryFuc(id, newName).then(() => {
+                  getCategoryFuc();
+                });
               }}
             />
             <ListBtn
@@ -41,7 +98,7 @@ function CateGoryList(props: any) {
           </>
         ) : (
           <>
-            <div className="w-32 text-center">{name}</div>
+            <div className="w-32 text-center">{category}</div>
             <ListBtn
               value="수정"
               color="bg-pink-500"
@@ -49,39 +106,41 @@ function CateGoryList(props: any) {
                 setModify(true);
               }}
             />
-            <ListBtn value="삭제" color="bg-red-500" onClick={() => {}} />
+            <ListBtn
+              value="삭제"
+              color="bg-red-500"
+              onClick={() => {
+                deleteCategoryFuc(id).then(() => {
+                  getCategoryFuc();
+                });
+              }}
+            />
           </>
         )}
         <div className="flex-1 flex justify-end">
           <span
             className="text-sm items-center underline underline-offset-4 cursor-pointer text-gray-500"
-            onClick={() => setDropdown(!dropdown)}
+            onClick={() => {
+              setDropdown(!dropdown);
+              if (!dropdown)
+                getServiceData({ category_id: id, gender: gender });
+            }}
           >
             {dropdown ? "닫기" : "열기"}
           </span>
         </div>
       </div>
-      <ServiceList dropdown={dropdown} />
-    </div>
-  );
-}
-
-function ServiceList(props: any) {
-  const { dropdown } = props;
-  const headList = ["시술명", "가격", "수정하기", "삭제하기"];
-  const dataList = [];
-
-  return (
-    <>
       {dropdown ? (
-        <div className="relative grid grid-cols-4 mt-4">
-          {<ListHead headList={headList} />}
-          <div className="absolute right-0 pt-1 pr-2">
-            <PlusIcon />
-          </div>
-        </div>
+        <ServiceList
+          id={id}
+          service={service}
+          gender={gender}
+          createServiceFuc={createService}
+          deleteServiceFuc={deleteService}
+          getServiceFuc={getServiceData}
+        />
       ) : null}
-    </>
+    </div>
   );
 }
 
