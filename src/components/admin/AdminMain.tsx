@@ -1,8 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { ListBtn, ListHead } from "../master/UserList";
 import CountCard from "../salon/CountCard";
 
 function AdminMain() {
   const headList = ["제목", "태그", "작성자"];
+  const navigate = useNavigate();
 
   return (
     <div className="flex gap-40 mt-6 pr-10">
@@ -43,7 +45,13 @@ function AdminMain() {
             </div>
           </div>
           <div className="flex-1"></div>
-          <ListBtn value="작성" color="bg-cyan-600" onClick={() => {}} />
+          <ListBtn
+            value="작성"
+            color="bg-cyan-600"
+            onClick={() => {
+              navigate("/main/post/writing");
+            }}
+          />
         </div>
         <div className="grid grid-cols-3">
           {<ListHead headList={headList} />}

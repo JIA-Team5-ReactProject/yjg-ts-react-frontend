@@ -3,6 +3,6 @@ type ValuePiece = Date | null;
 
 type GetTodayReservation = {
   status: string;
-  start_date?: string;
-  end_date?: string;
+  r_date?: string;
+  r_time?: string;
 };

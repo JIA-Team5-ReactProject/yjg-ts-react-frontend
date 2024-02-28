@@ -54,11 +54,12 @@ function ListHead(props: { headList: string[] }) {
 
 //버튼
 function ListBtn(props: DataListBtnType) {
-  const { value, color, onClick, user } = props;
+  const { value, color, onClick, user, type } = props;
   return (
     <button
       className={`middle none center rounded-lg ${color} py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40  focus:shadow-none active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
       data-ripple-light="true"
+      type={type ? type : "button"}
       onClick={() => {
         onClick(user);
       }}

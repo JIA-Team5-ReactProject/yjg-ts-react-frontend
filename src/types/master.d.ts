@@ -7,6 +7,7 @@ export type UserListType = {
 
 export type DataListBtnType = {
   user?: Record<string | unknown>;
+  type?: "submit";
   value: string;
   color: string;
   onClick: (number) => void;

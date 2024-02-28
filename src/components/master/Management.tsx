@@ -84,7 +84,7 @@ function Management() {
     try {
       //선택된 유저 권한 변경 요청
       await customAxios.patch("/api/admin/privilege", {
-        id: userId.current,
+        admin_id: userId.current,
         ...data,
       });
       getData({ type: "approved" });
