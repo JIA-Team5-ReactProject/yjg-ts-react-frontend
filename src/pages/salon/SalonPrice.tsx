@@ -1,10 +1,11 @@
+import MainContainer from "../../components/MainContainer";
 import PriceCorrection from "../../components/salon/PriceCorrection";
 
 function SalonPrice() {
   return (
-    <div className="flex-auto h-screen pt-32 pr-6 pb-6 overflow-auto">
+    <MainContainer>
       <PriceCorrection />
-    </div>
+    </MainContainer>
   );
 }
 
