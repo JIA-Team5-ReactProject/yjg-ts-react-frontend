@@ -1,18 +1,19 @@
 import { useState } from "react";
 import PasswordConfirmation from "../components/mypage/PasswordConfirmation";
 import MypageForm from "../components/mypage/MypageForm";
+import MainContainer from "../components/MainContainer";
 
 function Mypage() {
-  const [passwordCheck, setPasswordCheck] = useState(true);
+  const [passwordCheck, setPasswordCheck] = useState(false);
 
   return (
-    <div className="flex-auto h-screen pt-32 pr-6 pb-6">
+    <MainContainer>
       {passwordCheck ? (
         <MypageForm />
       ) : (
         <PasswordConfirmation setPasswordCheck={setPasswordCheck} />
       )}
-    </div>
+    </MainContainer>
   );
 }
 
