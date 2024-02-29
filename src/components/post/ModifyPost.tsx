@@ -3,21 +3,45 @@ import Editor from "./Editor";
 import { ListBtn } from "../master/UserList";
 import PostImg from "./PostImg";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { PostFormType } from "../../types/post";
+import { NoticeType, ModifyFormType } from "../../types/post";
 import { customAxios } from "../../services/customAxios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import PostPrevImg from "./PostPrevImg";
+import { AxiosRequestConfig } from "axios";
 
-function WritePost() {
+function ModifyPost() {
+  // 수정하는 게시글 ID
+  const { id } = useParams();
+  // 수정하는 게시글 DATA
+  const [notice, setNotice] = useState<NoticeType>();
   const {
     handleSubmit,
     control,
     register,
+    setValue,
     formState: { errors },
-  } = useForm<PostFormType>();
+  } = useForm<ModifyFormType>();
   const navigate = useNavigate();
 
-  // 공지사항 제출 함수
-  const onSubmit: SubmitHandler<PostFormType> = async (data) => {
+  // 페이지 렌더링 시
+  useEffect(() => {
+    getNotice();
+  }, []);
+
+  // 공지사항 마운트 시
+  useEffect(() => {
+    if (notice) {
+      setValue("title", notice.title);
+      setValue("tag", notice.tag);
+      setValue("urgent", notice.urgent);
+      setValue("content", notice.content);
+    }
+  }, [notice]);
+
+  // 공지사항 수정 제출 함수
+  const onSubmit: SubmitHandler<ModifyFormType> = async (data) => {
+    console.log(data);
     try {
       const formData = new FormData();
       if (data.images && data.images.length > 0) {
@@ -25,18 +49,34 @@ function WritePost() {
           formData.append(`images[${index}]`, image);
         });
       }
+      if (data.delete_images && data.delete_images.length > 0) {
+        data.delete_images.forEach((id, index) => {
+          formData.append(`delete_images[${index}]`, id);
+        });
+      }
       formData.append("title", data.title);
       formData.append("content", data.content);
       formData.append("tag", data.tag);
+      formData.append("_method", "PATCH");
       if (data.urgent) {
         formData.append("urgent", "1");
       }
-      await customAxios.post("/api/admin/notice", formData, {
+      await customAxios.post(`/api/admin/notice/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      navigate("/main/admin");
+      navigate(`/main/post/reading/${id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 공지사항 가져오기
+  const getNotice = async () => {
+    try {
+      const noticeData = await customAxios.get(`/api/admin/notice/${id}`);
+      setNotice(noticeData.data.notice);
     } catch (error) {
       console.log(error);
     }
@@ -45,11 +85,11 @@ function WritePost() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col p-4">
       <div className="flex">
-        <div className="font-bold text-3xl mb-10">공지사항 작성</div>
+        <div className="font-bold text-3xl mb-10">공지사항 수정</div>
         <div className="flex-1"></div>
         <div className="flex gap-5 h-fit">
           <ListBtn
-            value="작성완료"
+            value="수정완료"
             color="bg-blue-500"
             type="submit"
             onClick={() => {}}
@@ -120,6 +160,20 @@ function WritePost() {
           <Editor value={field.value} setValue={field.onChange} />
         )}
       />
+      {notice?.notice_images ? (
+        <Controller
+          control={control}
+          name="delete_images"
+          defaultValue={[]}
+          render={({ field }) => (
+            <PostPrevImg
+              prevImgData={notice.notice_images}
+              prevImg={field.value}
+              setPrevImg={field.onChange}
+            />
+          )}
+        />
+      ) : null}
       <Controller
         control={control}
         name="images"
@@ -132,4 +186,4 @@ function WritePost() {
   );
 }
 
-export default WritePost;
+export default ModifyPost;

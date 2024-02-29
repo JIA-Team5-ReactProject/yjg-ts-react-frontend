@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { ChangeEvent } from "react";
 import CloseIcon from "../../icons/CloseIcon";
 import { PostImgType } from "../../types/post";
 
@@ -11,7 +11,7 @@ function PostImg(props: PostImgType) {
     const updatedImages = [...selectedImg];
     if (files)
       for (let i = 0; i < files.length; i++) {
-        updatedImages.push(URL.createObjectURL(files[i]));
+        updatedImages.push(files[i]);
       }
 
     setSelectedImg(updatedImages);
@@ -22,19 +22,18 @@ function PostImg(props: PostImgType) {
     const updatedImages = [...selectedImg];
     updatedImages.splice(index, 1);
     setSelectedImg(updatedImages);
-    console.log(selectedImg);
   };
 
   // 이미지 미리보기 생성
   const renderImagePreviews = () => {
-    return selectedImg.map((imageUrl, index) => (
+    return selectedImg.map((imageFile, index) => (
       <div key={index} className="flex w-40 relative">
         <img
-          src={imageUrl}
+          src={URL.createObjectURL(imageFile)}
           alt={`Image ${index}`}
-          className="object-contain h-full"
+          className="object-contain h-60"
         />
-        <div className="absolute text-black right-0 top-[-20px] bg-sky-100 rounded-full">
+        <div className="absolute text-black -right-4 top-[-20px] bg-sky-100 rounded-full">
           <CloseIcon
             onClick={() => {
               handleImageDelete(index);
@@ -75,10 +74,18 @@ function PostImg(props: PostImgType) {
           onChange={handleImageChange}
         />
       </div>
-      {/* 선택된 이미지 미리보기 */}
       {selectedImg.length > 0 && (
-        <div className="image-previews flex border-b-4 w-fit border-black p-3 h-60 ">
-          {renderImagePreviews()}
+        <div className="border-4 border-sky-400 relative my-6 rounded-3xl p-6">
+          {selectedImg.length > 0 && (
+            <>
+              <span className="absolute font-bold text-lg top-0 transform -translate-y-2/3 left-5 px-2 bg-white">
+                추가 이미지
+              </span>
+              <div className="image-previews flex flex-wrap gap-4 p-3">
+                {renderImagePreviews()}
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

@@ -18,6 +18,7 @@ import StayOut from "./pages/admin/StayOut";
 import MeetingRoom from "./pages/admin/MeetingRoom";
 import BusTimeTable from "./pages/admin/BusTimeTable";
 import Writing from "./pages/post/Writing";
+import Modifying from "./pages/post/Modifying";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="admin/busTimeTable" element={<BusTimeTable />} />
           <Route path="post/reading/:id" element={<Reading />} />
           <Route path="post/writing" element={<Writing />} />
+          <Route path="post/modifying/:id" element={<Modifying />} />
           <Route path="restaurant" element />
         </Route>
       </Routes>
