@@ -6,12 +6,17 @@ import CheckIcon from "../../icons/CheckIcon";
 import { GetApprovedData } from "../../types/master";
 import { AxiosRequestConfig } from "axios";
 
-function Management() {
-  const headList = ["이름", "전화번호", "메일", "관리"];
+function OVerallUser() {
+  const headList = [
+    { value: "이름", col: "col-span-1" },
+    { value: "전화번호", col: "col-span-1" },
+    { value: "메일", col: "col-span-1" },
+    { value: "", col: "col-span-1" },
+  ];
   const dataList = [
-    "name",
-    "phone_number",
-    "email",
+    { value: "name", col: "col-span-1" },
+    { value: "phone_number", col: "col-span-1" },
+    { value: "email", col: "col-span-1" },
     [
       {
         value: "권한설정",
@@ -41,13 +46,13 @@ function Management() {
   });
   let userId = useRef(0);
 
+  //페이지 접속 시 승인 유저 데이터 받아오기
   useEffect(() => {
-    //페이지 접속 시 승인 유저 데이터 받아오기
     getData({ type: "approved" });
   }, []);
 
+  // 모달 접속 시 해당 유저 데이터 받아오기
   useEffect(() => {
-    // 모달 접속 시 해당 유저 데이터 받아오기
     if (onModal) {
       let copy = {
         salon_privilege: onModal.salon_privilege,
@@ -59,30 +64,30 @@ function Management() {
     }
   }, [onModal]);
 
+  // 승인 유저데이터 가져오기
   const getData = async (data: GetApprovedData) => {
     try {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      // 승인 유저데이터 가져오기
-      const approvedData = await customAxios.get("/api/admin", config);
+      const approvedData = await customAxios.get("/api/admin/list", config);
       setApprovedUsers(approvedData.data.admins);
     } catch (error) {
       console.log(error);
     }
   };
+  // 유저데이터 삭제하기
   const deleteData = async (data: number) => {
     try {
-      // 유저데이터 삭제하기
       await customAxios.delete(`/api/admin/${data}`);
       getData({ type: "approved" });
     } catch (error) {
       console.log(error);
     }
   };
+  //선택된 유저 권한 변경 요청
   const patchPower = async (data: any) => {
     try {
-      //선택된 유저 권한 변경 요청
       await customAxios.patch("/api/admin/privilege", {
         admin_id: userId.current,
         ...data,
@@ -94,10 +99,10 @@ function Management() {
   };
 
   return (
-    <div className="flex-auto h-screen pt-32 pr-6 pb-6 overflow-scroll">
+    <div className="px-10">
       {onModal ? (
         <div className="fixed flex items-center justify-center inset-0 bg-black/35">
-          <div className="bg-white w-3/5 h-3/5 py-12">
+          <div className="bg-white w-3/5 h-3/5 py-12 overflow-auto">
             <div className="grid grid-cols-3 p-6 text-center text-2xl font-bold gap-5">
               <div className="col-span-3 text-2xl text-left font-bold mb-10 ml-5">
                 <span className="text-blue-700 text-5xl">{onModal.name} </span>
@@ -125,7 +130,7 @@ function Management() {
                 setUserPower={setUserPower}
               />
             </div>
-            <div className="flex justify-end mt-14 mr-6 gap-4">
+            <div className="flex justify-end mt-20 mr-14 gap-4">
               <ListBtn
                 value="저장"
                 color="bg-blue-500"
@@ -145,13 +150,15 @@ function Management() {
           </div>
         </div>
       ) : null}
-      <div className="grid grid-cols-4 p-12">
-        <div className="col-span-3 text-3xl font-bold mb-10 tracking-tighter text-left">
+      <div className="flex">
+        <div className="flex-1 text-3xl font-bold mb-10 tracking-tighter text-left">
           관리자 리스트
         </div>
-        <div className="col-span-1 self-end text-right p-4 tracking-widest font-semibold">
+        <div className="self-end text-right p-4 tracking-widest font-semibold">
           {approvedUsers.length}명
         </div>
+      </div>
+      <div className="grid grid-cols-4 border-x border-black/10 shadow-lg overflow-hidden rounded-2xl">
         <ListHead headList={headList} />
         {approvedUsers.map((user) => {
           return <UserList user={user} dataList={dataList} />;
@@ -161,7 +168,7 @@ function Management() {
   );
 }
 
-export default Management;
+export default OVerallUser;
 
 function CheckPower(props: {
   power: keyof UserPower;

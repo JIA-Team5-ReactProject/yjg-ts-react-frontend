@@ -8,14 +8,7 @@ function UserList(props: UserListType) {
       {dataList.map((v) => {
         return (
           <>
-            {typeof v === "string" ? (
-              <div
-                className="border-b py-5 bg-white text-center font-semibold text-lg
-              "
-              >
-                {user[v]}
-              </div>
-            ) : (
+            {v instanceof Array ? (
               <div className=" m-auto border-b py-4 w-full space-x-5 bg-white pr-3 text-center">
                 {v.map((v) => {
                   return (
@@ -28,6 +21,13 @@ function UserList(props: UserListType) {
                   );
                 })}
               </div>
+            ) : (
+              <div
+                className={`border-b border-r py-5 px-6 bg-white font-semibold text-lg ${v.col}
+              `}
+              >
+                {user[v.value]}
+              </div>
             )}
           </>
         );
@@ -37,14 +37,16 @@ function UserList(props: UserListType) {
 }
 
 //리스트 헤더
-function ListHead(props: { headList: string[] }) {
+function ListHead(props: { headList: { value: string; col: string }[] }) {
   const { headList } = props;
   return (
     <>
       {headList.map((v) => {
         return (
-          <div className="bg-blue-300/70 py-3 text-xl font-bold text-center">
-            {v}
+          <div
+            className={`bg-blue-300/70 px-5 py-3 text-xl font-bold ${v.col}`}
+          >
+            {v.value}
           </div>
         );
       })}

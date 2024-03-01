@@ -12,10 +12,14 @@ function ServiceList(props: ServiceListType) {
     deleteServiceFuc,
     getServiceFuc,
   } = props;
-  const headList = ["시술명", "가격", "삭제하기"];
+  const headList = [
+    { value: "시술명", col: "col-span-1" },
+    { value: "가격", col: "col-span-1" },
+    { value: "", col: "col-span-1" },
+  ];
   const dataList = [
-    "service",
-    "price",
+    { value: "service", col: "col-span-1" },
+    { value: "price", col: "col-span-1" },
     [
       {
         value: "삭제",
@@ -43,7 +47,7 @@ function ServiceList(props: ServiceListType) {
 
   return (
     <>
-      <div className="relative grid grid-cols-3 mt-4">
+      <div className="relative grid grid-cols-3 mt-2 text-center border-x border-black/10 shadow-lg overflow-hidden rounded-2xl">
         {<ListHead headList={headList} />}
         <div className="absolute right-0 pt-1 pr-2">
           <PlusIcon

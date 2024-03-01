@@ -34,11 +34,16 @@ function UnreservedList() {
   // 예약대기자 제목 스테이트
   const [head, setHead] = useState<string>();
   // 리스트 헤드, 데이터 틀
-  const headList = ["이름", "시간", "시술유형", "승인처리"];
+  const headList = [
+    { value: "이름", col: "col-span-1" },
+    { value: "시간", col: "col-span-1" },
+    { value: "시술유형", col: "col-span-1" },
+    { value: "승인처리", col: "col-span-1" },
+  ];
   const dataList = [
-    "user_name",
-    "reservation_time",
-    "service_name",
+    { value: "user_name", col: "col-span-1" },
+    { value: "reservation_time", col: "col-span-1" },
+    { value: "service_name", col: "col-span-1" },
     [
       {
         value: "승인",

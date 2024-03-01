@@ -1,8 +1,6 @@
-import { GetUserData } from "./auth";
-
 export type UserListType = {
   user: Record<string | unknown>;
-  dataList: (string | DataListBtnType[])[];
+  dataList: ({ value: string; col: string } | DataListBtnType[])[];
 };
 
 export type DataListBtnType = {

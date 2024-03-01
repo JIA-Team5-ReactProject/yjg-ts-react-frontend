@@ -5,8 +5,7 @@ import Main from "./pages/Main";
 import Join from "./pages/auth/Join";
 import FindMyAccount from "./pages/auth/FindMyAccount";
 import Mypage from "./pages/Mypage";
-import Master from "./pages/Master";
-import Management from "./components/master/Management";
+import Master from "./pages/master/Master";
 import Salon from "./pages/salon/Salon";
 import SalonPending from "./pages/salon/SalonPending";
 import SalonPrice from "./pages/salon/SalonPrice";
@@ -19,6 +18,7 @@ import MeetingRoom from "./pages/admin/MeetingRoom";
 import BusTimeTable from "./pages/admin/BusTimeTable";
 import Writing from "./pages/post/Writing";
 import Modifying from "./pages/post/Modifying";
+import Management from "./pages/master/Management";
 
 function App() {
   return (

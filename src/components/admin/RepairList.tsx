@@ -8,17 +8,32 @@ function RepairList() {
     {
       state: "completed",
       head: "처리완료",
-      headList: ["제목", "작성자", "호수", "처리일자"],
+      headList: [
+        { value: "제목", col: "col-span-1" },
+        { value: "작성자", col: "col-span-1" },
+        { value: "호수", col: "col-span-1" },
+        { value: "처리일자", col: "col-span-1" },
+      ],
     },
     {
       state: "repairing",
       head: "처리중",
-      headList: ["제목", "작성자", "호수", "방문희망"],
+      headList: [
+        { value: "제목", col: "col-span-1" },
+        { value: "작성자", col: "col-span-1" },
+        { value: "호수", col: "col-span-1" },
+        { value: "방문희망", col: "col-span-1" },
+      ],
     },
     {
       state: "unchecked",
       head: "미처리",
-      headList: ["제목", "작성자", "호수", "작성일자"],
+      headList: [
+        { value: "제목", col: "col-span-1" },
+        { value: "작성자", col: "col-span-1" },
+        { value: "호수", col: "col-span-1" },
+        { value: "작성일자", col: "col-span-1" },
+      ],
     },
   ];
 

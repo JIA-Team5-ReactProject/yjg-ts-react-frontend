@@ -17,12 +17,17 @@ function ReservationList() {
   //예약이 미승인된 유저 리스트
   const [unreservedUser, setUnreservedUser] = useState([]);
   //리스트 헤드, 데이터 틀
-  const headList = ["이름", "휴대폰", "시간", "시술유형"];
+  const headList = [
+    { value: "이름", col: "col-span-1" },
+    { value: "휴대폰", col: "col-span-1" },
+    { value: "시간", col: "col-span-1" },
+    { value: "시술유형", col: "col-span-1" },
+  ];
   const dataList = [
-    "user_name",
-    "phone_number",
-    "reservation_time",
-    "service_name",
+    { value: "user_name", col: "col-span-1" },
+    { value: "phone_number", col: "col-span-1" },
+    { value: "reservation_time", col: "col-span-1" },
+    { value: "service_name", col: "col-span-1" },
   ];
 
   useEffect(() => {

@@ -1,5 +1,5 @@
-import MainContainer from "../components/MainContainer";
-import MasterMain from "../components/master/MasterMain";
+import MainContainer from "../../components/MainContainer";
+import MasterMain from "../../components/master/MasterMain";
 
 function Master() {
   return (

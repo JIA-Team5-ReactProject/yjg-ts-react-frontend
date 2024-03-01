@@ -67,7 +67,7 @@ function CateGoryList(props: CategoryType) {
 
   return (
     <div>
-      <div className="flex gap-3 items-center border-2 border-gray-300 p-4 rounded-lg mt-10 text-2xl font-bold">
+      <div className="flex gap-3 items-center border-2 border-gray-300 p-4 rounded-lg mt-10 text-2xl font-bold shadow-md">
         {modify ? (
           <>
             <input
