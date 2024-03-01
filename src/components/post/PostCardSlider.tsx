@@ -1,6 +1,5 @@
 import { PostContainer } from "../../styles/post";
 import Slider, { Settings } from "react-slick";
-import testImg from "../../assets/schoolImg/test.jpg";
 
 function PostCardSlider(props: { img?: { image: string }[] }) {
   const { img } = props;

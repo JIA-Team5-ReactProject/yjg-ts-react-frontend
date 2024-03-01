@@ -5,7 +5,12 @@ import dayjs from "dayjs";
 import { ListHead } from "../master/UserList";
 
 function CheckStay() {
-  const headList = ["학번", "이름", "사유", "비고"];
+  const headList = [
+    { value: "학번", col: "col-span-1" },
+    { value: "이름", col: "col-span-1" },
+    { value: "사유", col: "col-span-1" },
+    { value: "비고", col: "col-span-1" },
+  ];
   //캘린더에서 선택한 DATE값
   const [clickDay, setClickDay] = useState<Value>(new Date());
   // 리스트종류 스테이트

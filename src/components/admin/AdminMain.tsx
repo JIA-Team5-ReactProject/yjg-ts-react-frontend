@@ -9,10 +9,14 @@ import Pagination from "../post/page/Pagination";
 import SearchBar from "../post/page/SearchBar";
 
 function AdminMain() {
-  const headList = ["제목", "태그", ""];
+  const headList = [
+    { value: "제목", col: "col-span-4" },
+    { value: "태그", col: "col-span-1" },
+    { value: "", col: "col-span-1" },
+  ];
   const dataList = [
-    "title",
-    "tag",
+    { value: "title", col: "col-span-4" },
+    { value: "tag", col: "col-span-1" },
     [
       {
         value: "조회",
@@ -102,13 +106,14 @@ function AdminMain() {
             }}
           />
         </div>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-6 border-x border-black/10 shadow-lg overflow-hidden rounded-2xl">
           {<ListHead headList={headList} />}
           {noticeList.map((user) => {
             return <UserList user={user} dataList={dataList} />;
           })}
         </div>
         <Pagination page={page} setPage={setPage} lastPage={lastPage} />
+        <div className="text-center font-bold text-xs">{`1 - ${lastPage}`}</div>
       </div>
     </div>
   );
