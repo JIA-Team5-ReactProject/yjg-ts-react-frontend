@@ -2,7 +2,8 @@ import { PostContainer } from "../../styles/post";
 import Slider, { Settings } from "react-slick";
 import testImg from "../../assets/schoolImg/test.jpg";
 
-function PostCardSlider() {
+function PostCardSlider(props: { img?: { image: string }[] }) {
+  const { img } = props;
   const settings: Settings = {
     dots: true,
     infinite: false,
@@ -13,7 +14,9 @@ function PostCardSlider() {
   return (
     <PostContainer>
       <Slider {...settings}>
-        <WaitingCard />
+        {img?.map((img, index) => (
+          <WaitingCard key={index} image={img} />
+        ))}
       </Slider>
     </PostContainer>
   );
@@ -21,10 +24,12 @@ function PostCardSlider() {
 
 export default PostCardSlider;
 
-function WaitingCard() {
+function WaitingCard(props: { image: { image: string } }) {
+  const { image } = props;
+
   return (
     <div className="w-full h-full flex justify-center">
-      <img src={testImg} alt="logo" className="max-h-full object-contain" />
+      <img src={image.image} alt="logo" className="max-h-full object-contain" />
     </div>
   );
 }

@@ -26,6 +26,11 @@ function PriceCorrection() {
     },
   ];
 
+  // 페이지 렌더링할 시
+  useEffect(() => {
+    getCategoryData();
+  }, []);
+
   // 카테고리 리스트 가져오기
   const getCategoryData = async () => {
     try {
@@ -67,11 +72,6 @@ function PriceCorrection() {
       console.log(error);
     }
   };
-
-  // 페이지 렌더링할 시
-  useEffect(() => {
-    getCategoryData();
-  }, []);
 
   return (
     <div>
