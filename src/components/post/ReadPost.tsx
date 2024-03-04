@@ -89,7 +89,7 @@ function ReadPost() {
           value="수정"
           color="bg-sky-500"
           onClick={() => {
-            navigate(`/main/post/modifying/${id}`);
+            navigate(`/main/admin/post/modifying/${id}`);
           }}
         />
         <ListBtn value="삭제" color="bg-red-500" onClick={deleteNotice} />

@@ -54,7 +54,6 @@ export type UserPower = {
 export type LoginUserData = {
   id: number;
   img?: string;
-  approved: boolean;
   power: UserPower;
 } & LoginFormValues &
   FindingIdValues;
@@ -69,5 +68,5 @@ export type PostUserData = {
   admin_id: number;
   name?: string;
   phone_number?: string;
-  password: string;
+  password?: string;
 };

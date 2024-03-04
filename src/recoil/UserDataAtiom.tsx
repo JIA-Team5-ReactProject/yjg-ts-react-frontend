@@ -10,7 +10,6 @@ export const UserDataAtom = atom<LoginUserData>({
     phone: "",
     email: "",
     password: "",
-    approved: false,
 
     power: {
       master: false,

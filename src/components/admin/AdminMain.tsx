@@ -22,7 +22,7 @@ function AdminMain() {
         value: "조회",
         color: "bg-cyan-500",
         onClick: (user: NoticeListType) => {
-          navigate(`/main/post/reading/${user.id}`);
+          navigate(`/main/admin/post/reading/${user.id}`);
         },
       },
     ],
@@ -102,7 +102,7 @@ function AdminMain() {
             value="작성"
             color="bg-cyan-600"
             onClick={() => {
-              navigate("/main/post/writing");
+              navigate("/main/admin/post/writing");
             }}
           />
         </div>
