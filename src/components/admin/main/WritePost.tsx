@@ -1,10 +1,10 @@
-import FormInput from "../auth/FormInput";
-import Editor from "./Editor";
-import { ListBtn } from "../master/UserList";
-import PostImg from "./PostImg";
+import FormInput from "../../auth/FormInput";
+import Editor from "../../post/Editor";
+import { ListBtn } from "../../master/UserList";
+import PostImg from "../../post/PostImg";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { PostFormType } from "../../types/post";
-import { customAxios } from "../../services/customAxios";
+import { PostFormType } from "../../../types/post";
+import { customAxios } from "../../../services/customAxios";
 import { useNavigate } from "react-router-dom";
 
 function WritePost() {
@@ -31,7 +31,7 @@ function WritePost() {
       if (data.urgent) {
         formData.append("urgent", "1");
       }
-      await customAxios.post("/api/admin/notice", formData, {
+      await customAxios.post("/api/notice", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

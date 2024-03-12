@@ -1,8 +1,8 @@
 import { ListBtn } from "../master/UserList";
 import { customAxios } from "../../services/customAxios";
 import { useEffect, useState } from "react";
-import CateGoryList from "./CateGoryList";
-import { CategoryType } from "../../types/salon";
+import SalonCategoryList from "./SalonCategoryList";
+import { SalonCategoryType } from "../../types/salon";
 import PriceIcon from "../../icons/PriceTag";
 import PriceTag from "./PriceTag";
 
@@ -10,7 +10,7 @@ function PriceCorrection() {
   // 전체 가격표 상태
   const [priceTag, setPriceTag] = useState(false);
   // 카테고리 데이터
-  const [category, setCategory] = useState<CategoryType[]>([]);
+  const [category, setCategory] = useState<SalonCategoryType[]>([]);
   // 카테고리 생성 명 입력 값
   const [newCategoryName, setNewCategoryName] = useState("");
   // 리스트종류 스테이트
@@ -34,7 +34,7 @@ function PriceCorrection() {
   // 카테고리 리스트 가져오기
   const getCategoryData = async () => {
     try {
-      const categoryData = await customAxios.get("/api/admin/salon-category");
+      const categoryData = await customAxios.get("/api/salon/category");
       setCategory(categoryData.data.categories);
     } catch (error) {
       console.log(error);
@@ -44,7 +44,7 @@ function PriceCorrection() {
   // 카테고리 생성
   const createCategory = async () => {
     try {
-      await customAxios.post("/api/admin/salon-category", {
+      await customAxios.post("/api/salon/category", {
         category_name: newCategoryName,
       });
     } catch (error) {
@@ -55,7 +55,7 @@ function PriceCorrection() {
   // 카테고리 이름 수정하기
   const modifyCategory = async (id: string, newName: string) => {
     try {
-      await customAxios.patch("/api/admin/salon-category", {
+      await customAxios.patch("/api/salon/category", {
         category_id: id,
         category_name: newName,
       });
@@ -67,7 +67,7 @@ function PriceCorrection() {
   // 카테고리 삭제
   const deleteCategory = async (id: string) => {
     try {
-      await customAxios.delete(`/api/admin/salon-category/${id}`);
+      await customAxios.delete(`/api/salon/category/${id}`);
     } catch (error) {
       console.log(error);
     }
@@ -134,7 +134,7 @@ function PriceCorrection() {
         </div>
       </div>
       {category.map((v) => (
-        <CateGoryList
+        <SalonCategoryList
           id={v.id}
           category={v.category}
           gender={listKind}

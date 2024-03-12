@@ -3,7 +3,7 @@ import SidePowerModal from "./SidePowerModal";
 import { UserDataAtom } from "../../recoil/UserDataAtiom";
 import { admin, master, restaurant, salon } from "../../constants/powerList";
 import { useNavigate } from "react-router-dom";
-import { customAxios } from "../../services/customAxios";
+import { customAxios, setAuthToken } from "../../services/customAxios";
 
 function Sidebar() {
   const userData = useRecoilValue(UserDataAtom);
@@ -11,8 +11,14 @@ function Sidebar() {
 
   //로그아웃 함수
   const logoutPost = async () => {
-    await customAxios.post("/api/admin/logout");
-    navigate("/login");
+    try {
+      await customAxios.post("/api/admin/logout");
+      localStorage.removeItem("token");
+      setAuthToken(null);
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

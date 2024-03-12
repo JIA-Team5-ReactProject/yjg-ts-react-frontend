@@ -5,7 +5,7 @@ export type ReservationUserType = {
   reservation_time: string;
 };
 
-export type CategoryType = {
+export type SalonCategoryType = {
   id: string;
   category: string;
   gender: string;
@@ -14,7 +14,7 @@ export type CategoryType = {
   getCategoryFuc: () => Promise<void>;
 };
 
-export type ServiceType = {
+export type SalonServiceType = {
   salon_category_id: string;
   id: string;
   service: string;
@@ -24,7 +24,7 @@ export type ServiceType = {
 
 export type ServiceListType = {
   id: string;
-  service: ServiceType[];
+  service: SalonServiceType[];
   gender: string;
   createServiceFuc: (
     id: string,
@@ -55,8 +55,8 @@ export type BreakTimeType = {
 
 export type AllServiceType = {
   category: string;
-  male: ServiceType[];
-  female: ServiceType[];
+  male: SalonServiceType[];
+  female: SalonServiceType[];
 };
 
 export type GetServiceType = {
@@ -67,11 +67,11 @@ export type GetServiceType = {
 export type PriceTagType = {
   priceTag: boolean;
   setPriceTag: (value: boolean) => void;
-  category: CategoryType[];
+  category: SalonCategoryType[];
 };
 
 export type ServiceTagType = {
-  category: CategoryType[];
-  service: ServiceType[];
+  category: SalonCategoryType[];
+  service: SalonServiceType[];
   gender: string;
 };

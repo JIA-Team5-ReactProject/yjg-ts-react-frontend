@@ -1,5 +1,5 @@
 import MainContainer from "../../components/MainContainer";
-import CheckStay from "../../components/admin/CheckStay";
+import CheckStay from "../../components/admin/overNight/CheckStay";
 
 function StayOut() {
   return (

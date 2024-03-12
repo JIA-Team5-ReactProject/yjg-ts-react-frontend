@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import CloseIcon from "../../icons/CloseIcon";
 import { customAxios } from "../../services/customAxios";
-import { PriceTagType, ServiceTagType, ServiceType } from "../../types/salon";
+import {
+  PriceTagType,
+  ServiceTagType,
+  SalonServiceType,
+} from "../../types/salon";
 
 function PriceTag(props: PriceTagType) {
   const { priceTag, setPriceTag, category } = props;
   // 서비스 데이터
-  const [service, setService] = useState<ServiceType[]>([]);
+  const [service, setService] = useState<SalonServiceType[]>([]);
 
   // 서비스 리스트 가져오기
   const getServiceData = async () => {
     try {
-      const serviceData = await customAxios.get("/api/admin/salon-service");
+      const serviceData = await customAxios.get("/api/salon/service");
       setService(serviceData.data.services);
     } catch (error) {
       console.log(error);

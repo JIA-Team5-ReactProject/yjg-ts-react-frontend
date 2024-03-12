@@ -29,7 +29,9 @@ function OVerallUser() {
         value: "삭제",
         color: "bg-red-400",
         onClick: (data: GetUserData) => {
-          deleteData(data.id);
+          deleteData(data.id).then(() => {
+            getData({ type: "approved" });
+          });
         },
       },
     ],
@@ -76,23 +78,23 @@ function OVerallUser() {
       console.log(error);
     }
   };
+
   // 유저데이터 삭제하기
   const deleteData = async (data: number) => {
     try {
-      await customAxios.delete(`/api/admin/${data}`);
-      getData({ type: "approved" });
+      await customAxios.delete(`/api/admin/master/${data}`);
     } catch (error) {
       console.log(error);
     }
   };
+
   //선택된 유저 권한 변경 요청
-  const patchPower = async (data: any) => {
+  const patchPower = async (data: UserPower) => {
     try {
       await customAxios.patch("/api/admin/privilege", {
         admin_id: userId.current,
         ...data,
       });
-      getData({ type: "approved" });
     } catch (error) {
       console.log(error);
     }
@@ -135,7 +137,9 @@ function OVerallUser() {
                 value="저장"
                 color="bg-blue-500"
                 onClick={() => {
-                  patchPower(userPower);
+                  patchPower(userPower).then(() => {
+                    getData({ type: "approved" });
+                  });
                   setOnModal(undefined);
                 }}
               />

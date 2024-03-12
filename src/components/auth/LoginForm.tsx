@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { LoginFormValues } from "../../types/auth";
 import { trimValues } from "../../utils/validate";
-import { customAxios } from "../../services/customAxios";
+import { customAxios, setAuthToken } from "../../services/customAxios";
 import { emailReg } from "../../utils/regex";
 import { useSetRecoilState } from "recoil";
 import { UserDataAtom } from "../../recoil/UserDataAtiom";
@@ -43,25 +43,27 @@ function LoginForm(): JSX.Element {
     const trimData = trimValues(data);
     handleOnChange();
     try {
-      await customAxios.get("/sanctum/csrf-cookie");
       const loginPost = await customAxios.post("/api/admin/login", {
         email: trimData.email,
         password: trimData.password,
       });
-
+      const token = loginPost.data.access_token;
+      console.log(token);
+      window.localStorage.setItem("token", token);
+      setAuthToken(token);
+      const userData = loginPost.data.user;
       setUserData({
-        id: loginPost.data.admin_id,
-        name: loginPost.data.name,
+        id: userData.id,
+        name: userData.name,
         img: testImg,
-        phone: loginPost.data.phone_number,
-        email: loginPost.data.email,
-        password: loginPost.data.password,
-        approved: loginPost.data.approved,
+        phone: userData.phone_number,
+        email: userData.email,
+        password: userData.password,
         power: {
-          master: loginPost.data.master,
-          salon_privilege: loginPost.data.salon_privilege,
-          restaurant_privilege: loginPost.data.restaurant_privilege,
-          admin_privilege: loginPost.data.admin_privilege,
+          master: userData.master,
+          salon_privilege: userData.salon_privilege,
+          restaurant_privilege: userData.restaurant_privilege,
+          admin_privilege: userData.admin_privilege,
         },
       });
       navigate("/main");

@@ -19,7 +19,6 @@ function Routing() {
       <Route path="/join" element={<Join />} />
       <Route path="/findIdPw" element={<FindMyAccount />} />
       <Route path="/findIdPw/result" element={<FindResult />} />
-      <Route path="*" element={<NotFound />} />
       <Route path="/main" element={<Main />}>
         <Route path="mypage" element={<Mypage />} />
         <Route
@@ -56,6 +55,7 @@ function Routing() {
           }
         />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

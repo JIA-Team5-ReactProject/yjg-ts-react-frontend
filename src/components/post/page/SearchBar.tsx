@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { SearchType } from "../../../types/post";
 
 function SearchBar(props: SearchType) {
-  const { tag, setTag, setSearch } = props;
+  const { tag, setTag, setSearch, tagList } = props;
   const [inputContent, setInputContent] = useState("");
 
   // tag값 변경 시
@@ -26,13 +26,13 @@ function SearchBar(props: SearchType) {
         }}
         className="outline-none rounded-l-3xl focus:outline-none font-semibold text-base text-left border-r-2 border-gray-200 p-2"
       >
-        <option value="" className="py-2">
-          제목
-        </option>
-        <option value="admin">행정</option>
-        <option value="salon">미용실</option>
-        <option value="restaurant">식당</option>
-        <option value="bus">버스</option>
+        {tagList.map((v) => {
+          return (
+            <option value={v.name} className="py-2">
+              {v.name}
+            </option>
+          );
+        })}
       </select>
 
       <input

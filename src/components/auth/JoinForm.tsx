@@ -34,15 +34,17 @@ function JoinForm(): JSX.Element {
       return Promise.reject(new Error("이메일을 입력해주세요."));
     }
     //중복체크 API
-    const verifyEmail = await customAxios.get(
-      `/api/admin/verify-email/${email}`
-    );
-    if (verifyEmail.data.check) {
-      setDuplicateCheck(verifyEmail.data.check);
-    } else {
+    try {
+      const verifyEmail = await customAxios.get(
+        `/api/admin/verify-email/${email}`
+      );
+      if (verifyEmail.data.check) {
+        setDuplicateCheck(verifyEmail.data.check);
+      }
+    } catch (error: any) {
       setError(
         "email",
-        { message: "존재하는 이메일 입니다." },
+        { message: error.response.data.error },
         { shouldFocus: true }
       );
     }

@@ -16,9 +16,9 @@ function AdminRoutes() {
       <Route path="/stayOut" element={<StayOut />} />
       <Route path="/meetingRoom" element={<MeetingRoom />} />
       <Route path="/busTimeTable" element={<BusTimeTable />} />
-      <Route path="post/reading/:id" element={<Reading />} />
-      <Route path="post/writing" element={<Writing />} />
-      <Route path="post/modifying/:id" element={<Modifying />} />
+      <Route path="/reading/:id" element={<Reading />} />
+      <Route path="/writing" element={<Writing />} />
+      <Route path="/modifying/:id" element={<Modifying />} />
     </Routes>
   );
 }

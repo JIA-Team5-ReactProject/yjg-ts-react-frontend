@@ -70,3 +70,11 @@ export type PostUserData = {
   phone_number?: string;
   password?: string;
 };
+
+export type StudentType = {
+  id: string;
+  email: string;
+  name: string;
+  phone_number?: string;
+  student_id?: string;
+};
