@@ -1,3 +1,5 @@
+import { StudentType } from "./auth";
+
 export type PostType = {
   title: string;
   content: string;
@@ -31,6 +33,12 @@ export type PostPrevImgType = {
   setPrevImg: (value: string[]) => void;
 };
 
+export type getNoticeDataType = {
+  page: number;
+  tag?: string;
+  title?: string;
+};
+
 export type NoticeListType = {
   id: string;
 } & PostType;
@@ -41,6 +49,7 @@ export type NoticeType = {
 } & NoticeListType;
 
 export type SearchType = {
+  tagList: { value: string; name: string }[];
   tag: string;
   setTag: (tag: string) => void;
   setSearch: (seach: string) => void;
@@ -51,3 +60,25 @@ export type PaginationType = {
   setPage: (page: number) => void;
   lastPage: number;
 };
+
+export type getAfterServiceType = {
+  page: number;
+  name?: string;
+  status: number;
+};
+
+export type AfterServiceListType = {
+  id: string;
+  user_name?: string;
+  title: string;
+  content: string;
+  status: number;
+  visit_date: string;
+  visit_place: string;
+};
+
+export type AfterServiceType = {
+  user_id: string;
+  user: StudentType;
+  after_service_images?: { image: string; id: string }[];
+} & AfterServiceListType;

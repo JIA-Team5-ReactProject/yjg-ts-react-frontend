@@ -1,14 +1,13 @@
-import FormInput from "../auth/FormInput";
-import Editor from "./Editor";
-import { ListBtn } from "../master/UserList";
-import PostImg from "./PostImg";
+import FormInput from "../../auth/FormInput";
+import Editor from "../../post/Editor";
+import { ListBtn } from "../../master/UserList";
+import PostImg from "../../post/PostImg";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { NoticeType, ModifyFormType } from "../../types/post";
-import { customAxios } from "../../services/customAxios";
+import { NoticeType, ModifyFormType } from "../../../types/post";
+import { customAxios } from "../../../services/customAxios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import PostPrevImg from "./PostPrevImg";
-import { AxiosRequestConfig } from "axios";
+import PostPrevImg from "../../post/PostPrevImg";
 
 function ModifyPost() {
   // 수정하는 게시글 ID
@@ -41,7 +40,6 @@ function ModifyPost() {
 
   // 공지사항 수정 제출 함수
   const onSubmit: SubmitHandler<ModifyFormType> = async (data) => {
-    console.log(data);
     try {
       const formData = new FormData();
       if (data.images && data.images.length > 0) {
@@ -61,12 +59,12 @@ function ModifyPost() {
       if (data.urgent) {
         formData.append("urgent", "1");
       }
-      await customAxios.post(`/api/admin/notice/${id}`, formData, {
+      await customAxios.post(`/api/notice/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      navigate(`/main/post/reading/${id}`);
+      navigate(`/main/admin/reading/${id}`, { state: { type: "Post" } });
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +73,7 @@ function ModifyPost() {
   // 공지사항 가져오기
   const getNotice = async () => {
     try {
-      const noticeData = await customAxios.get(`/api/admin/notice/${id}`);
+      const noticeData = await customAxios.get(`/api/notice/${id}`);
       setNotice(noticeData.data.notice);
     } catch (error) {
       console.log(error);

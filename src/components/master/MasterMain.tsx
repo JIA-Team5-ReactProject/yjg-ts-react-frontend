@@ -21,14 +21,18 @@ function MasterMain() {
         value: "승인",
         color: "bg-blue-400",
         onClick: (data: GetUserData) => {
-          approval(data.id);
+          approval(data.id).then(() => {
+            getData({ type: "unapproved" });
+          });
         },
       },
       {
         value: "거절",
         color: "bg-red-400",
         onClick: (data: GetUserData) => {
-          unapproval(data.id);
+          deleteData(data.id).then(() => {
+            getData({ type: "unapproved" });
+          });
         },
       },
     ],
@@ -56,22 +60,17 @@ function MasterMain() {
     try {
       await customAxios.patch("/api/admin/approve", {
         admin_id: data,
-        approve: true,
+        approve: 1,
       });
-      getData({ type: "unapproved" });
     } catch (error) {
       console.log(error);
     }
   };
 
-  // 유저 데이터 거절요청
-  const unapproval = async (data: number) => {
+  // 유저데이터 거절 삭제하기
+  const deleteData = async (data: number) => {
     try {
-      await customAxios.patch("/api/admin/approve", {
-        admin_id: data,
-        approve: false,
-      });
-      getData({ type: "unapproved" });
+      await customAxios.delete(`/api/admin/master/${data}`);
     } catch (error) {
       console.log(error);
     }

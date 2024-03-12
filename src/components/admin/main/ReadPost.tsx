@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import ImageIcon from "../../icons/ImageIcon";
-import PostCardSlider from "./PostCardSlider";
-import CloseIcon from "../../icons/CloseIcon";
-import { ListBtn } from "../master/UserList";
+import ImageIcon from "../../../icons/ImageIcon";
+import PostCardSlider from "../../post/PostCardSlider";
+import CloseIcon from "../../../icons/CloseIcon";
+import { ListBtn } from "../../master/UserList";
 import { useNavigate, useParams } from "react-router-dom";
-import { customAxios } from "../../services/customAxios";
-import { NoticeType } from "../../types/post";
+import { customAxios } from "../../../services/customAxios";
+import { NoticeType } from "../../../types/post";
 
 function ReadPost() {
   // 글 ID 값
@@ -24,15 +24,17 @@ function ReadPost() {
   // 게시글 가져오기
   const getNoticeData = async () => {
     try {
-      const getNotice = await customAxios.get(`/api/admin/notice/${id}`);
+      const getNotice = await customAxios.get(`/api/notice/${id}`);
       setNotice(getNotice.data.notice);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // 게시글 삭제하기
   const deleteNotice = async () => {
     try {
-      await customAxios.delete(`/api/admin/notice/${id}`).then(() => {
+      await customAxios.delete(`/api/notice/${id}`).then(() => {
         navigate("/main/admin");
       });
     } catch (error) {
@@ -48,7 +50,7 @@ function ReadPost() {
         </div>
 
         <div className="flex flex-col p-2 font-bold text-right text-lg">
-          <div>작성자 : 김 현</div>
+          <div>작성자 : {notice?.tag}</div>
           {notice?.urgent ? <div>태그 : 🚨 {notice.tag}</div> : null}
         </div>
       </div>
@@ -84,15 +86,26 @@ function ReadPost() {
         </div>
         <div dangerouslySetInnerHTML={{ __html: notice?.content || "" }} />
       </div>
-      <div className="flex justify-end gap-4">
+      <div className="flex gap-4">
         <ListBtn
           value="수정"
           color="bg-sky-500"
           onClick={() => {
-            navigate(`/main/admin/post/modifying/${id}`);
+            navigate(`/main/admin/modifying/${id}`, {
+              state: { type: "Post" },
+            });
           }}
         />
         <ListBtn value="삭제" color="bg-red-500" onClick={deleteNotice} />
+        <div className="flex flex-1 justify-end">
+          <ListBtn
+            value="나가기"
+            color="bg-pink-700"
+            onClick={() => {
+              navigate("/main/admin");
+            }}
+          />
+        </div>
       </div>
     </div>
   );

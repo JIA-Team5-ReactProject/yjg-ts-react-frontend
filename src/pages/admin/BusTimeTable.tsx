@@ -1,5 +1,5 @@
 import MainContainer from "../../components/MainContainer";
-import BusManagement from "../../components/admin/BusManagement";
+import BusManagement from "../../components/admin/bus/BusManagement";
 
 function BusTimeTable() {
   return (

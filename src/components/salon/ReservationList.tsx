@@ -53,7 +53,7 @@ function ReservationList() {
       };
 
       const reservationData = await customAxios.get(
-        "/api/admin/salon-reservation",
+        "/api/salon/reservation",
         config
       );
       if (data.status === "confirm") {

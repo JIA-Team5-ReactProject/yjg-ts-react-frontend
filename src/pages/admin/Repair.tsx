@@ -1,5 +1,5 @@
 import MainContainer from "../../components/MainContainer";
-import RepairList from "../../components/admin/RepairList";
+import RepairList from "../../components/admin/as/RepairList";
 
 function Repair() {
   return (

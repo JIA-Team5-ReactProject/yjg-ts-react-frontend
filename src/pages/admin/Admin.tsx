@@ -1,5 +1,5 @@
 import MainContainer from "../../components/MainContainer";
-import AdminMain from "../../components/admin/AdminMain";
+import AdminMain from "../../components/admin/main/AdminMain";
 
 function Admin() {
   return (

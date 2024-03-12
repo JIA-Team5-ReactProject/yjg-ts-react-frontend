@@ -1,49 +1,43 @@
 import { useEffect, useState } from "react";
-import PlusIcon from "../../icons/PlusIcon";
-import { ServiceListType, ServiceType } from "../../types/salon";
-import { ListBtn, ListHead, UserList } from "../master/UserList";
+import { BusScheduleListType, ScheduleType } from "../../../types/admin";
+import { ListBtn, ListHead, UserList } from "../../master/UserList";
+import PlusIcon from "../../../icons/PlusIcon";
 
-function ServiceList(props: ServiceListType) {
-  const {
-    service,
-    id,
-    gender,
-    createServiceFuc,
-    deleteServiceFuc,
-    getServiceFuc,
-  } = props;
+function BusScheduleList(props: BusScheduleListType) {
+  const { schedule, id, createScheduleFuc, deleteScheduleFuc, getScheduleFuc } =
+    props;
   const headList = [
-    { value: "시술명", col: "col-span-1" },
-    { value: "가격", col: "col-span-1" },
+    { value: "역이름", col: "col-span-1" },
+    { value: "시간", col: "col-span-1" },
     { value: "", col: "col-span-1" },
   ];
   const dataList = [
-    { value: "service", col: "col-span-1" },
-    { value: "price", col: "col-span-1" },
+    { value: "station", col: "col-span-1" },
+    { value: "bus_time", col: "col-span-1" },
     [
       {
         value: "삭제",
         color: "bg-red-400",
-        onClick: (service: ServiceType) => {
-          deleteServiceFuc(service.id).then(() => {
-            getServiceFuc({ category_id: id, gender: gender });
+        onClick: (schedule: ScheduleType) => {
+          deleteScheduleFuc(schedule.id).then(() => {
+            getScheduleFuc();
           });
         },
       },
     ],
   ];
-  // 서비스 생성 상태
-  const [createService, setCreateService] = useState(false);
-  // 새로운 서비스 명
-  const [newName, setNewName] = useState("");
-  // 새로운 서비스 값
-  const [newValue, setNewValue] = useState("");
+  // 스케줄 생성 상태
+  const [createSchedule, setCreateSchedule] = useState(false);
+  // 새로운 역 명
+  const [newStation, setNewStation] = useState("");
+  // 새로운 시간 값
+  const [newTime, setNewTime] = useState("");
 
   // 생성 칸 열릴 시 초기화 작업
   useEffect(() => {
-    setNewName("");
-    setNewValue("");
-  }, [createService]);
+    setNewStation("");
+    setNewTime("");
+  }, [createSchedule]);
 
   return (
     <>
@@ -52,27 +46,27 @@ function ServiceList(props: ServiceListType) {
         <div className="absolute right-0 pt-1 pr-2">
           <PlusIcon
             onClick={() => {
-              setCreateService(true);
+              setCreateSchedule(true);
             }}
           />
         </div>
-        {createService ? (
+        {createSchedule ? (
           <>
             <input
               id="name"
               type="text"
-              value={newName}
+              value={newStation}
               onChange={(e) => {
-                setNewName(e.target.value);
+                setNewStation(e.target.value);
               }}
               className="p-2 mx-5 my-3 text-center font-bold text-xl border border-black rounded-md"
             />
             <input
               id="value"
               type="text"
-              value={newValue}
+              value={newTime}
               onChange={(e) => {
-                setNewValue(e.target.value);
+                setNewTime(e.target.value);
               }}
               className="p-2 mx-5 my-3 text-center font-bold text-xl border border-black rounded-md"
             />
@@ -81,24 +75,24 @@ function ServiceList(props: ServiceListType) {
                 value="생성"
                 color="bg-blue-500"
                 onClick={() => {
-                  createServiceFuc(id, newName, newValue).then(() => {
-                    getServiceFuc({ category_id: id, gender: gender });
+                  createScheduleFuc(id, newStation, newTime).then(() => {
+                    getScheduleFuc();
                   });
-                  setCreateService(false);
+                  setCreateSchedule(false);
                 }}
               />
               <ListBtn
                 value="취소"
                 color="bg-red-500"
                 onClick={() => {
-                  setCreateService(false);
+                  setCreateSchedule(false);
                 }}
               />
             </div>
           </>
         ) : null}
 
-        {service.map((v: ServiceType) => (
+        {schedule.map((v: ScheduleType) => (
           <UserList user={v} dataList={dataList} />
         ))}
       </div>
@@ -106,4 +100,4 @@ function ServiceList(props: ServiceListType) {
   );
 }
 
-export default ServiceList;
+export default BusScheduleList;

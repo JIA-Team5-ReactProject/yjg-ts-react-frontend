@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { ListBtn } from "../master/UserList";
-import { CategoryType, GetServiceType, ServiceType } from "../../types/salon";
+import {
+  SalonCategoryType,
+  GetServiceType,
+  SalonServiceType,
+} from "../../types/salon";
 import { customAxios } from "../../services/customAxios";
-import ServiceList from "./ServiceList";
+import SalonServiceList from "./SalonServiceList";
 import { AxiosRequestConfig } from "axios";
 
-function CateGoryList(props: CategoryType) {
+function SalonCategoryList(props: SalonCategoryType) {
   const {
     id,
     category,
@@ -21,7 +25,12 @@ function CateGoryList(props: CategoryType) {
   // 서비스 드롭다운 상태
   const [dropdown, setDropdown] = useState(false);
   // 서비스 리스트
-  const [service, setService] = useState<ServiceType[]>([]);
+  const [service, setService] = useState<SalonServiceType[]>([]);
+
+  // 성별 바뀔 시
+  useEffect(() => {
+    getServiceData({ category_id: id, gender: gender });
+  }, [gender]);
 
   // 서비스 리스트 가져오기
   const getServiceData = async (data: GetServiceType) => {
@@ -29,10 +38,7 @@ function CateGoryList(props: CategoryType) {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const serviceData = await customAxios.get(
-        "/api/admin/salon-service/",
-        config
-      );
+      const serviceData = await customAxios.get("/api/salon/service", config);
       setService(serviceData.data.services);
     } catch (error) {
       console.log(error);
@@ -42,7 +48,7 @@ function CateGoryList(props: CategoryType) {
   // 서비스 리스트 추가하기
   const createService = async (id: string, service: string, price: string) => {
     try {
-      await customAxios.post("/api/admin/salon-service", {
+      await customAxios.post("/api/salon/service", {
         category_id: id,
         service_name: service,
         gender: gender,
@@ -56,14 +62,11 @@ function CateGoryList(props: CategoryType) {
   // 서비스 리스트 삭제하기
   const deleteService = async (service_id: string) => {
     try {
-      await customAxios.delete(`/api/admin/salon-service/${service_id}`);
+      await customAxios.delete(`/api/salon/service/${service_id}`);
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    getServiceData({ category_id: id, gender: gender });
-  }, [gender]);
 
   return (
     <div>
@@ -131,7 +134,7 @@ function CateGoryList(props: CategoryType) {
         </div>
       </div>
       {dropdown ? (
-        <ServiceList
+        <SalonServiceList
           id={id}
           service={service}
           gender={gender}
@@ -144,4 +147,4 @@ function CateGoryList(props: CategoryType) {
   );
 }
 
-export default CateGoryList;
+export default SalonCategoryList;

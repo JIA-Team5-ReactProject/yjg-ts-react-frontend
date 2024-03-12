@@ -1,5 +1,5 @@
 import MainContainer from "../../components/MainContainer";
-import RoomReservation from "../../components/admin/RoomReservation";
+import RoomReservation from "../../components/admin/room/RoomReservation";
 
 function MeetingRoom() {
   return (
