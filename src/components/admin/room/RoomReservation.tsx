@@ -1,6 +1,6 @@
 import { customAxios } from "../../../services/customAxios";
 import * as S from "../../../styles/calender";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ListBtn } from "../../master/UserList";
 import { AxiosRequestConfig } from "axios";
 import { GetReservationDataType, ReservationList } from "../../../types/admin";
@@ -10,12 +10,14 @@ import RoomState from "./RoomState";
 function RoomReservation() {
   // 캘린더에서 선택한 DATE값
   const [clickDay, setClickDay] = useState<Value>(new Date());
+  // formatted date 값
+  let formattedDate = useRef<string>();
   // 회의실 목록
   const [rooms, setRooms] = useState<{ room_number: string; id: string }[]>([]);
   // 선택된 회의실
   const [room, setRoom] = useState("");
   // 카테고리 생성 명 입력 값
-  const [newRoomName, setNewRoomName] = useState("");
+  const [newRoomName, setNewRoomName] = useState<string | number>();
   // 선택된 회의실, 날짜에 맞는 예약 리스트
   const [reservationList, setReservationList] = useState<ReservationList[]>([]);
   // 전체 시간 값
@@ -32,9 +34,9 @@ function RoomReservation() {
   // 회의실 선택할 시
   useEffect(() => {
     if (clickDay instanceof Date) {
-      const formattedDate = dayjs(clickDay).format("YYYY-MM-DD");
+      formattedDate.current = dayjs(clickDay).format("YYYY-MM-DD");
       if (room) {
-        getReservationData({ date: formattedDate, room_number: room });
+        getReservationData({ date: formattedDate.current, room_number: room });
       }
     }
   }, [clickDay, room]);
@@ -108,7 +110,7 @@ function RoomReservation() {
         const sTime = parseInt(reservation.reservation_s_time.split(":")[0]);
         const eTime = parseInt(reservation.reservation_e_time.split(":")[0]);
         const currentTime = parseInt(time.split(":")[0]);
-        return sTime <= currentTime && eTime > currentTime;
+        return sTime <= currentTime && eTime >= currentTime;
       });
       if (matchingReservation) {
         return (
@@ -165,22 +167,17 @@ function RoomReservation() {
               value="생성"
               color="bg-blue-500"
               onClick={() => {
-                if (typeof newRoomName === "number") {
-                  createRoomData().then(() => {
-                    setNewRoomName("");
-                    getRoomData();
-                  });
-                } else {
+                createRoomData().then(() => {
                   setNewRoomName("");
-                  alert("숫자 값만 입력 가능합니다");
-                }
+                  getRoomData();
+                });
               }}
             />
           </div>
         </div>
       </div>
 
-      <div className=" flex-1 h-fit min-h-[750px] p-10 mx-16 my-4 bg-cyan-300 rounded-md">
+      <div className=" flex-1 h-[760px] p-10 mx-16 my-4 bg-cyan-300 rounded-md overflow-auto">
         <div className="flex border-b-4 border-blue-600 mb-10 p-2">
           <div className="flex-1 font-bold text-2xl">
             <span className="text-blue-700 text-3xl">{room}호</span> 예약자
@@ -197,6 +194,40 @@ function RoomReservation() {
           />
         </div>
         <div className="grid grid-cols-3 gap-10">{reservations()}</div>
+        {reservationList.length > 0 ? (
+          <div className="font-bold text-xl mt-4 text-blue-700">
+            예약자 명단
+          </div>
+        ) : null}
+        <div className="grid grid-cols-2 gap-2">
+          {reservationList.map((v) => {
+            return (
+              <div className="flex items-center justify-center p-2 font-bold border-b-2 border-red-300">
+                <div className="text-xl mr-8">🔑 {v.user.name}</div>
+                <div className="text-lg flex-1 ">
+                  {` ${v.reservation_s_time} ~ ${v.reservation_e_time.substring(
+                    0,
+                    3
+                  )}59`}
+                </div>
+                <ListBtn
+                  value="예약거절"
+                  color="bg-red-400"
+                  onClick={() => {
+                    patchReservation(v.id).then(() => {
+                      if (formattedDate.current) {
+                        getReservationData({
+                          date: formattedDate.current,
+                          room_number: room,
+                        });
+                      }
+                    });
+                  }}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

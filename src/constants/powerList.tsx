@@ -67,15 +67,15 @@ export const restaurant = {
   list: [
     {
       name: "식단표 추가",
-      path: basePath("restaurant/mealSchedule"),
+      path: basePath("restaurant/dietPlan"),
     },
     {
       name: "주말 식수 현황",
       path: basePath("restaurant/weekendMeal"),
     },
     {
-      name: "식수 신청 현황",
-      path: basePath("restaurant/mealRequest"),
+      name: "학기 식수 현황",
+      path: basePath("restaurant/semesterMeal"),
     },
   ],
 };

@@ -75,3 +75,11 @@ export type ServiceTagType = {
   service: SalonServiceType[];
   gender: string;
 };
+
+export type BusinessTimeType = {
+  id: string;
+  s_time: string;
+  e_time: string;
+  date: string;
+  open: number;
+};

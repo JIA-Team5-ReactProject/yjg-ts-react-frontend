@@ -28,7 +28,7 @@ function SearchBar(props: SearchType) {
       >
         {tagList.map((v) => {
           return (
-            <option value={v.name} className="py-2">
+            <option value={v.value} className="py-2">
               {v.name}
             </option>
           );

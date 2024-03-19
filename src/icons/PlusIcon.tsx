@@ -1,4 +1,4 @@
-function PlusIcon(props: { onClick: () => void }) {
+function PlusIcon(props: { onClick?: () => void }) {
   const { onClick } = props;
 
   return (
