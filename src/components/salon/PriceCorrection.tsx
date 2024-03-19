@@ -45,7 +45,7 @@ function PriceCorrection() {
   const createCategory = async () => {
     try {
       await customAxios.post("/api/salon/category", {
-        category_name: newCategoryName,
+        category: newCategoryName,
       });
     } catch (error) {
       console.log(error);
