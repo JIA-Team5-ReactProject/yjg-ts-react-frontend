@@ -8,7 +8,7 @@ import { customAxios, setAuthToken } from "../../services/customAxios";
 import { emailReg } from "../../utils/regex";
 import { useSetRecoilState } from "recoil";
 import { UserDataAtom } from "../../recoil/UserDataAtiom";
-import testImg from "../../assets/schoolImg/test.jpg";
+import testImg from "../../assets/winter.jpg";
 
 function LoginForm(): JSX.Element {
   const {
@@ -48,7 +48,6 @@ function LoginForm(): JSX.Element {
         password: trimData.password,
       });
       const token = loginPost.data.access_token;
-      console.log(token);
       window.localStorage.setItem("token", token);
       setAuthToken(token);
       const userData = loginPost.data.user;
