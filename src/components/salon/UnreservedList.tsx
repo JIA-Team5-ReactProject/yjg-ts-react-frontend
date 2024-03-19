@@ -5,16 +5,9 @@ import dayjs from "dayjs";
 import { AxiosRequestConfig } from "axios";
 import { customAxios } from "../../services/customAxios";
 import { BreakTimeType, GuestType, TimeData } from "../../types/salon";
+import SetBusinessTime from "./SetBusinessTime";
 
 function UnreservedList() {
-  const week = [
-    { day: "월", open: false },
-    { day: "화", open: true },
-    { day: "수", open: false },
-    { day: "목", open: true },
-    { day: "금", open: false },
-  ];
-
   // 캘린더에서 선택한 DATE값
   const [clickDay, setClickDay] = useState<Value>(new Date());
   // 변경된 DATE 값
@@ -164,35 +157,35 @@ function UnreservedList() {
   const breakBtn = () => {
     if (typeof selectedTime === "string") {
       return null;
-    } else {
-      if (selectedTime?.available) {
-        return (
-          <ListBtn
-            value="마감"
-            color="bg-red-500"
-            onClick={() => {
-              postBreakData(selectedTime.time).then(() => {
-                getTimeData(formattedDate.current);
-              });
-            }}
-          />
-        );
-      } else if (selectedTime?.available === false) {
-        return (
-          <ListBtn
-            value="오픈"
-            color="bg-sky-500"
-            onClick={() => {
-              deleteBreakData({
-                break_time: [selectedTime.time],
-                date: formattedDate.current,
-              }).then(() => {
-                getTimeData(formattedDate.current);
-              });
-            }}
-          />
-        );
-      }
+    } else if (selectedTime?.available) {
+      return (
+        <ListBtn
+          value="마감"
+          color="bg-red-500"
+          onClick={() => {
+            postBreakData(selectedTime.time).then(() => {
+              getTimeData(formattedDate.current);
+              setSelectedTime(formattedDate.current);
+            });
+          }}
+        />
+      );
+    } else if (selectedTime?.available === false) {
+      return (
+        <ListBtn
+          value="오픈"
+          color="bg-sky-500"
+          onClick={() => {
+            deleteBreakData({
+              break_time: [selectedTime.time],
+              date: formattedDate.current,
+            }).then(() => {
+              getTimeData(formattedDate.current);
+              setSelectedTime(formattedDate.current);
+            });
+          }}
+        />
+      );
     }
   };
 
@@ -235,25 +228,7 @@ function UnreservedList() {
 
         <div className="  text-black font-bold text-2xl mt-2">💈 영업 설정</div>
         <div className="flex flex-col gap-6 p-8 ml-10 mt-2 bg-sky-200 rounded-md">
-          <div className="bg-white text-white rounded-lg grid grid-cols-5 text-center p-4 gap-4">
-            {week.map((v) => {
-              return (
-                <div
-                  className={`${
-                    v.open ? "bg-cyan-500" : "text-black"
-                  } p-1 rounded-md`}
-                >
-                  {v.day}
-                </div>
-              );
-            })}
-          </div>
-          <div className="bg-white rounded-lg grid grid-cols-5 text-center p-4 gap-5">
-            <div className="font-bold text-lg col-span-2">🔓 open</div>
-            <input className="font-bold text-xl col-span-3 outline-none text-center" />
-            <div className="font-bold text-lg col-span-2">🔒 close</div>
-            <input className="font-bold text-xl col-span-3 outline-none text-center" />
-          </div>
+          <SetBusinessTime />
         </div>
       </div>
       <div className="flex-1 flex justify-center pt-10">
