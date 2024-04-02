@@ -88,13 +88,13 @@ function ModifyPost() {
         <div className="flex gap-5 h-fit">
           <ListBtn
             value="수정완료"
-            color="bg-blue-500"
+            color="bg-blue-500/90"
             type="submit"
             onClick={() => {}}
           />
           <ListBtn
             value="취소"
-            color="bg-red-500"
+            color="bg-red-500/90"
             onClick={() => {
               navigate(-1);
             }}
@@ -121,7 +121,7 @@ function ModifyPost() {
               required: "태그를 선택해주세요.",
             })}
             id="tag"
-            className="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 mb-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-md"
           >
             <option value="admin">행정</option>
             <option value="restaurant">식수</option>
@@ -134,7 +134,7 @@ function ModifyPost() {
             <input
               {...register("urgent")}
               type="checkbox"
-              className="form-checkbox h-5 w-5 text-gray-600"
+              className="form-checkbox h-5 w-5 text-gray-600 shadow-sm"
             />
             <span className="ml-2 text-gray-700">긴급공지</span>
           </label>
@@ -145,19 +145,21 @@ function ModifyPost() {
           {errors.content.message}
         </span>
       )}
-      <Controller
-        control={control}
-        name="content"
-        defaultValue=""
-        rules={{
-          validate: (value) =>
-            (value && value.trim() !== "" && value !== "<p><br></p>") ||
-            "본문을 입력해주세요.",
-        }}
-        render={({ field }) => (
-          <Editor value={field.value} setValue={field.onChange} />
-        )}
-      />
+      <div className="bg-white mb-4 shadow-md">
+        <Controller
+          control={control}
+          name="content"
+          defaultValue=""
+          rules={{
+            validate: (value) =>
+              (value && value.trim() !== "" && value !== "<p><br></p>") ||
+              "본문을 입력해주세요.",
+          }}
+          render={({ field }) => (
+            <Editor value={field.value} setValue={field.onChange} />
+          )}
+        />
+      </div>
       {notice?.notice_images ? (
         <Controller
           control={control}

@@ -17,7 +17,7 @@ function SearchBar(props: SearchType) {
         e.preventDefault();
         setSearch(inputContent);
       }}
-      className="relative flex align-middle text-gray-600 border-2 border-gray-300 rounded-lg pr-8"
+      className="bg-white relative flex align-middle text-gray-600 border-2 border-gray-300 rounded-lg pr-8 shadow-md"
     >
       <select
         value={tag}

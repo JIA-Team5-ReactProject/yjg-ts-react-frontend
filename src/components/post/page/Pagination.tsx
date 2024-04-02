@@ -12,7 +12,7 @@ function Pagination(props: PaginationType) {
   }, [page]);
 
   return (
-    <div className="flex items-center justify-center lg:px-0 sm:px-6 px-4">
+    <div className="flex items-center justify-center">
       <div className="lg:w-3/5 w-full  flex items-center justify-between">
         <div
           className="flex items-center pb-3 text-gray-600 hover:text-indigo-700 cursor-pointer"
@@ -54,7 +54,7 @@ function Pagination(props: PaginationType) {
             } else setPage(Math.floor((page - 0.1) / 8) * 8 + 9);
           }}
         >
-          <p className="text-sm font-medium leading-none mr-3">{`>>`}</p>
+          <p className="text-sm font-medium leading-none">{`>>`}</p>
         </div>
       </div>
     </div>

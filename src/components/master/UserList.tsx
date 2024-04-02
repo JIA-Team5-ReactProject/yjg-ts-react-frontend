@@ -9,7 +9,7 @@ function UserList(props: UserListType) {
         return (
           <>
             {v instanceof Array ? (
-              <div className=" m-auto border-b py-4 w-full space-x-5 bg-white pr-3 text-center">
+              <div className="m-auto border-b py-4 w-full space-x-5 text-center">
                 {v.map((v) => {
                   return (
                     <ListBtn

@@ -27,7 +27,11 @@ function Editor(props: EditorType) {
 
   return (
     <ReactQuill
-      style={{ height: "400px", margin: "0 0 60px 0" }}
+      style={{
+        height: "300px",
+        margin: "0 0 43px 0",
+        backgroundColor: "white",
+      }}
       placeholder="내용을 입력하세요."
       theme="snow"
       value={value}

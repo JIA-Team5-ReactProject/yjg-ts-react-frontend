@@ -5,6 +5,7 @@ import SalonCategoryList from "./SalonCategoryList";
 import { SalonCategoryType } from "../../types/salon";
 import PriceIcon from "../../icons/PriceTag";
 import PriceTag from "./PriceTag";
+import SetBusinessTime from "./SetBusinessTime";
 
 function PriceCorrection() {
   // 전체 가격표 상태
@@ -54,10 +55,11 @@ function PriceCorrection() {
 
   // 카테고리 이름 수정하기
   const modifyCategory = async (id: string, newName: string) => {
+    console.log(id, newName);
     try {
       await customAxios.patch("/api/salon/category", {
         category_id: id,
-        category_name: newName,
+        category: newName,
       });
     } catch (error) {
       console.log(error);
@@ -81,7 +83,7 @@ function PriceCorrection() {
         category={category}
       />
       <div className="flex border-b-2 border-black">
-        <div className="flex bg-cyan-400 rounded-lg my-auto p-2 shadow-lg text-black/50 hover:bg-cyan-400/80 hover:text-black">
+        <div className="flex bg-cyan-400 rounded-lg my-auto p-2 shadow-lg text-gray-700 hover:bg-cyan-400/80 hover:text-black">
           <PriceIcon
             onClick={() => {
               setPriceTag(true);
@@ -95,7 +97,7 @@ function PriceCorrection() {
               <span
                 className={`${
                   listKind === v.state
-                    ? "font-bold text-2xl text-purple-500"
+                    ? "font-bold text-2xl text-blue-500"
                     : "text-gray-400 text-xl"
                 } cursor-pointer`}
                 onClick={() => {
@@ -111,7 +113,7 @@ function PriceCorrection() {
           <div>
             <input
               type="text"
-              className="p-2 w-32 text-center focus:outline-none focus:ring-2 focus:rounded-xl focus:ring-blue-500"
+              className="p-2 w-32 text-center focus:outline-none focus:ring-2 focus:rounded-xl focus:ring-blue-400 rounded-md shadow-md"
               placeholder="카테고리 명"
               onChange={(e) => {
                 setNewCategoryName(e.target.value);
@@ -122,7 +124,7 @@ function PriceCorrection() {
           <div>
             <ListBtn
               value="생성"
-              color="bg-blue-500"
+              color="bg-blue-500/90"
               onClick={() => {
                 createCategory().then(() => {
                   getCategoryData();
@@ -143,6 +145,14 @@ function PriceCorrection() {
           modifyCategoryFuc={modifyCategory}
         />
       ))}
+      <div className="flex border-b-2 border-black my-10">
+        <div className="flex items-end gap-2 flex-1 text-4xl font-bold p-4 tracking-tighter text-left">
+          <span className="mr-6">💈 영업 시간 설정</span>
+        </div>
+      </div>
+      <div className="flex flex-col gap-6 p-8 w-1/2 bg-white rounded-2xl shadow-lg">
+        <SetBusinessTime />
+      </div>
     </div>
   );
 }

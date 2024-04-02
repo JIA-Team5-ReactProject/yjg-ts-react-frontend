@@ -14,15 +14,13 @@ function CheckStay() {
   const headList = [
     { value: "학번", col: "col-span-1" },
     { value: "이름", col: "col-span-1" },
-    { value: "외출일", col: "col-span-1" },
-    { value: "복귀일", col: "col-span-1" },
+    { value: "외출일", col: "col-span-2" },
     { value: "", col: "col-span-1" },
   ];
   const dataList = [
     { value: "student_id", col: "col-span-1" },
     { value: "user_name", col: "col-span-1" },
-    { value: "start_date", col: "col-span-1" },
-    { value: "end_date", col: "col-span-1" },
+    { value: "start_date", col: "col-span-2" },
     [
       {
         value: "조회",
@@ -149,7 +147,7 @@ function CheckStay() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex gap-7">
       <div className="flex-col">
         <div className="flex justify-between px-3 gap-6">
           <CountCard header="외박 신청" count={sleepMember} />
@@ -160,11 +158,12 @@ function CheckStay() {
             locale="en"
             onChange={setClickDay}
             value={clickDay}
+            calendarType="US"
           />
         </S.CalendarBox>
       </div>
 
-      <div className="flex flex-col flex-1 gap-4 mx-10">
+      <div className="flex flex-col flex-1">
         <div className="flex">
           <div className="flex gap-4 items-end tracking-tighter text-left mb-6">
             {kind.map((v) => {
@@ -193,14 +192,18 @@ function CheckStay() {
             />
           </div>
         </div>
-        <div className="grid grid-cols-5 mb-5 border-x border-black/10 shadow-lg overflow-hidden rounded-2xl text-center">
-          <ListHead headList={headList} />
-          {absence.map((user) => {
-            return <UserList user={user} dataList={dataList} />;
-          })}
+        <div className="bg-white flex flex-col gap-2 p-4 h-full rounded-2xl overflow-auto shadow-lg">
+          <div className="grid grid-cols-5 mb-5 border-x border-black/10 shadow-lg overflow-hidden rounded-2xl text-center">
+            <ListHead headList={headList} />
+            {absence.map((user) => {
+              return <UserList user={user} dataList={dataList} />;
+            })}
+          </div>
+          <div className="flex-1 justify-end flex flex-col gap-2">
+            <Pagination page={page} setPage={setPage} lastPage={lastPage} />
+            <div className="text-center font-bold text-xs">{`1 - ${lastPage}`}</div>
+          </div>
         </div>
-        <Pagination page={page} setPage={setPage} lastPage={lastPage} />
-        <div className="text-center font-bold text-xs">{`1 - ${lastPage}`}</div>
       </div>
     </div>
   );

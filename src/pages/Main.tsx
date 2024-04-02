@@ -4,9 +4,9 @@ import Sidebar from "../components/sidebar/Sidebar";
 
 function Main() {
   return (
-    <div className="h-screen">
+    <div className="h-screen w-screen overflow-auto">
       <Header />
-      <div className="flex gap-6 h-full">
+      <div className="flex h-full">
         <Sidebar />
         <Outlet />
       </div>

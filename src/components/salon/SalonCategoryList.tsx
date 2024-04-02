@@ -50,7 +50,7 @@ function SalonCategoryList(props: SalonCategoryType) {
     try {
       await customAxios.post("/api/salon/service", {
         category_id: id,
-        service_name: service,
+        service: service,
         gender: gender,
         price: price,
       });
@@ -70,7 +70,7 @@ function SalonCategoryList(props: SalonCategoryType) {
 
   return (
     <div>
-      <div className="flex gap-3 items-center border-2 border-gray-300 p-4 rounded-lg mt-10 text-2xl font-bold shadow-md">
+      <div className="bg-white flex gap-3 items-center border-2 border-gray-300 p-4 rounded-lg mt-10 text-2xl font-bold shadow-md">
         {modify ? (
           <>
             <input
@@ -93,7 +93,7 @@ function SalonCategoryList(props: SalonCategoryType) {
             />
             <ListBtn
               value="취소"
-              color="bg-red-500"
+              color="bg-red-500/90"
               onClick={() => {
                 setModify(false);
               }}
@@ -104,14 +104,14 @@ function SalonCategoryList(props: SalonCategoryType) {
             <div className="w-32 text-center">{category}</div>
             <ListBtn
               value="수정"
-              color="bg-pink-500"
+              color="bg-pink-500/80"
               onClick={() => {
                 setModify(true);
               }}
             />
             <ListBtn
               value="삭제"
-              color="bg-red-500"
+              color="bg-red-500/90"
               onClick={() => {
                 deleteCategoryFuc(id).then(() => {
                   getCategoryFuc();

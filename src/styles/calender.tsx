@@ -13,6 +13,8 @@ export const StyleCalendar = styled(Calendar)`
   border: none;
   margin-bottom: 15px;
   padding: 20px;
+  box-shadow: 0px 4px 8px #d1c8c8;
+  border-radius: 10px;
 
   .react-calendar__navigation {
     display: flex;
@@ -39,6 +41,7 @@ export const StyleCalendar = styled(Calendar)`
     text-transform: uppercase;
     font-weight: bold;
     font-size: 0.15em;
+    background-color: #ceecf5;
   }
 
   .react-calendar__year-view .react-calendar__tile,

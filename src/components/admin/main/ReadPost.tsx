@@ -55,7 +55,7 @@ function ReadPost() {
         </div>
       </div>
 
-      <div className="relative border border-black px-4 py-6 min-h-96">
+      <div className="bg-white rounded-xl relative border border-black/20 px-4 py-6 min-h-96 shadow-md">
         <div className="absolute right-1 top-1">
           {notice?.notice_images.length ? (
             <ImageIcon
@@ -89,18 +89,18 @@ function ReadPost() {
       <div className="flex gap-4">
         <ListBtn
           value="수정"
-          color="bg-sky-500"
+          color="bg-sky-500/90"
           onClick={() => {
             navigate(`/main/admin/modifying/${id}`, {
               state: { type: "Post" },
             });
           }}
         />
-        <ListBtn value="삭제" color="bg-red-500" onClick={deleteNotice} />
+        <ListBtn value="삭제" color="bg-red-500/80" onClick={deleteNotice} />
         <div className="flex flex-1 justify-end">
           <ListBtn
             value="나가기"
-            color="bg-pink-700"
+            color="bg-pink-700/70"
             onClick={() => {
               navigate("/main/admin");
             }}

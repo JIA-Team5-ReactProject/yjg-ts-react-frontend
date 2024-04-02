@@ -114,14 +114,14 @@ function RoomReservation() {
       });
       if (matchingReservation) {
         return (
-          <div className="flex items-center gap-5 font-bold text-xl">
+          <div className="flex items-center gap-5 font-bold text-lg">
             <div className="bg-yellow-200 rounded-md p-1">⏰ {time}</div>
             <div>{matchingReservation.user.name}</div>
           </div>
         );
       } else {
         return (
-          <div className="flex gap-5 font-bold text-xl">
+          <div className="flex gap-5 font-bold text-lg">
             <div>⏰ {time}</div>
             <div></div>
           </div>
@@ -132,16 +132,17 @@ function RoomReservation() {
 
   return (
     <div className="flex">
-      <div className="flex-col">
+      <div className="flex flex-col gap-6">
         <S.CalendarBox className="flex-auto">
           <S.StyleCalendar
             locale="en"
             onChange={setClickDay}
             value={clickDay}
+            calendarType="US"
           />
         </S.CalendarBox>
-        <div className="relative h-[440px] p-2 py-4 border-4 border-purple-700">
-          <div className="absolute bg-white right-24 -translate-y-9 font-bold text-xl px-4">
+        <div className="bg-white rounded-md relative h-[440px] p-2 py-4 border-2 border-sky-900/30 shadow-lg">
+          <div className="absolute right-24 -translate-y-12 font-bold text-xl px-4">
             회의실 이용상황
           </div>
           <div className="grid grid-cols-2 gap-6 px-6 py-2 text-center overflow-auto max-h-full">
@@ -150,11 +151,11 @@ function RoomReservation() {
             })}
           </div>
         </div>
-        <div className="flex gap-2 justify-center items-end pt-2">
+        <div className="flex gap-2 justify-center items-end">
           <div>
             <input
               type="text"
-              className="p-2 w-32 text-center ring-2 rounded-2xl focus:outline-none focus:ring-2 focus:rounded-xl focus:ring-blue-500"
+              className="p-2 w-32 text-center ring-2 rounded-2xl focus:outline-none focus:ring-2 focus:rounded-xl focus:ring-blue-500 shadow-md"
               placeholder="회의실 호실"
               onChange={(e) => {
                 setNewRoomName(e.target.value);
@@ -177,15 +178,15 @@ function RoomReservation() {
         </div>
       </div>
 
-      <div className=" flex-1 h-[760px] p-10 mx-16 my-4 bg-cyan-300 rounded-md overflow-auto">
-        <div className="flex border-b-4 border-blue-600 mb-10 p-2">
+      <div className=" flex-1 h-[760px] p-8 mx-16 my-4 bg-white rounded-xl overflow-auto shadow-lg">
+        <div className="flex border-b-4 border-blue-600/50 mb-10 p-2">
           <div className="flex-1 font-bold text-2xl">
-            <span className="text-blue-700 text-3xl">{room}호</span> 예약자
+            <span className="text-blue-700/70 text-3xl">{room}호</span> 예약자
             리스트
           </div>
           <ListBtn
             value="회의실 삭제"
-            color="bg-red-500"
+            color="bg-red-500/80"
             onClick={() => {
               deleteRoomData().then(() => {
                 getRoomData();
@@ -199,11 +200,11 @@ function RoomReservation() {
             예약자 명단
           </div>
         ) : null}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex flex-wrap gap-2">
           {reservationList.map((v) => {
             return (
-              <div className="flex items-center justify-center p-2 font-bold border-b-2 border-red-300">
-                <div className="text-xl mr-8">🔑 {v.user.name}</div>
+              <div className="flex gap-3 items-center justify-center p-2 font-bold border-b-2 border-red-300">
+                <div className="text-lg mr-2">🔑 {v.user.name}</div>
                 <div className="text-lg flex-1 ">
                   {` ${v.reservation_s_time} ~ ${v.reservation_e_time.substring(
                     0,

@@ -139,14 +139,18 @@ function RepairList() {
           />
         </div>
       </div>
-      <div className="grid grid-cols-5 mt-2 border-x border-black/10 shadow-lg overflow-hidden rounded-2xl text-center">
-        {<ListHead headList={headList} />}
-        {ASList.map((user) => {
-          return <UserList user={user} dataList={dataList} />;
-        })}
+      <div className="bg-white flex flex-col gap-2 p-4 h-full rounded-2xl min-h-[30rem]">
+        <div className="grid grid-cols-5 mt-2 border-x border-black/10 shadow-lg overflow-hidden rounded-2xl text-center">
+          {<ListHead headList={headList} />}
+          {ASList.map((user) => {
+            return <UserList user={user} dataList={dataList} />;
+          })}
+        </div>
+        <div className="flex-1 justify-end flex flex-col gap-2">
+          <Pagination page={page} setPage={setPage} lastPage={lastPage} />
+          <div className="text-center font-bold text-xs">{`1 - ${lastPage}`}</div>
+        </div>
       </div>
-      <Pagination page={page} setPage={setPage} lastPage={lastPage} />
-      <div className="text-center font-bold text-xs">{`1 - ${lastPage}`}</div>
     </div>
   );
 }

@@ -18,9 +18,9 @@ function GetResult() {
       <div className="text-center">
         <ListBtn
           value="확인"
-          color="bg-red-500"
+          color="bg-red-500/85"
           onClick={() => {
-            navigate("/login");
+            navigate("/");
           }}
         />
       </div>

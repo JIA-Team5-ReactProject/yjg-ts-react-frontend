@@ -1,5 +1,4 @@
 import AdminIcon from "../icons/AdminIcon";
-import BusIcon from "../icons/BusIcon";
 import MasterIcon from "../icons/MasterIcon";
 import RestaurantIcon from "../icons/RestaurantIcon";
 import SalonIcon from "../icons/SalonIcon";
@@ -30,7 +29,7 @@ export const salon = {
       path: basePath("salon/pending"),
     },
     {
-      name: "가격표 관리",
+      name: "영업 관리",
       path: basePath("salon/priceCorrection"),
     },
   ],

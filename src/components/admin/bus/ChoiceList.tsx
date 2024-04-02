@@ -14,7 +14,7 @@ function ChoiceList(props: ChoiceListType) {
                 state === v.state
                   ? "border-sky-600 text-sky-600 shadow-cyan-600"
                   : "text-gray-400 text-2xl"
-              } flex-1 border-2 rounded-lg p-5 font-bold text-2xl my-auto cursor-pointer shadow-md`}
+              } bg-white flex-1 border-2 rounded-lg p-5 font-bold text-2xl my-auto cursor-pointer shadow-md`}
               onClick={() => {
                 setState(v.state);
               }}

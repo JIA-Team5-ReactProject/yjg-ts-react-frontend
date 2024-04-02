@@ -53,7 +53,7 @@ function RoomState(props: { name: string; setRoom: (room: string) => void }) {
         exist
           ? "border-4 border-blue-500 text-blue-500"
           : "border-2 border-gray-300 text-gray-400 hover:border-2 hover:border-sky-500"
-      } p-2 font-bold h-28 cursor-pointer hover:bg-sky-700/30`}
+      } p-2 font-bold h-28 cursor-pointer hover:bg-sky-700/30 shadow-md`}
       onClick={() => {
         setRoom(name);
       }}

@@ -60,7 +60,7 @@ function SetBusinessTime() {
     }
   };
 
-  // 영업시간 업데이하기
+  // 영업시간 업데이트하기
   const patchBusinessTimeData = async () => {
     try {
       await customAxios.patch("/api/salon/hour", {
@@ -76,13 +76,15 @@ function SetBusinessTime() {
 
   return (
     <>
-      <div className="bg-white text-white rounded-lg grid grid-cols-7 text-center p-4 gap-4">
+      <div className="bg-sky-200 text-white rounded-lg grid grid-cols-7 text-center p-4 gap-4 shadow-lg">
         {businessTime.map((v) => {
           return (
             <div
               className={`${
-                v.open ? "bg-cyan-500" : "text-black"
-              } p-1 rounded-md cursor-pointer hover:bg-cyan-700`}
+                v.open
+                  ? "bg-cyan-500 hover:bg-cyan-700"
+                  : "text-black/30 font-bold hover:bg-cyan-400"
+              } p-1 rounded-md cursor-pointer shadow-md`}
               onClick={() => {
                 setSelectedWeek(v);
               }}
@@ -93,14 +95,14 @@ function SetBusinessTime() {
         })}
       </div>
       {selectedWeek && !onChange ? (
-        <div className="bg-white rounded-lg grid grid-cols-5 text-center p-4 gap-5">
+        <div className="bg-sky-200 rounded-lg grid grid-cols-5 text-center p-8 gap-5 shadow-lg">
           <div className="relative font-bold text-lg col-span-5">
             {selectedWeek.date}
-            {selectedWeek.open ? " 영업일" : " 휴일"}
-            <div className="absolute right-0 top-0">
+            {selectedWeek.open ? " 영업일" : ""}
+            <div className="absolute -right-3 -top-4">
               <ListBtn
                 value="재설정"
-                color="bg-blue-800"
+                color="bg-blue-800/80"
                 onClick={() => {
                   setOnchange(true);
                 }}

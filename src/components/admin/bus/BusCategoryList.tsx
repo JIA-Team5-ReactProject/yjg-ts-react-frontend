@@ -27,6 +27,7 @@ function BusCategoryList(props: BusCategoryListType) {
   // 렌더링 시
   useEffect(() => {
     getScheduleData();
+    setDropdown(false);
   }, [id]);
 
   // 스케줄 데이터 가져오기
@@ -65,7 +66,7 @@ function BusCategoryList(props: BusCategoryListType) {
 
   return (
     <div>
-      <div className="flex gap-3 items-center border-2 border-gray-300 p-4 rounded-lg mt-10 text-2xl font-bold shadow-md">
+      <div className="bg-white flex gap-3 items-center border-2 border-gray-300 p-4 rounded-lg mt-10 text-2xl font-bold shadow-md">
         {modify ? (
           <>
             <input
@@ -78,7 +79,7 @@ function BusCategoryList(props: BusCategoryListType) {
             />
             <ListBtn
               value="완료"
-              color="bg-sky-500"
+              color="bg-sky-400"
               onClick={() => {
                 modifyCategotyFuc(id, newName).then(() => {
                   setModify(false);
@@ -92,7 +93,7 @@ function BusCategoryList(props: BusCategoryListType) {
             />
             <ListBtn
               value="취소"
-              color="bg-red-500"
+              color="bg-red-500/80"
               onClick={() => {
                 setModify(false);
               }}
@@ -100,17 +101,17 @@ function BusCategoryList(props: BusCategoryListType) {
           </>
         ) : (
           <>
-            <div className="w-32 text-center">{round}</div>
+            <div className="min-w-32 text-center">{round}</div>
             <ListBtn
               value="수정"
-              color="bg-pink-500"
+              color="bg-pink-500/80"
               onClick={() => {
                 setModify(true);
               }}
             />
             <ListBtn
               value="삭제"
-              color="bg-red-500"
+              color="bg-red-500/80"
               onClick={() => {
                 deleteCategoryFuc(id).then(() => {
                   getCategoryFuc({
