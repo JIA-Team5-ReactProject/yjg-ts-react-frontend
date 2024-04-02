@@ -57,6 +57,12 @@ export type BusScheduleListType = {
   getScheduleFuc: () => Promise<void>;
 };
 
+export type ScheduleListType = {
+  schedule: ScheduleType;
+  deleteScheduleFuc: (id: string) => Promise<void>;
+  getScheduleFuc: () => Promise<void>;
+};
+
 export type BusCategoryListType = {
   id: string;
   round: string;
@@ -85,4 +91,18 @@ export type AbsenceType = {
   start_date: string;
   end_date: string;
   type: string;
+};
+
+// AS 관련
+
+export type GetCommentDataType = {
+  id: string;
+  admin_id: string;
+  comment: string;
+};
+
+export type CommentsType = {
+  comment: GetCommentDataType;
+  getComment: () => Promise<void>;
+  deleteComment: (id: string) => Promise<void>;
 };

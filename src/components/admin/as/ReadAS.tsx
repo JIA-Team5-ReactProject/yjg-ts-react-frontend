@@ -6,6 +6,7 @@ import PostCardSlider from "../../post/PostCardSlider";
 import CloseIcon from "../../../icons/CloseIcon";
 import { ListBtn } from "../../master/UserList";
 import ImageIcon from "../../../icons/ImageIcon";
+import CommentList from "./comment/CommentList";
 
 function ReadAS() {
   // 글 ID 값
@@ -60,7 +61,7 @@ function ReadAS() {
           희망처리일자: <span>{afterService?.visit_date}</span>
         </div>
       </div>
-      <div className="relative border border-black px-4 py-6 min-h-96">
+      <div className="bg-white relative rounded-lg border border-black/40 px-4 py-6 min-h-96">
         <div className="absolute right-1 top-1">
           {afterService?.after_service_images?.length ? (
             <ImageIcon
@@ -93,12 +94,17 @@ function ReadAS() {
           dangerouslySetInnerHTML={{ __html: afterService?.content || "" }}
         />
       </div>
+      <CommentList id={id} />
       {afterService?.status ? null : (
         <div className="flex justify-end gap-4">
-          <ListBtn value="A/S 완료" color="bg-sky-500" onClick={patchASData} />
+          <ListBtn
+            value="A/S 완료"
+            color="bg-sky-500/90"
+            onClick={patchASData}
+          />
           <ListBtn
             value="닫기"
-            color="bg-red-500"
+            color="bg-red-500/80"
             onClick={() => {
               navigate("/main/admin/repair");
             }}
