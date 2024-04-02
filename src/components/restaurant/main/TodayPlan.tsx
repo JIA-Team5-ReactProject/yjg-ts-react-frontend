@@ -17,8 +17,8 @@ function TodayPlan(props: TodayMenuType) {
   };
 
   return (
-    <div className="flex flex-col text-center font-bold text-lg p-3 tracking-tighter">
-      <div className="w-full border-b-2 border-cyan-500 min-w-32 mb-4 text-2xl">
+    <div className="flex flex-col text-center font-bold text-base p-3 tracking-tighter">
+      <div className="w-full border-b-2 border-cyan-500 min-w-32 mb-4 text-xl">
         {switchTime()}
       </div>
       {menuArray.map((v) => {

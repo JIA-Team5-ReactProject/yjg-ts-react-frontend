@@ -55,14 +55,14 @@ function ReadAbsence() {
         </div>
       </div>
 
-      <div className="relative border border-black px-4 py-6 min-h-96">
+      <div className="bg-white relative rounded-xl border border-black/20 px-4 py-6 min-h-96 shadow-md">
         <div dangerouslySetInnerHTML={{ __html: absence?.content || "" }} />
       </div>
 
       <div className="flex justify-end gap-4">
         <ListBtn
           value="외출 취소"
-          color="bg-pink-500"
+          color="bg-pink-400/90"
           onClick={() => {
             if (id) {
               patchAbsenceData(id).then(() => {
@@ -73,7 +73,7 @@ function ReadAbsence() {
         />
         <ListBtn
           value="닫기"
-          color="bg-red-500"
+          color="bg-red-400"
           onClick={() => {
             navigate("/main/admin/stayOut");
           }}

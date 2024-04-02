@@ -14,7 +14,6 @@ function RestaurantMain() {
   // 페이지 렌더링 시
   useEffect(() => {
     getMenuData();
-    console.log(todayMenu);
   }, []);
 
   // 당일 식단표 가져오기
@@ -33,12 +32,13 @@ function RestaurantMain() {
       console.log(error);
     }
   };
+
   return (
-    <div className="flex flex-col gap-20 p-4">
-      <div className="flex gap-24">
+    <div className="flex flex-col gap-5">
+      <div className="flex gap-10">
         <div>
           <div className="font-bold text-lg pl-4 pb-2">• 금일 식단표</div>
-          <div className="flex gap-10 shadow-lg px-8 py-5 border border-black/10 rounded-xl">
+          <div className="bg-white min-w-[34rem] flex gap-2 shadow-lg px-5 py-4 border border-black/10 rounded-xl">
             {todayMenu.length > 0 ? (
               todayMenu.map((v) => {
                 return <TodayPlan meal_time={v.meal_time} menu={v.menu} />;

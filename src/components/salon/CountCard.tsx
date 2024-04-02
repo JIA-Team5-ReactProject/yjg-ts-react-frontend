@@ -1,7 +1,7 @@
 function CountCard(props: { header: string; count: number }) {
   const { header, count } = props;
   return (
-    <div className="border border-gray-300 rounded-md shadow-lg p-5 w-full h-fit mb-3">
+    <div className="bg-white border border-gray-300 rounded-md shadow-lg p-5 w-full h-fit mb-3">
       <div className="text-cyan-500 font-bold text-lg text-center">
         {header}
       </div>

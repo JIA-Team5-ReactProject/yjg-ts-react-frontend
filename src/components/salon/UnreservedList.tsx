@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import { AxiosRequestConfig } from "axios";
 import { customAxios } from "../../services/customAxios";
 import { BreakTimeType, GuestType, TimeData } from "../../types/salon";
-import SetBusinessTime from "./SetBusinessTime";
 
 function UnreservedList() {
   // 캘린더에서 선택한 DATE값
@@ -42,14 +41,24 @@ function UnreservedList() {
         value: "승인",
         color: "bg-blue-400",
         onClick: (data: GuestType) => {
-          patchData(data.id, true);
+          patchData(data.id, true).then(() => {
+            getData({
+              status: "submit",
+              r_date: formattedDate.current,
+            });
+          });
         },
       },
       {
         value: "거절",
         color: "bg-red-400",
         onClick: (data: GuestType) => {
-          patchData(data.id, false);
+          patchData(data.id, false).then(() => {
+            getData({
+              status: "submit",
+              r_date: formattedDate.current,
+            });
+          });
         },
       },
     ],
@@ -161,7 +170,7 @@ function UnreservedList() {
       return (
         <ListBtn
           value="마감"
-          color="bg-red-500"
+          color="bg-red-400"
           onClick={() => {
             postBreakData(selectedTime.time).then(() => {
               getTimeData(formattedDate.current);
@@ -174,7 +183,7 @@ function UnreservedList() {
       return (
         <ListBtn
           value="오픈"
-          color="bg-sky-500"
+          color="bg-sky-400"
           onClick={() => {
             deleteBreakData({
               break_time: [selectedTime.time],
@@ -190,54 +199,51 @@ function UnreservedList() {
   };
 
   return (
-    <div className="flex">
-      <div className="flex-none flex flex-col text-center">
-        <div className=" text-black font-bold text-2xl">🕐 예약 목록 확인</div>
-        <div className="flex flex-col gap-4 p-8 ml-10 mt-2 bg-sky-200 rounded-md ">
-          <S.CalendarBox className="">
-            <S.StyleCalendar
-              locale="en"
-              onChange={setClickDay}
-              value={clickDay}
-            />
-          </S.CalendarBox>
-          <div className="bg-white text-white rounded-lg grid grid-cols-4 text-center p-4 gap-4">
-            {timeData.map((v: TimeData) => {
-              return (
-                <div
-                  className={`${
-                    v.available
-                      ? "bg-cyan-500 hover:bg-cyan-600 hover:font-bold"
-                      : "bg-gray-300 hover:bg-gray-400"
-                  } relative  p-1 rounded-md cursor-pointer shadow-lg`}
-                  onClick={() => {
-                    setSelectedTime(v);
-                  }}
-                >
-                  {v.time}
-                  {personnel.filter((item) => item === v.time).length > 0 ? (
-                    <span className="absolute top-[-10px] right-[-10px] bg-sky-200 font-bold text-blue-400 rounded-full w-8 h-8 shadow-xl flex items-center justify-center">
-                      {personnel.filter((item) => item === v.time).length}
-                    </span>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
+    <div className="flex gap-10 h-full">
+      <div className="flex flex-col">
+        <S.CalendarBox className="">
+          <S.StyleCalendar
+            locale="en"
+            onChange={setClickDay}
+            value={clickDay}
+            calendarType="US"
+          />
+        </S.CalendarBox>
+        <div className="  text-black font-bold text-xl my-2 text-center">
+          ⏱ 시간표
         </div>
-
-        <div className="  text-black font-bold text-2xl mt-2">💈 영업 설정</div>
-        <div className="flex flex-col gap-6 p-8 ml-10 mt-2 bg-sky-200 rounded-md">
-          <SetBusinessTime />
+        <div className="bg-white text-white rounded-lg grid grid-cols-4 text-center p-4 h-50 gap-4 overflow-auto shadow-lg">
+          {timeData.map((v: TimeData) => {
+            return (
+              <div
+                className={`${
+                  v.available
+                    ? "bg-cyan-500 hover:bg-cyan-600 hover:font-bold"
+                    : "bg-gray-300 hover:bg-gray-400"
+                } relative  p-1 rounded-md cursor-pointer shadow-lg`}
+                onClick={() => {
+                  setSelectedTime(v);
+                }}
+              >
+                {v.time}
+                {personnel.filter((item) => item === v.time).length > 0 ? (
+                  <span className="absolute top-[-10px] right-[-10px] bg-sky-200 font-bold text-blue-400 rounded-full w-8 h-8 shadow-xl flex items-center justify-center">
+                    {personnel.filter((item) => item === v.time).length}
+                  </span>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
       </div>
-      <div className="flex-1 flex justify-center pt-10">
-        <div className="bg-sky-200 rounded-md min-w-fit w-5/6 min-h-24 h-4/6 p-5">
-          <div className="flex align-middle  text-3xl font-bold mt-3 ml-2 mb-5 tracking-tight text-left text-blue-700">
-            <div className="flex-1">{head} 예약대기자</div>
-            <div className="flex align-middle">{breakBtn()}</div>
-          </div>
-          <div className="grid grid-cols-4 w-full">
+
+      <div className="flex-1 flex flex-col">
+        <div className="flex align-middle  text-2xl font-bold tracking-tight m-2 text-black">
+          <div className="flex-1">{head} 예약대기자</div>
+          <div className="flex align-middle">{breakBtn()}</div>
+        </div>
+        <div className="bg-white rounded-2xl h-5/6 p-4 overflow-auto shadow-lg">
+          <div className="grid grid-cols-4 text-center border-x border-black/10 shadow-lg overflow-hidden rounded-2xl">
             <ListHead headList={headList} />
             {allUser
               ? unreservedUser.map((user) => {

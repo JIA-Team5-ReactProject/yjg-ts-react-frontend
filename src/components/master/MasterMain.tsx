@@ -77,20 +77,22 @@ function MasterMain() {
   };
 
   return (
-    <div className="px-10">
-      <div className="flex mb-4">
-        <div className="flex-1 text-3xl font-bold mb-10 tracking-tighter text-left">
+    <div className="px-10 h-full">
+      <div className="flex">
+        <div className="flex-1 text-2xl font-bold tracking-tighter text-left">
           관리자 승인 대기 리스트
         </div>
-        <div className="self-end text-right font-bold tracking-widest">
+        <div className="self-end text-right p-4 font-bold tracking-widest">
           {unapprovedUsers.length}명
         </div>
       </div>
-      <div className="grid grid-cols-5 text-xl font-semibold text-center border-x border-black/10 shadow-lg overflow-hidden rounded-2xl">
-        <ListHead headList={headList} />
-        {unapprovedUsers.map((user) => {
-          return <UserList user={user} dataList={dataList} />;
-        })}
+      <div className="bg-white p-4 h-5/6 rounded-2xl overflow-auto shadow-lg">
+        <div className="grid grid-cols-5 text-center border-x border-black/10 shadow-lg overflow-hidden rounded-2xl">
+          <ListHead headList={headList} />
+          {unapprovedUsers.map((user) => {
+            return <UserList user={user} dataList={dataList} />;
+          })}
+        </div>
       </div>
     </div>
   );

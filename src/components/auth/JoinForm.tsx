@@ -36,7 +36,7 @@ function JoinForm(): JSX.Element {
     //중복체크 API
     try {
       const verifyEmail = await customAxios.get(
-        `/api/admin/verify-email/${email}`
+        `/api/user/verify-email/${email}`
       );
       if (verifyEmail.data.check) {
         setDuplicateCheck(verifyEmail.data.check);
@@ -68,7 +68,7 @@ function JoinForm(): JSX.Element {
       password: trimData.password,
     });
     alert("회원가입 신청이 완료되었습니다.");
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -77,7 +77,7 @@ function JoinForm(): JSX.Element {
         <div className="absolute right-1 top-1">
           <CloseIcon
             onClick={() => {
-              navigate("/login");
+              navigate("/");
             }}
           />
         </div>

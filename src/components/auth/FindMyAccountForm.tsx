@@ -133,7 +133,7 @@ function FindMyAccountForm(): JSX.Element {
         <div className="absolute right-0 top-0">
           <CloseIcon
             onClick={() => {
-              navigate("/login");
+              navigate("/");
             }}
           />
         </div>

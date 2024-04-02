@@ -130,7 +130,7 @@ function BusManagement() {
             <div>
               <input
                 type="text"
-                className="p-2 w-32 text-center focus:outline-none focus:ring-2 focus:rounded-xl focus:ring-blue-500"
+                className="p-2 w-32 rounded-lg text-center focus:outline-none focus:ring-2 focus:rounded-xl focus:ring-blue-500 shadow-md"
                 placeholder="카테고리 명"
                 onChange={(e) => {
                   setNewCategoryName(e.target.value);
