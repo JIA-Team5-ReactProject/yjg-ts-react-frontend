@@ -22,7 +22,7 @@ export type SalonServiceType = {
   gender?: string;
 };
 
-export type ServiceListType = {
+export type SalonServiceListType = {
   id: string;
   service: SalonServiceType[];
   gender: string;
@@ -31,6 +31,14 @@ export type ServiceListType = {
     newName: string,
     newValue: string
   ) => Promise<void>;
+  deleteServiceFuc: (service_id: string) => Promise<void>;
+  getServiceFuc: (data: GetServiceType) => Promise<void>;
+};
+
+export type ServiceListType = {
+  category_id: string;
+  service: SalonServiceType;
+  gender: string;
   deleteServiceFuc: (service_id: string) => Promise<void>;
   getServiceFuc: (data: GetServiceType) => Promise<void>;
 };

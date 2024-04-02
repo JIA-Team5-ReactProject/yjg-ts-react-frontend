@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import PlusIcon from "../../icons/PlusIcon";
-import { ServiceListType, SalonServiceType } from "../../types/salon";
-import { ListBtn, ListHead, UserList } from "../master/UserList";
+import { SalonServiceListType, ServiceListType } from "../../types/salon";
+import { ListBtn, ListHead } from "../master/UserList";
+import { customAxios } from "../../services/customAxios";
 
-function SalonServiceList(props: ServiceListType) {
+function SalonServiceList(props: SalonServiceListType) {
   const {
     service,
     id,
@@ -17,21 +18,7 @@ function SalonServiceList(props: ServiceListType) {
     { value: "가격", col: "col-span-1" },
     { value: "", col: "col-span-1" },
   ];
-  const dataList = [
-    { value: "service", col: "col-span-1" },
-    { value: "price", col: "col-span-1" },
-    [
-      {
-        value: "삭제",
-        color: "bg-red-400",
-        onClick: (service: SalonServiceType) => {
-          deleteServiceFuc(service.id).then(() => {
-            getServiceFuc({ category_id: id, gender: gender });
-          });
-        },
-      },
-    ],
-  ];
+
   // 서비스 생성 상태
   const [createService, setCreateService] = useState(false);
   // 새로운 서비스 명
@@ -47,7 +34,7 @@ function SalonServiceList(props: ServiceListType) {
 
   return (
     <>
-      <div className="relative grid grid-cols-3 mt-2 text-center border-x border-black/10 shadow-lg overflow-hidden rounded-2xl">
+      <div className="bg-white relative grid grid-cols-3 mt-2 text-center border-x border-black/10 shadow-lg overflow-hidden rounded-2xl">
         {<ListHead headList={headList} />}
         <div className="absolute right-0 pt-1 pr-2">
           <PlusIcon
@@ -79,7 +66,7 @@ function SalonServiceList(props: ServiceListType) {
             <div className="flex gap-3 items-center justify-center">
               <ListBtn
                 value="생성"
-                color="bg-blue-500"
+                color="bg-blue-400"
                 onClick={() => {
                   createServiceFuc(id, newName, newValue).then(() => {
                     getServiceFuc({ category_id: id, gender: gender });
@@ -89,7 +76,7 @@ function SalonServiceList(props: ServiceListType) {
               />
               <ListBtn
                 value="취소"
-                color="bg-red-500"
+                color="bg-red-400"
                 onClick={() => {
                   setCreateService(false);
                 }}
@@ -98,8 +85,14 @@ function SalonServiceList(props: ServiceListType) {
           </>
         ) : null}
 
-        {service.map((v: SalonServiceType) => (
-          <UserList user={v} dataList={dataList} />
+        {service.map((service) => (
+          <ServiceList
+            category_id={id}
+            service={service}
+            gender={gender}
+            getServiceFuc={getServiceFuc}
+            deleteServiceFuc={deleteServiceFuc}
+          />
         ))}
       </div>
     </>
@@ -107,3 +100,104 @@ function SalonServiceList(props: ServiceListType) {
 }
 
 export default SalonServiceList;
+
+function ServiceList(props: ServiceListType) {
+  const { category_id, service, gender, getServiceFuc, deleteServiceFuc } =
+    props;
+  // 수정 상태
+  const [onModify, setOnModify] = useState(false);
+  // 수정된 시술명
+  const [newService, setNewService] = useState("");
+  // 수정된 가격
+  const [newPrice, setNewPrice] = useState("");
+
+  // 댓글 수정하기
+  const patchService = async (id: string) => {
+    try {
+      await customAxios.patch(`/api/salon/service/{id}`, {
+        service: newService,
+        price: newPrice,
+        gender: gender,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <>
+      {onModify ? (
+        <>
+          <div className="border-b border-r py-5 px-6 font-semibold text-lg">
+            <input
+              type="text"
+              className="flex-1 border-b border-black/20 text-center outline-none"
+              value={newService}
+              onChange={(e) => {
+                setNewService(e.target.value);
+              }}
+            />
+          </div>
+          <div className="border-b border-r py-5 px-6 font-semibold text-lg">
+            <input
+              type="text"
+              className="flex-1 border-b border-black/20 text-center outline-none"
+              value={newPrice}
+              onChange={(e) => {
+                setNewPrice(e.target.value);
+              }}
+            />
+          </div>
+          <div className="m-auto border-b py-4 w-full space-x-5 text-center">
+            <ListBtn
+              value="수정완료"
+              color="bg-sky-400"
+              onClick={() => {
+                patchService(service.id).then(() => {
+                  setOnModify(false);
+                  getServiceFuc({ category_id: category_id, gender: gender });
+                });
+              }}
+            />
+            <ListBtn
+              value="취소"
+              color="bg-red-500/80"
+              onClick={() => {
+                setOnModify(false);
+              }}
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="border-b border-r py-5 px-6 font-semibold text-lg">
+            {service.service}
+          </div>
+          <div className="border-b border-r py-5 px-6 font-semibold text-lg">
+            {service.price}
+          </div>
+          <div className="m-auto border-b py-4 w-full space-x-5 text-center">
+            <ListBtn
+              value="수정"
+              color="bg-sky-400"
+              onClick={() => {
+                setOnModify(true);
+                setNewService(service.service);
+                setNewPrice(service.price);
+              }}
+            />
+            <ListBtn
+              value="삭제"
+              color="bg-red-500/80"
+              onClick={() => {
+                deleteServiceFuc(service.id).then(() => {
+                  getServiceFuc({ category_id: category_id, gender: gender });
+                });
+              }}
+            />
+          </div>
+        </>
+      )}
+    </>
+  );
+}
