@@ -1,0 +1,104 @@
+import { useEffect, useState } from "react";
+import * as S from "../../styles/calender";
+import { customAxios } from "../../services/customAxios";
+import { AxiosRequestConfig } from "axios";
+import { ListHead, UserList } from "../master/UserList";
+import CountCard from "./CountCard";
+import dayjs from "dayjs";
+import { ReservationUserType } from "../../types/salon";
+
+function ReservationList() {
+  //캘린더에서 선택한 DATE값
+  const [clickDay, setClickDay] = useState<Value>(new Date());
+  //예약이 승인된 유저 리스트
+  const [reservationUser, setReservationUser] = useState<ReservationUserType[]>(
+    []
+  );
+  //예약이 미승인된 유저 리스트
+  const [unreservedUser, setUnreservedUser] = useState([]);
+  //리스트 헤드, 데이터 틀
+  const headList = [
+    { value: "이름", col: "col-span-1" },
+    { value: "휴대폰", col: "col-span-2" },
+    { value: "시간", col: "col-span-1" },
+    { value: "시술유형", col: "col-span-2" },
+  ];
+  const dataList = [
+    { value: "user_name", col: "col-span-1" },
+    { value: "phone_number", col: "col-span-2" },
+    { value: "reservation_time", col: "col-span-1" },
+    { value: "service_name", col: "col-span-2" },
+  ];
+
+  useEffect(() => {
+    // 날짜 변경 시 발생
+    if (clickDay instanceof Date) {
+      const formattedData = dayjs(clickDay).format("YYYY-MM-DD");
+      getData({
+        status: "confirm",
+        r_date: formattedData,
+      });
+      getData({
+        status: "submit",
+        r_date: formattedData,
+      });
+    }
+  }, [clickDay]);
+
+  //지정 날짜의 예약 리스트 가져오기
+  const getData = async (data: GetTodayReservation) => {
+    try {
+      const config: AxiosRequestConfig = {
+        params: data,
+      };
+
+      const reservationData = await customAxios.get(
+        "/api/salon/reservation",
+        config
+      );
+      if (data.status === "confirm") {
+        //예약 승인 값
+        setReservationUser(reservationData.data.reservations);
+      } else if (data.status === "submit") {
+        //예약 미승인 값
+        setUnreservedUser(reservationData.data.reservations);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return (
+    <div className="flex gap-10">
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between px-3 gap-6">
+          <CountCard header="확정 예약자" count={reservationUser.length} />
+          <CountCard header="승인 대기자" count={unreservedUser.length} />
+        </div>
+        <S.CalendarBox className="flex-auto">
+          <S.StyleCalendar
+            locale="en"
+            onChange={setClickDay}
+            value={clickDay}
+            calendarType="US"
+          />
+        </S.CalendarBox>
+      </div>
+
+      <div className="flex-1">
+        <div className="text-2xl font-bold mb-4 tracking-tighter text-left">
+          예약 확정 목록
+        </div>
+        <div className="bg-white p-5 h-full rounded-2xl overflow-auto shadow-lg">
+          <div className="grid grid-cols-6 text-center  border-black/10 shadow-lg overflow-hidden rounded-2xl">
+            <ListHead headList={headList} />
+            {reservationUser.map((user) => {
+              return <UserList user={user} dataList={dataList} />;
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ReservationList;

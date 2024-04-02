@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 스크롤바 숨김 */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background-color: transparent;
+}
+
+/* 스크롤바 썸네일 숨김 */
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
