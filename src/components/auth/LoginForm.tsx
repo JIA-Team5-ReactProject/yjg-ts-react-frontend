@@ -7,8 +7,7 @@ import { trimValues } from "../../utils/validate";
 import { customAxios, setAuthToken } from "../../services/customAxios";
 import { emailReg } from "../../utils/regex";
 import { useSetRecoilState } from "recoil";
-import { UserDataAtom } from "../../recoil/UserDataAtiom";
-import testImg from "../../assets/winter.jpg";
+import { Token, UserDataAtom } from "../../recoil/UserDataAtiom";
 
 function LoginForm(): JSX.Element {
   const {
@@ -20,9 +19,13 @@ function LoginForm(): JSX.Element {
     formState: { errors },
   } = useForm<LoginFormValues>();
   const navigate = useNavigate();
+  // 이메일 저장
   const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
   const [isRemember, setIsRemember] = useState(false);
+  // 유저 데이터 전역 변수
   const setUserData = useSetRecoilState(UserDataAtom);
+  // 토큰 전역 변수
+  const setToken = useSetRecoilState(Token);
 
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
@@ -48,25 +51,24 @@ function LoginForm(): JSX.Element {
         password: trimData.password,
       });
       const token = loginPost.data.access_token;
-      window.localStorage.setItem("token", token);
+      setToken(token);
       setAuthToken(token);
       const userData = loginPost.data.user;
+      const powerArr: string[] = [];
+      userData.privileges.map((v: { privilege: string }) => {
+        powerArr.push(v.privilege);
+      });
       setUserData({
         id: userData.id,
         name: userData.name,
-        img: testImg,
         phone: userData.phone_number,
         email: userData.email,
         password: userData.password,
-        power: {
-          master: userData.master,
-          salon_privilege: userData.salon_privilege,
-          restaurant_privilege: userData.restaurant_privilege,
-          admin_privilege: userData.admin_privilege,
-        },
+        power: powerArr,
       });
       navigate("/main");
     } catch (error) {
+      console.log(error);
       setError("email", {
         type: "manual",
         message: "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
