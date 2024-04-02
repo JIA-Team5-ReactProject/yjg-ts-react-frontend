@@ -3,7 +3,7 @@ import { RegisterOptions } from "react-hook-form";
 export type FormInputPropsType = {
   type: string;
   name: string;
-  label: string;
+  label?: string;
   placeholder: string;
   check?: {
     textT: string;
@@ -44,31 +44,29 @@ export type FindingPasswordValues = {
   email: string;
 };
 
-export type UserPower = {
-  master?: boolean;
-  salon_privilege: boolean;
-  restaurant_privilege: boolean;
-  admin_privilege: boolean;
-};
-
 export type LoginUserData = {
   id: number;
   img?: string;
-  power: UserPower;
+  power: string[];
 } & LoginFormValues &
   FindingIdValues;
 
 export type GetUserData = {
   id: number;
   phone_number: string;
-} & FindingPasswordValues &
-  UserPower;
+  privileges: PrivilegeType[];
+} & FindingPasswordValues;
 
 export type PostUserData = {
   admin_id: number;
   name?: string;
   phone_number?: string;
   password?: string;
+};
+
+export type PrivilegeType = {
+  id: string;
+  privilege: string;
 };
 
 export type StudentType = {

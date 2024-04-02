@@ -15,7 +15,7 @@ import RestaurantRoutes from "./RestaurantRoutes";
 function Routing() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login />} />
       <Route path="/join" element={<Join />} />
       <Route path="/findIdPw" element={<FindMyAccount />} />
       <Route path="/findIdPw/result" element={<FindResult />} />
@@ -29,27 +29,17 @@ function Routing() {
         />
         <Route
           path="admin/*"
-          element={
-            <ProtectedRoute
-              power="admin_privilege"
-              children={<AdminRoutes />}
-            />
-          }
+          element={<ProtectedRoute power="admin" children={<AdminRoutes />} />}
         />
         <Route
           path="salon/*"
-          element={
-            <ProtectedRoute
-              power="salon_privilege"
-              children={<SalonRoutes />}
-            />
-          }
+          element={<ProtectedRoute power="salon" children={<SalonRoutes />} />}
         />
         <Route
           path="restaurant/*"
           element={
             <ProtectedRoute
-              power="restaurant_privilege"
+              power="restaurant"
               children={<RestaurantRoutes />}
             />
           }

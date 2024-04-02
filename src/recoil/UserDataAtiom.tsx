@@ -1,21 +1,20 @@
 import { atom } from "recoil";
 import { LoginUserData } from "../types/auth";
 
+export const Token = atom<string>({
+  key: "token",
+  default: "",
+});
+
 export const UserDataAtom = atom<LoginUserData>({
   key: "UserData",
   default: {
     id: 0,
-    img: "",
     name: "",
     phone: "",
     email: "",
     password: "",
 
-    power: {
-      master: false,
-      salon_privilege: false,
-      restaurant_privilege: false,
-      admin_privilege: false,
-    },
+    power: [""],
   },
 });
