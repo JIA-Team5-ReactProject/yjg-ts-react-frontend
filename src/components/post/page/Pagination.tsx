@@ -12,7 +12,7 @@ function Pagination(props: PaginationType) {
   }, [page]);
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center mt-3">
       <div className="lg:w-3/5 w-full  flex items-center justify-between">
         <div
           className="flex items-center pb-3 text-gray-600 hover:text-indigo-700 cursor-pointer"

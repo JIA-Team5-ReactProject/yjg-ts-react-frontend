@@ -11,9 +11,7 @@ function Editor(props: EditorType) {
       toolbar: {
         container: [
           [{ size: ["small", false, "large", "huge"] }],
-          [{ align: [] }],
           ["bold", "italic", "underline", "strike"],
-          [{ list: "ordered" }, { list: "bullet" }],
           [
             {
               color: [],

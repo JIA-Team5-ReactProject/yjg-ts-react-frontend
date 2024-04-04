@@ -15,23 +15,28 @@ function OVerallUser() {
   ];
   const dataList = [
     { value: "name", col: "col-span-1" },
-    { value: "phone_number", col: "col-span-1" },
+    { value: "phone_number", col: "col-span-1", type: "phoneNum" },
     { value: "email", col: "col-span-2" },
     [
       {
         value: "권한설정",
-        color: "bg-blue-400",
+        color: "bg-blue-400/90",
         onClick: (data: GetUserData) => {
           setOnModal(data);
         },
       },
       {
         value: "삭제",
-        color: "bg-red-400",
+        color: "bg-red-400/90",
         onClick: (data: GetUserData) => {
-          deleteData(data.id).then(() => {
-            getData({ type: "approved" });
-          });
+          if (window.confirm("삭제하시겠습니까?")) {
+            alert("삭제되었습니다");
+            deleteData(data.id).then(() => {
+              getData({ type: "approved" });
+            });
+          } else {
+            alert("취소되었습니다.");
+          }
         },
       },
     ],
@@ -112,10 +117,10 @@ function OVerallUser() {
     <div className="px-10 h-full">
       {onModal ? (
         <div className="fixed flex items-center justify-center inset-0 bg-black/35">
-          <div className="bg-white w-3/5 h-3/5 py-12 overflow-auto shadow-lg">
+          <div className="bg-white rounded-md w-3/5 h-3/5 py-12 overflow-auto shadow-lg">
             <div className="grid grid-cols-3 p-6 text-center text-2xl font-bold gap-5">
-              <div className="col-span-3 text-2xl text-left font-bold mb-10 ml-5">
-                <span className="text-blue-700 text-5xl">{onModal.name} </span>
+              <div className="col-span-3 text-xl text-left font-bold mb-10 ml-5">
+                <span className="text-blue-700 text-3xl">{onModal.name} </span>
                 님의 관리자 권한
               </div>
               <div className="text-lg">권한</div>
@@ -135,7 +140,7 @@ function OVerallUser() {
             <div className="flex justify-end mt-20 mr-14 gap-4">
               <ListBtn
                 value="저장"
-                color="bg-blue-500"
+                color="bg-blue-400/90"
                 onClick={() => {
                   patchPower(userPower).then(() => {
                     getData({ type: "approved" });
@@ -145,7 +150,7 @@ function OVerallUser() {
               />
               <ListBtn
                 value="취소"
-                color="bg-red-500"
+                color="bg-red-400/90"
                 onClick={() => {
                   setOnModal(undefined);
                 }}

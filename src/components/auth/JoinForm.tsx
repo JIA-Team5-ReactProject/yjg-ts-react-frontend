@@ -6,7 +6,6 @@ import { trimValues } from "../../utils/validate";
 import { customAxios } from "../../services/customAxios";
 import { emailReg, nameReg, passwordReg, phoneNumReg } from "../../utils/regex";
 import { useNavigate } from "react-router-dom";
-import CloseIcon from "../../icons/CloseIcon";
 
 function JoinForm(): JSX.Element {
   const {
@@ -27,21 +26,19 @@ function JoinForm(): JSX.Element {
     setDuplicateCheck(false);
   }, [email]);
 
-  // 아이디 중복 체크 함수
+  // 아이디 중복 체크하기
   const idDuplicateCheck = async (email: string) => {
     const isValid = emailReg.test(email);
     if (!isValid) {
       return Promise.reject(new Error("이메일을 입력해주세요."));
     }
-    //중복체크 API
     try {
-      const verifyEmail = await customAxios.get(
-        `/api/user/verify-email/${email}`
-      );
+      const verifyEmail = await customAxios.get(`/api/verify-email/${email}`);
       if (verifyEmail.data.check) {
         setDuplicateCheck(verifyEmail.data.check);
       }
     } catch (error: any) {
+      console.log(error);
       setError(
         "email",
         { message: error.response.data.error },
@@ -73,14 +70,7 @@ function JoinForm(): JSX.Element {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="relative flex flex-col bg-sky-200/90 rounded-3xl aspect-video p-10 min-w-96 max-w-xl m-auto">
-        <div className="absolute right-1 top-1">
-          <CloseIcon
-            onClick={() => {
-              navigate("/");
-            }}
-          />
-        </div>
+      <div className="flex flex-col bg-sky-200/90 rounded-3xl aspect-video p-10 min-w-96 max-w-xl m-auto">
         <p className="font-bold text-3xl text-center mb-10 mt-2">회원가입</p>
         <FormInput
           type="text"
@@ -167,6 +157,19 @@ function JoinForm(): JSX.Element {
         >
           가입하기
         </button>
+        <div className="flex justify-center gap-2 mt-3">
+          <div className="text-xs text-right pt-1 font-bold">
+            이미 계정이 있나요?
+          </div>
+          <div
+            className="text-xs text-right pt-1 font-bold underline-offset-2  hover:underline cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            로그인
+          </div>
+        </div>
       </div>
     </form>
   );

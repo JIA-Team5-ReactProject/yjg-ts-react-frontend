@@ -8,6 +8,8 @@ function SetBusinessTime() {
   const [businessTime, setBusinessTime] = useState<BusinessTimeType[]>([]);
   // 선택된 요일 값
   const [selectedWeek, setSelectedWeek] = useState<BusinessTimeType>();
+  // 이전의 선택 값
+  const [prevSelected, setPrevSelected] = useState<string>();
   // 수정중인지 아닌지 체크
   const [onChange, setOnchange] = useState<boolean>(false);
   // 영업 상태 수정 값
@@ -29,12 +31,21 @@ function SetBusinessTime() {
 
   // 영업시간 데이터 받을 시
   useEffect(() => {
-    setSelectedWeek(businessTime[0]);
+    if (prevSelected) {
+      businessTime.map((v) => {
+        if (v.date === prevSelected) {
+          setSelectedWeek(v);
+        }
+      });
+    } else {
+      setSelectedWeek(businessTime[0]);
+    }
   }, [businessTime]);
 
   // 요일 선택할 시
   useEffect(() => {
     setOnchange(false);
+    setPrevSelected(selectedWeek?.date);
   }, [selectedWeek]);
 
   // 재설정할 시
@@ -76,15 +87,13 @@ function SetBusinessTime() {
 
   return (
     <>
-      <div className="bg-sky-200 text-white rounded-lg grid grid-cols-7 text-center p-4 gap-4 shadow-lg">
+      <div className="grid grid-cols-7 text-center p-4 gap-4">
         {businessTime.map((v) => {
           return (
             <div
               className={`${
-                v.open
-                  ? "bg-cyan-500 hover:bg-cyan-700"
-                  : "text-black/30 font-bold hover:bg-cyan-400"
-              } p-1 rounded-md cursor-pointer shadow-md`}
+                v.open ? "text-black" : "text-black/20"
+              } p-1 rounded-md cursor-pointer underline underline-offset-4 font-bold`}
               onClick={() => {
                 setSelectedWeek(v);
               }}
@@ -95,14 +104,14 @@ function SetBusinessTime() {
         })}
       </div>
       {selectedWeek && !onChange ? (
-        <div className="bg-sky-200 rounded-lg grid grid-cols-5 text-center p-8 gap-5 shadow-lg">
-          <div className="relative font-bold text-lg col-span-5">
+        <div className="rounded-lg grid grid-cols-6 text-center px-8 pb-6 gap-5">
+          <div className="relative font-bold text-lg col-span-6 mb-3">
             {selectedWeek.date}
             {selectedWeek.open ? " 영업일" : ""}
-            <div className="absolute -right-3 -top-4">
+            <div className="absolute -right-3 -top-1">
               <ListBtn
                 value="재설정"
-                color="bg-blue-800/80"
+                color="bg-blue-400/90"
                 onClick={() => {
                   setOnchange(true);
                 }}
@@ -111,24 +120,24 @@ function SetBusinessTime() {
           </div>
           {selectedWeek.open ? (
             <>
-              <div className="font-bold text-lg col-span-2">🔓 open</div>
+              <div className="font-bold text-lg col-span-3">🔓 open</div>
               <div className="font-bold text-xl col-span-3 outline-none text-center">
                 {selectedWeek?.s_time}
               </div>
-              <div className="font-bold text-lg col-span-2">🔒 close</div>
+              <div className="font-bold text-lg col-span-3">🔒 close</div>
               <div className="font-bold text-xl col-span-3 outline-none text-center">
                 {selectedWeek?.e_time}
               </div>
             </>
           ) : (
-            <div className="col-span-5 font-bold text-gray-400 p-6">
+            <div className="col-span-6 text-xl font-bold text-gray-400 p-6">
               영업일이 아닙니다
             </div>
           )}
         </div>
       ) : (
-        <div className="bg-white rounded-lg grid grid-cols-5 text-center p-4 gap-5">
-          <div className="font-bold text-lg col-span-2 self-center">영업</div>
+        <div className="bg-white rounded-lg grid grid-cols-6 text-center p-4 gap-5">
+          <div className="font-bold text-lg col-span-3 self-center">영업</div>
           <div className="font-bold text-xl col-span-3 outline-none text-center px-20">
             <div className="flex gap-2 p-4">
               <label className="relative cursor-pointer">
@@ -148,7 +157,7 @@ function SetBusinessTime() {
           </div>
           {modifyOpen ? (
             <>
-              <div className="font-bold text-lg col-span-2">🔓 open</div>
+              <div className="font-bold text-lg col-span-3">🔓 open</div>
               <div className="font-bold text-xl col-span-3 outline-none text-center">
                 <select
                   className="border-b-2 border-black px-1"
@@ -162,7 +171,7 @@ function SetBusinessTime() {
                   ))}
                 </select>
               </div>
-              <div className="font-bold text-lg col-span-2">🔒 close</div>
+              <div className="font-bold text-lg col-span-3">🔒 close</div>
               <div className="font-bold text-xl col-span-3 outline-none text-center">
                 <select
                   className="border-b-2 border-black px-1"
@@ -178,10 +187,10 @@ function SetBusinessTime() {
               </div>
             </>
           ) : null}
-          <div className="flex gap-5 justify-center col-span-5">
+          <div className="flex gap-5 justify-center col-span-6 mt-3">
             <ListBtn
               value="설정완료"
-              color="bg-blue-400"
+              color="bg-blue-400/90"
               onClick={() => {
                 patchBusinessTimeData().then(() => {
                   setOnchange(false);
@@ -191,7 +200,7 @@ function SetBusinessTime() {
             />
             <ListBtn
               value="취소"
-              color="bg-red-400"
+              color="bg-red-400/90"
               onClick={() => {
                 setOnchange(false);
               }}

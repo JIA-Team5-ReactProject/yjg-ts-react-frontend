@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { UserDataAtom } from "../../recoil/UserDataAtiom";
+import { Token, UserDataAtom } from "../../recoil/UserDataAtiom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { JoinFormValues, PostUserData } from "../../types/auth";
 import { nameReg, passwordReg, phoneNumReg } from "../../utils/regex";
@@ -8,6 +8,7 @@ import { trimValues } from "../../utils/validate";
 import { customAxios } from "../../services/customAxios";
 import { ListBtn } from "../master/UserList";
 import { useNavigate } from "react-router-dom";
+import { formatPhoneNumber } from "../../utils/formatPhoneNum";
 
 function MypageForm() {
   const {
@@ -26,6 +27,7 @@ function MypageForm() {
   const [powerData, setPowerData] = useState<string[]>([]);
   // 유저 데이터
   const userData = useRecoilValue(UserDataAtom);
+  const token = useRecoilValue(Token);
   const password = watch("password");
   const navigate = useNavigate();
 
@@ -67,8 +69,7 @@ function MypageForm() {
   // 회원 탈퇴하기
   const deleteSelf = async () => {
     try {
-      const token = localStorage.getItem("token");
-      await customAxios.delete("/api/admin", {
+      await customAxios.delete("/api/unregister", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -178,7 +179,7 @@ function MypageForm() {
                   })}
                 />
                 <div>
-                  비밀번호체크
+                  비밀번호 체크
                   {errors?.pwCheck && (
                     <span className="text-red-500 text-xs font-bold translate-x-2 tracking-tight mb-2 ml-2">
                       {errors.pwCheck.message}
@@ -200,13 +201,13 @@ function MypageForm() {
             <div className="col-span-2 space-x-3 justify-self-end">
               <button
                 type="submit"
-                className="rounded-xl mt-6 ml-auto px-7 bg-cyan-600 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                className="rounded-xl mt-6 ml-auto px-7 bg-blue-400/90 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 data-ripple-light="true"
               >
                 확인
               </button>
               <button
-                className="rounded-xl mt-6 ml-auto px-7 bg-cyan-600 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                className="rounded-xl mt-6 ml-auto px-7 bg-red-400/90 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 data-ripple-light="true"
                 onClick={() => {
                   setOnChange(false);
@@ -223,7 +224,7 @@ function MypageForm() {
           <div className="bg-white grid grid-cols-2 p-12 text-xl gap-y-5 font-semibold w-2/3 h-fit rounded-2xl shadow-lg">
             <div className="col-span-2 text-4xl font-bold mb-6">내정보</div>
             <div>이름</div> <div>{userData.name}</div>
-            <div>전화번호</div> <div>{userData.phone}</div>
+            <div>전화번호</div> <div>{formatPhoneNumber(userData.phone)}</div>
             <div>이메일</div> <div>{userData.email}</div>
             <div>권한</div>
             <div className="flex flex-col gap-1">
@@ -234,12 +235,16 @@ function MypageForm() {
             <div className="col-span-2 flex justify-end gap-3 mt-3">
               <ListBtn
                 value="수정"
-                color="bg-cyan-600"
+                color="bg-orange-400/80"
                 onClick={() => {
                   setOnChange(true);
                 }}
               />
-              <ListBtn value="회원탈퇴" color="bg-red-600" onClick={onRemove} />
+              <ListBtn
+                value="회원탈퇴"
+                color="bg-red-400/90"
+                onClick={onRemove}
+              />
             </div>
           </div>
         </div>

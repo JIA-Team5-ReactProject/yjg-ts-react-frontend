@@ -88,13 +88,13 @@ function ModifyPost() {
         <div className="flex gap-5 h-fit">
           <ListBtn
             value="수정완료"
-            color="bg-blue-500/90"
+            color="bg-blue-400/90"
             type="submit"
             onClick={() => {}}
           />
           <ListBtn
             value="취소"
-            color="bg-red-500/90"
+            color="bg-red-400/90"
             onClick={() => {
               navigate(-1);
             }}

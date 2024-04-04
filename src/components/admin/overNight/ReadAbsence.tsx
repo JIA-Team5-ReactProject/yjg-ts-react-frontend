@@ -61,19 +61,24 @@ function ReadAbsence() {
 
       <div className="flex justify-end gap-4">
         <ListBtn
-          value="외출 취소"
-          color="bg-pink-400/90"
+          value="외출 거절"
+          color="bg-orange-400/70"
           onClick={() => {
             if (id) {
-              patchAbsenceData(id).then(() => {
-                navigate("/main/admin/stayOut");
-              });
+              if (window.confirm("거절하시겠습니까?")) {
+                alert("거절되었습니다");
+                patchAbsenceData(id).then(() => {
+                  navigate("/main/admin/stayOut");
+                });
+              } else {
+                alert("취소되었습니다.");
+              }
             }
           }}
         />
         <ListBtn
           value="닫기"
-          color="bg-red-400"
+          color="bg-red-400/90"
           onClick={() => {
             navigate("/main/admin/stayOut");
           }}

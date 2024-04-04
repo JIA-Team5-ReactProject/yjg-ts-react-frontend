@@ -3,6 +3,7 @@ import PlusIcon from "../../icons/PlusIcon";
 import { SalonServiceListType, ServiceListType } from "../../types/salon";
 import { ListBtn, ListHead } from "../master/UserList";
 import { customAxios } from "../../services/customAxios";
+import { formatCurrency } from "../../utils/formatCurrency";
 
 function SalonServiceList(props: SalonServiceListType) {
   const {
@@ -66,7 +67,7 @@ function SalonServiceList(props: SalonServiceListType) {
             <div className="flex gap-3 items-center justify-center">
               <ListBtn
                 value="생성"
-                color="bg-blue-400"
+                color="bg-blue-400/90"
                 onClick={() => {
                   createServiceFuc(id, newName, newValue).then(() => {
                     getServiceFuc({ category_id: id, gender: gender });
@@ -76,7 +77,7 @@ function SalonServiceList(props: SalonServiceListType) {
               />
               <ListBtn
                 value="취소"
-                color="bg-red-400"
+                color="bg-red-400/90"
                 onClick={() => {
                   setCreateService(false);
                 }}
@@ -111,10 +112,10 @@ function ServiceList(props: ServiceListType) {
   // 수정된 가격
   const [newPrice, setNewPrice] = useState("");
 
-  // 댓글 수정하기
+  // 서비스 수정하기
   const patchService = async (id: string) => {
     try {
-      await customAxios.patch(`/api/salon/service/{id}`, {
+      await customAxios.patch(`/api/salon/service/${id}`, {
         service: newService,
         price: newPrice,
         gender: gender,
@@ -151,7 +152,7 @@ function ServiceList(props: ServiceListType) {
           <div className="m-auto border-b py-4 w-full space-x-5 text-center">
             <ListBtn
               value="수정완료"
-              color="bg-sky-400"
+              color="bg-sky-400/90"
               onClick={() => {
                 patchService(service.id).then(() => {
                   setOnModify(false);
@@ -161,7 +162,7 @@ function ServiceList(props: ServiceListType) {
             />
             <ListBtn
               value="취소"
-              color="bg-red-500/80"
+              color="bg-red-400/90"
               onClick={() => {
                 setOnModify(false);
               }}
@@ -174,12 +175,12 @@ function ServiceList(props: ServiceListType) {
             {service.service}
           </div>
           <div className="border-b border-r py-5 px-6 font-semibold text-lg">
-            {service.price}
+            {formatCurrency(service.price)}
           </div>
           <div className="m-auto border-b py-4 w-full space-x-5 text-center">
             <ListBtn
               value="수정"
-              color="bg-sky-400"
+              color="bg-sky-400/90"
               onClick={() => {
                 setOnModify(true);
                 setNewService(service.service);
@@ -188,10 +189,15 @@ function ServiceList(props: ServiceListType) {
             />
             <ListBtn
               value="삭제"
-              color="bg-red-500/80"
+              color="bg-red-400/90"
               onClick={() => {
                 deleteServiceFuc(service.id).then(() => {
-                  getServiceFuc({ category_id: category_id, gender: gender });
+                  if (window.confirm("삭제하시겠습니까?")) {
+                    alert("삭제되었습니다");
+                    getServiceFuc({ category_id: category_id, gender: gender });
+                  } else {
+                    alert("취소되었습니다.");
+                  }
                 });
               }}
             />

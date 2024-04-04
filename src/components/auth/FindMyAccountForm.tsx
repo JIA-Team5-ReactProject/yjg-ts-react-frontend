@@ -128,15 +128,8 @@ function FindMyAccountForm(): JSX.Element {
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative flex flex-col bg-sky-200/90 rounded-b-3xl  aspect-video p-10 min-w-96 max-w-xl m-auto "
+        className="flex flex-col bg-sky-200/90 rounded-b-3xl  aspect-video p-10 min-w-96 max-w-xl m-auto "
       >
-        <div className="absolute right-0 top-0">
-          <CloseIcon
-            onClick={() => {
-              navigate("/");
-            }}
-          />
-        </div>
         {findingAccount === "findingId" ? (
           <>
             <FormInput
@@ -234,6 +227,19 @@ function FindMyAccountForm(): JSX.Element {
         >
           {findingAccount === "findingId" ? "아이디 찾기" : "비밀번호 찾기"}
         </button>
+        <div className="flex justify-center gap-2 mt-3">
+          <div className="text-xs text-right pt-1 font-bold">
+            이미 계정이 있나요?
+          </div>
+          <div
+            className="text-xs text-right pt-1 font-bold underline-offset-2  hover:underline cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            로그인
+          </div>
+        </div>
       </form>
     </>
   );

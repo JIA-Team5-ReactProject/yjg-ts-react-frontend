@@ -1,12 +1,13 @@
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { GetCheckRoomType } from "../../../types/admin";
+import { GetCheckRoomType, RoomStateType } from "../../../types/admin";
 import { AxiosRequestConfig } from "axios";
 import { customAxios } from "../../../services/customAxios";
 import PeopleIcon from "../../../icons/PeopleIcon";
+import closeImg from "../../../assets/close.png";
 
-function RoomState(props: { name: string; setRoom: (room: string) => void }) {
-  const { name, setRoom } = props;
+function RoomState(props: RoomStateType) {
+  const { room, setRoom } = props;
   // 현재 시간의 예약 상태
   const [exist, setExist] = useState(false);
   // 예약된 시간 리스트
@@ -15,7 +16,7 @@ function RoomState(props: { name: string; setRoom: (room: string) => void }) {
   // 렌더링 시
   useEffect(() => {
     const formattedDate = dayjs(new Date()).format("YYYY-MM-DD");
-    getCheckData({ date: formattedDate, room_number: name });
+    getCheckData({ date: formattedDate, room_number: room.room_number });
   }, []);
 
   // reservedTimes 상태 변경 시
@@ -53,13 +54,18 @@ function RoomState(props: { name: string; setRoom: (room: string) => void }) {
         exist
           ? "border-4 border-blue-500 text-blue-500"
           : "border-2 border-gray-300 text-gray-400 hover:border-2 hover:border-sky-500"
-      } p-2 font-bold h-28 cursor-pointer hover:bg-sky-700/30 shadow-md`}
+      } flex flex-col p-2 font-bold h-28 cursor-pointer hover:bg-sky-700/30 shadow-md`}
       onClick={() => {
-        setRoom(name);
+        setRoom(room);
       }}
     >
-      <div>{name}</div>
+      <div>{room.room_number}</div>
       {exist ? <PeopleIcon /> : null}
+      {room.open ? null : (
+        <div className="flex-1 flex items-center justify-center text-lg">
+          <img className="w-1/2" src={closeImg} alt="close" />
+        </div>
+      )}
     </div>
   );
 }
