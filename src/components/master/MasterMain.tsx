@@ -14,12 +14,12 @@ function MasterMain() {
   ];
   const dataList = [
     { value: "name", col: "col-span-1" },
-    { value: "phone_number", col: "col-span-1" },
+    { value: "phone_number", col: "col-span-1", type: "phoneNum" },
     { value: "email", col: "col-span-2" },
     [
       {
         value: "승인",
-        color: "bg-blue-400",
+        color: "bg-blue-400/90",
         onClick: (data: GetUserData) => {
           approval(data.id).then(() => {
             getData({ type: "unapproved" });
@@ -28,11 +28,16 @@ function MasterMain() {
       },
       {
         value: "거절",
-        color: "bg-red-400",
+        color: "bg-red-400/90",
         onClick: (data: GetUserData) => {
-          deleteData(data.id).then(() => {
-            getData({ type: "unapproved" });
-          });
+          if (window.confirm("거절하시겠습니까?")) {
+            alert("거절되었습니다");
+            deleteData(data.id).then(() => {
+              getData({ type: "unapproved" });
+            });
+          } else {
+            alert("취소되었습니다.");
+          }
         },
       },
     ],

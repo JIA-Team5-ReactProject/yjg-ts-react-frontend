@@ -63,7 +63,7 @@ function Comments(props: CommentsType) {
         <div className="flex gap-3 border-b border-black/30 pt-2 pl-3 pb-1 font-bold">
           <div>▪</div>
           <div className="flex-1">{comment.comment}</div>
-          {String(userData.id) === String(comment.admin_id) ? (
+          {String(userData.id) === String(comment.user_id) ? (
             <div className="flex gap-2 text-sm items-end text-black/40">
               <div
                 className="cursor-pointer hover:text-black"

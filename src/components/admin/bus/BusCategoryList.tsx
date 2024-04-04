@@ -30,6 +30,13 @@ function BusCategoryList(props: BusCategoryListType) {
     setDropdown(false);
   }, [id]);
 
+  // 수정할 시
+  useEffect(() => {
+    if (modify) {
+      setNewName(round);
+    }
+  }, [modify]);
+
   // 스케줄 데이터 가져오기
   const getScheduleData = async () => {
     try {
@@ -79,7 +86,7 @@ function BusCategoryList(props: BusCategoryListType) {
             />
             <ListBtn
               value="완료"
-              color="bg-sky-400"
+              color="bg-sky-400/90"
               onClick={() => {
                 modifyCategotyFuc(id, newName).then(() => {
                   setModify(false);
@@ -93,7 +100,7 @@ function BusCategoryList(props: BusCategoryListType) {
             />
             <ListBtn
               value="취소"
-              color="bg-red-500/80"
+              color="bg-red-400/90"
               onClick={() => {
                 setModify(false);
               }}
@@ -104,22 +111,27 @@ function BusCategoryList(props: BusCategoryListType) {
             <div className="min-w-32 text-center">{round}</div>
             <ListBtn
               value="수정"
-              color="bg-pink-500/80"
+              color="bg-orange-400/80"
               onClick={() => {
                 setModify(true);
               }}
             />
             <ListBtn
               value="삭제"
-              color="bg-red-500/80"
+              color="bg-red-400/90"
               onClick={() => {
-                deleteCategoryFuc(id).then(() => {
-                  getCategoryFuc({
-                    semester: semester,
-                    weekend: weekend,
-                    bus_route_direction: bus_route_direction,
+                if (window.confirm("삭제하시겠습니까?")) {
+                  alert("삭제되었습니다");
+                  deleteCategoryFuc(id).then(() => {
+                    getCategoryFuc({
+                      semester: semester,
+                      weekend: weekend,
+                      bus_route_direction: bus_route_direction,
+                    });
                   });
-                });
+                } else {
+                  alert("취소되었습니다.");
+                }
               }}
             />
           </>

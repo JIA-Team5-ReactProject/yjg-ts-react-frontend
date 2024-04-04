@@ -55,7 +55,6 @@ function PriceCorrection() {
 
   // 카테고리 이름 수정하기
   const modifyCategory = async (id: string, newName: string) => {
-    console.log(id, newName);
     try {
       await customAxios.patch("/api/salon/category", {
         category_id: id,
@@ -82,16 +81,9 @@ function PriceCorrection() {
         setPriceTag={setPriceTag}
         category={category}
       />
-      <div className="flex border-b-2 border-black">
-        <div className="flex bg-cyan-400 rounded-lg my-auto p-2 shadow-lg text-gray-700 hover:bg-cyan-400/80 hover:text-black">
-          <PriceIcon
-            onClick={() => {
-              setPriceTag(true);
-            }}
-          />
-        </div>
+      <div className="relative flex border-b-2 border-black">
         <div className="flex items-end gap-2 flex-1 text-4xl font-bold p-4 tracking-tighter text-left">
-          <span className="mr-6">가격표 관리</span>
+          <span className="mr-6">💈 가격표 관리</span>
           {kind.map((v) => {
             return (
               <span
@@ -109,7 +101,7 @@ function PriceCorrection() {
             );
           })}
         </div>
-        <div className="flex gap-2 justify-end items-end pb-4">
+        <div className="absolute right-2 -bottom-16 flex gap-2 justify-end items-end py-4">
           <div>
             <input
               type="text"
@@ -124,7 +116,7 @@ function PriceCorrection() {
           <div>
             <ListBtn
               value="생성"
-              color="bg-blue-500/90"
+              color="bg-blue-400/90"
               onClick={() => {
                 createCategory().then(() => {
                   getCategoryData();
@@ -134,17 +126,27 @@ function PriceCorrection() {
             />
           </div>
         </div>
+        <div className="flex flex-col mb-2 mr-1 bg-cyan-500/60 rounded-lg my-auto px-2 py-1 shadow-lg text-gray-700 hover:bg-cyan-400/80 hover:text-black cursor-pointer">
+          <PriceIcon
+            onClick={() => {
+              setPriceTag(true);
+            }}
+          />
+          <div className="text-xs font-bold text-center">가격표</div>
+        </div>
       </div>
-      {category.map((v) => (
-        <SalonCategoryList
-          id={v.id}
-          category={v.category}
-          gender={listKind}
-          getCategoryFuc={getCategoryData}
-          deleteCategoryFuc={deleteCategory}
-          modifyCategoryFuc={modifyCategory}
-        />
-      ))}
+      <div className="mt-16">
+        {category.map((v) => (
+          <SalonCategoryList
+            id={v.id}
+            category={v.category}
+            gender={listKind}
+            getCategoryFuc={getCategoryData}
+            deleteCategoryFuc={deleteCategory}
+            modifyCategoryFuc={modifyCategory}
+          />
+        ))}
+      </div>
       <div className="flex border-b-2 border-black my-10">
         <div className="flex items-end gap-2 flex-1 text-4xl font-bold p-4 tracking-tighter text-left">
           <span className="mr-6">💈 영업 시간 설정</span>

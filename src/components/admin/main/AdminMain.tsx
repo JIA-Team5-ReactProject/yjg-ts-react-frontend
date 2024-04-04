@@ -174,7 +174,7 @@ function AdminMain() {
           </div>
           <ListBtn
             value="작성"
-            color="bg-cyan-600"
+            color="bg-cyan-500/90"
             onClick={() => {
               navigate("/main/admin/writing", { state: { type: "Post" } });
             }}

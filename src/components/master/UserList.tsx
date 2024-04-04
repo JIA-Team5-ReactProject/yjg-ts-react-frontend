@@ -1,8 +1,33 @@
 import { DataListBtnType, UserListType } from "../../types/master";
+import { formatPhoneNumber } from "../../utils/formatPhoneNum";
 
 //리스트 유저데이터
 function UserList(props: UserListType) {
   const { user, dataList } = props;
+
+  // 값에 따른 필터링
+  const dataFilter = (data: { value: string; col: string; type?: string }) => {
+    if (data.type === "phoneNum") {
+      return (
+        <div
+          className={`border-b border-r py-5 px-6 bg-white font-semibold text-lg ${data.col}
+              `}
+        >
+          {formatPhoneNumber(user[data.value])}
+        </div>
+      );
+    } else {
+      return (
+        <div
+          className={`border-b border-r py-5 px-6 bg-white font-semibold text-lg ${data.col}
+              `}
+        >
+          {user[data.value]}
+        </div>
+      );
+    }
+  };
+
   return (
     <>
       {dataList.map((v) => {
@@ -22,12 +47,7 @@ function UserList(props: UserListType) {
                 })}
               </div>
             ) : (
-              <div
-                className={`border-b border-r py-5 px-6 bg-white font-semibold text-lg ${v.col}
-              `}
-              >
-                {user[v.value]}
-              </div>
+              dataFilter(v)
             )}
           </>
         );

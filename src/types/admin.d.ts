@@ -19,6 +19,17 @@ export type ReservationList = {
   user: StudentType;
 };
 
+export type RoomType = {
+  id?: string;
+  room_number: string;
+  open: number;
+};
+
+export type RoomStateType = {
+  room: RoomType;
+  setRoom: (room: RoomType) => void;
+};
+
 // 버스 관련 타입
 
 export type ChoiceListType = {
@@ -97,7 +108,7 @@ export type AbsenceType = {
 
 export type GetCommentDataType = {
   id: string;
-  admin_id: string;
+  user_id: string;
   comment: string;
 };
 

@@ -99,12 +99,12 @@ function ReadAS() {
         <div className="flex justify-end gap-4">
           <ListBtn
             value="A/S 완료"
-            color="bg-sky-500/90"
+            color="bg-sky-400/90"
             onClick={patchASData}
           />
           <ListBtn
             value="닫기"
-            color="bg-red-500/80"
+            color="bg-red-400/90"
             onClick={() => {
               navigate("/main/admin/repair");
             }}

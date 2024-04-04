@@ -141,7 +141,7 @@ function BusManagement() {
             <div>
               <ListBtn
                 value="생성"
-                color="bg-blue-500"
+                color="bg-blue-400/90"
                 onClick={() => {
                   createCategory().then(() => {
                     getCategoryData({

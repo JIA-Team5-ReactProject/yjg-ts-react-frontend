@@ -14,7 +14,7 @@ function Sidebar() {
   //로그아웃 함수
   const logoutPost = async () => {
     try {
-      await customAxios.post("/api/admin/logout");
+      await customAxios.post("/api/logout");
       setToken("");
       setAuthToken(null);
     } catch (error) {

@@ -60,7 +60,7 @@ function BusScheduleList(props: BusScheduleListType) {
             <div className="flex gap-3 items-center justify-center">
               <ListBtn
                 value="생성"
-                color="bg-blue-400"
+                color="bg-blue-400/90"
                 onClick={() => {
                   createScheduleFuc(id, newStation, newTime).then(() => {
                     getScheduleFuc();
@@ -70,7 +70,7 @@ function BusScheduleList(props: BusScheduleListType) {
               />
               <ListBtn
                 value="취소"
-                color="bg-red-500"
+                color="bg-red-400/90"
                 onClick={() => {
                   setCreateSchedule(false);
                 }}
@@ -142,7 +142,7 @@ function ScheduleList(props: ScheduleListType) {
           <div className="m-auto border-b py-4 w-full space-x-5 text-center">
             <ListBtn
               value="수정완료"
-              color="bg-sky-400"
+              color="bg-sky-400/90"
               onClick={() => {
                 patchSchedule(schedule.id).then(() => {
                   setOnModify(false);
@@ -152,7 +152,7 @@ function ScheduleList(props: ScheduleListType) {
             />
             <ListBtn
               value="취소"
-              color="bg-red-500/80"
+              color="bg-red-400/90"
               onClick={() => {
                 setOnModify(false);
               }}
@@ -170,7 +170,7 @@ function ScheduleList(props: ScheduleListType) {
           <div className="m-auto border-b py-4 w-full space-x-5 text-center">
             <ListBtn
               value="수정"
-              color="bg-sky-400"
+              color="bg-sky-400/90"
               onClick={() => {
                 setOnModify(true);
                 setNewStation(schedule.station);
@@ -179,7 +179,7 @@ function ScheduleList(props: ScheduleListType) {
             />
             <ListBtn
               value="삭제"
-              color="bg-red-500/80"
+              color="bg-red-400/90"
               onClick={() => {
                 deleteScheduleFuc(schedule.id).then(() => {
                   getScheduleFuc();
