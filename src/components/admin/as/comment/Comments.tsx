@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CommentsType } from "../../../../types/admin";
 import { useRecoilValue } from "recoil";
 import { UserDataAtom } from "../../../../recoil/UserDataAtiom";
-import { customAxios } from "../../../../services/customAxios";
+import { privateApi } from "../../../../services/customAxios";
 
 function Comments(props: CommentsType) {
   const { comment, getComment, deleteComment } = props;
@@ -16,7 +16,7 @@ function Comments(props: CommentsType) {
   // 댓글 수정하기
   const patchComment = async (id: string) => {
     try {
-      await customAxios.patch(`/api/after-service/comment/${id}`, {
+      await privateApi.patch(`/api/after-service/comment/${id}`, {
         comment: newComment,
       });
     } catch (error) {

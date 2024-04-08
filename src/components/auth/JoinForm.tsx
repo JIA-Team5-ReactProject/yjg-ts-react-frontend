@@ -3,7 +3,7 @@ import FormInput from "./FormInput";
 import { JoinFormValues } from "../../types/auth";
 import { useEffect, useState } from "react";
 import { trimValues } from "../../utils/validate";
-import { customAxios } from "../../services/customAxios";
+import { publicApi } from "../../services/customAxios";
 import { emailReg, nameReg, passwordReg, phoneNumReg } from "../../utils/regex";
 import { useNavigate } from "react-router-dom";
 
@@ -33,7 +33,7 @@ function JoinForm(): JSX.Element {
       return Promise.reject(new Error("이메일을 입력해주세요."));
     }
     try {
-      const verifyEmail = await customAxios.get(`/api/verify-email/${email}`);
+      const verifyEmail = await publicApi.get(`/api/verify-email/${email}`);
       if (verifyEmail.data.check) {
         setDuplicateCheck(verifyEmail.data.check);
       }
@@ -47,7 +47,7 @@ function JoinForm(): JSX.Element {
     }
   };
 
-  //회원가입 제출 함수
+  // 회원가입 제출 함수
   const onSubmit: SubmitHandler<JoinFormValues> = async (data) => {
     if (!duplicateCheck) {
       setError(
@@ -58,7 +58,7 @@ function JoinForm(): JSX.Element {
       return;
     }
     const trimData = trimValues(data);
-    await customAxios.post("/api/admin", {
+    await publicApi.post("/api/admin", {
       name: trimData.name,
       phone_number: trimData.phone,
       email: trimData.email,

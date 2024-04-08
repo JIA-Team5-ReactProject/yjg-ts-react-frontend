@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { LoginFormValues } from "../../types/auth";
 import { trimValues } from "../../utils/validate";
-import { customAxios, setAuthToken } from "../../services/customAxios";
+import { publicApi } from "../../services/customAxios";
 import { emailReg } from "../../utils/regex";
 import { useSetRecoilState } from "recoil";
-import { Token, UserDataAtom } from "../../recoil/UserDataAtiom";
+import { LoginStateAtom, UserDataAtom } from "../../recoil/UserDataAtiom";
 
 function LoginForm(): JSX.Element {
   const {
@@ -22,10 +22,10 @@ function LoginForm(): JSX.Element {
   // 이메일 저장
   const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
   const [isRemember, setIsRemember] = useState(false);
-  // 유저 데이터 전역 변수
+  // 유저 데이터 전역 저장변수
   const setUserData = useSetRecoilState(UserDataAtom);
-  // 토큰 전역 변수
-  const setToken = useSetRecoilState(Token);
+  // 로그인 상태 전역 저장변수
+  const setLoginState = useSetRecoilState(LoginStateAtom);
 
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
@@ -33,6 +33,7 @@ function LoginForm(): JSX.Element {
       setIsRemember(true);
     }
   }, []);
+
   // id저장 기억 함수
   const handleOnChange = () => {
     if (isRemember) {
@@ -41,18 +42,19 @@ function LoginForm(): JSX.Element {
       removeCookie("rememberEmail");
     }
   };
-  //로그인 제출 함수
+
+  // 로그인 제출 함수
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     const trimData = trimValues(data);
     handleOnChange();
     try {
-      const loginPost = await customAxios.post("/api/admin/login", {
+      const loginPost = await publicApi.post("/api/admin/login/web", {
         email: trimData.email,
         password: trimData.password,
       });
       const token = loginPost.data.access_token;
-      setToken(token);
-      setAuthToken(token);
+      sessionStorage.setItem("userToken", token);
+      setLoginState(true);
       const userData = loginPost.data.user;
       const powerArr: string[] = [];
       userData.privileges.map((v: { privilege: string }) => {

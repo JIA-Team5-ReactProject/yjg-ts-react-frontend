@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BusCategoryListType, ScheduleType } from "../../../types/admin";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import { ListBtn } from "../../master/UserList";
 import BusScheduleList from "./BusScheduleList";
 
@@ -40,7 +40,7 @@ function BusCategoryList(props: BusCategoryListType) {
   // 스케줄 데이터 가져오기
   const getScheduleData = async () => {
     try {
-      const scheduleData = await customAxios.get(
+      const scheduleData = await privateApi.get(
         `/api/bus/round/schedule/${id}`
       );
       setSchedule(scheduleData.data.schedules);
@@ -52,7 +52,7 @@ function BusCategoryList(props: BusCategoryListType) {
   // 스케줄 생성하기
   const createSchedule = async (id: string, station: string, time: string) => {
     try {
-      await customAxios.post("/api/bus/schedule", {
+      await privateApi.post("/api/bus/schedule", {
         round_id: id,
         station: station,
         bus_time: time,
@@ -65,7 +65,7 @@ function BusCategoryList(props: BusCategoryListType) {
   // 스케줄 삭제하기
   const deleteSchedule = async (id: string) => {
     try {
-      await customAxios.delete(`/api/bus/schedule/${id}`);
+      await privateApi.delete(`/api/bus/schedule/${id}`);
     } catch (error) {
       console.log(error);
     }

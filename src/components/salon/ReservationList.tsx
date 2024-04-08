@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as S from "../../styles/calender";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
 import { ListHead, UserList } from "../master/UserList";
 import CountCard from "./CountCard";
@@ -57,7 +57,7 @@ function ReservationList() {
         params: data,
       };
 
-      const reservationData = await customAxios.get(
+      const reservationData = await privateApi.get(
         "/api/salon/reservation",
         config
       );

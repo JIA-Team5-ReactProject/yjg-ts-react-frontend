@@ -3,7 +3,7 @@ import * as S from "../../../styles/calender";
 import CountCard from "../../salon/CountCard";
 import dayjs from "dayjs";
 import { ListHead, UserList } from "../../master/UserList";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
 import { AbsenceListType, GetAbsenceDataType } from "../../../types/admin";
 import { useNavigate } from "react-router-dom";
@@ -126,7 +126,7 @@ function CheckStay() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const AbsenceData = await customAxios.get("/api/absence", config);
+      const AbsenceData = await privateApi.get("/api/absence", config);
       setAbsence(AbsenceData.data.absence_lists.data);
       setLastPage(AbsenceData.data.absence_lists.last_page);
     } catch (error) {
@@ -138,7 +138,7 @@ function CheckStay() {
   const getCountData = async (data: { date: string }) => {
     try {
       const config: AxiosRequestConfig = { params: data };
-      const countData = await customAxios.get("/api/absence/count", config);
+      const countData = await privateApi.get("/api/absence/count", config);
       setGoMember(countData.data.go_count);
       setSleepMember(countData.data.sleep_count);
     } catch (error) {

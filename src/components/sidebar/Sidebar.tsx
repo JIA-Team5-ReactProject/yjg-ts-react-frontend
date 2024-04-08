@@ -1,22 +1,23 @@
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import SidePowerModal from "./SidePowerModal";
-import { Token, UserDataAtom } from "../../recoil/UserDataAtiom";
+import { LoginStateAtom, UserDataAtom } from "../../recoil/UserDataAtiom";
 import { admin, master, restaurant, salon } from "../../constants/powerList";
 import { useNavigate } from "react-router-dom";
-import { customAxios, setAuthToken } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import symbolImg from "../../assets/schoolImg/simbol.png";
 
 function Sidebar() {
   const userData = useRecoilValue(UserDataAtom);
   const navigate = useNavigate();
-  // 토큰 전역 변수
-  const setToken = useSetRecoilState(Token);
-  //로그아웃 함수
+  // 로그인 상태 전역 변수
+  const setLoginState = useSetRecoilState(LoginStateAtom);
+
+  // 로그아웃 함수
   const logoutPost = async () => {
     try {
-      await customAxios.post("/api/logout");
-      setToken("");
-      setAuthToken(null);
+      await privateApi.post("/api/logout");
+      setLoginState(false);
+      sessionStorage.removeItem("userToken");
     } catch (error) {
       console.log(error);
     }

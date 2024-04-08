@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import { GetUserData } from "../../types/auth";
 import { ListHead, UserList } from "./UserList";
 import { GetApprovedData } from "../../types/master";
@@ -53,7 +53,7 @@ function MasterMain() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const unapprovedData = await customAxios.get("/api/admin/list", config);
+      const unapprovedData = await privateApi.get("/api/admin/list", config);
       setUnapprovedUsers(unapprovedData.data.admins);
     } catch (error) {
       console.log(error);
@@ -63,7 +63,7 @@ function MasterMain() {
   // 유저 데이터 승인요청
   const approval = async (data: number) => {
     try {
-      await customAxios.patch("/api/admin/approve", {
+      await privateApi.patch("/api/admin/approve", {
         admin_id: data,
         approve: 1,
       });
@@ -75,7 +75,7 @@ function MasterMain() {
   // 유저데이터 거절 삭제하기
   const deleteData = async (data: number) => {
     try {
-      await customAxios.delete(`/api/admin/master/${data}`);
+      await privateApi.delete(`/api/admin/master/${data}`);
     } catch (error) {
       console.log(error);
     }

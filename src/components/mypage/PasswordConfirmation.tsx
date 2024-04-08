@@ -3,7 +3,7 @@ import { UserDataAtom } from "../../recoil/UserDataAtiom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { passwordValues } from "../../types/auth";
 import { trimValues } from "../../utils/validate";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 
 function PasswordConfirmation(props: {
   setPasswordCheck: (value: boolean) => void;
@@ -21,7 +21,7 @@ function PasswordConfirmation(props: {
   const onSubmit: SubmitHandler<passwordValues> = async (data) => {
     const trimData = trimValues(data);
     try {
-      await customAxios.post("/api/verify-password", {
+      await privateApi.post("/api/verify-password", {
         password: trimData.password,
       });
       setPasswordCheck(true);

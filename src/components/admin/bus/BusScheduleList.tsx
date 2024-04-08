@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BusScheduleListType, ScheduleListType } from "../../../types/admin";
 import { ListBtn, ListHead } from "../../master/UserList";
 import PlusIcon from "../../../icons/PlusIcon";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 
 function BusScheduleList(props: BusScheduleListType) {
   const { schedule, id, createScheduleFuc, deleteScheduleFuc, getScheduleFuc } =
@@ -106,7 +106,7 @@ function ScheduleList(props: ScheduleListType) {
   // 댓글 수정하기
   const patchSchedule = async (id: string) => {
     try {
-      await customAxios.patch(`/api/bus/schedule/update/${id}`, {
+      await privateApi.patch(`/api/bus/schedule/update/${id}`, {
         station: newStation,
         bus_time: newTime,
       });

@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { GetCheckRoomType, RoomStateType } from "../../../types/admin";
 import { AxiosRequestConfig } from "axios";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import PeopleIcon from "../../../icons/PeopleIcon";
 import closeImg from "../../../assets/close.png";
 
@@ -30,10 +30,7 @@ function RoomState(props: RoomStateType) {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const checkData = await customAxios.get(
-        "/api/meeting-room/check",
-        config
-      );
+      const checkData = await privateApi.get("/api/meeting-room/check", config);
       setReservedTimes(checkData.data.reservations);
     } catch (error) {
       console.log(error);

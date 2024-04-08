@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import { ListBtn } from "../../master/UserList";
 import { AbsenceType } from "../../../types/admin";
 
@@ -20,7 +20,7 @@ function ReadAbsence() {
   // 외박,외출 가져오기
   const getAbsenceData = async () => {
     try {
-      const getNotice = await customAxios.get(`/api/absence/${id}`);
+      const getNotice = await privateApi.get(`/api/absence/${id}`);
       setAbsence(getNotice.data.stay_out);
     } catch (error) {
       console.log(error);
@@ -30,7 +30,7 @@ function ReadAbsence() {
   // 외출,외박 거절하기
   const patchAbsenceData = async (id: string) => {
     try {
-      await customAxios.patch(`/api/absence/reject/${id}`);
+      await privateApi.patch(`/api/absence/reject/${id}`);
     } catch (error) {
       console.log(error);
     }

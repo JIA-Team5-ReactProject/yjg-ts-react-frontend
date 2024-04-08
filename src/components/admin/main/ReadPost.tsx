@@ -4,7 +4,7 @@ import PostCardSlider from "../../post/PostCardSlider";
 import CloseIcon from "../../../icons/CloseIcon";
 import { ListBtn } from "../../master/UserList";
 import { useNavigate, useParams } from "react-router-dom";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import { NoticeType } from "../../../types/post";
 
 function ReadPost() {
@@ -24,7 +24,7 @@ function ReadPost() {
   // 게시글 가져오기
   const getNoticeData = async () => {
     try {
-      const getNotice = await customAxios.get(`/api/notice/${id}`);
+      const getNotice = await privateApi.get(`/api/notice/${id}`);
       setNotice(getNotice.data.notice);
     } catch (error) {
       console.log(error);
@@ -34,7 +34,7 @@ function ReadPost() {
   // 게시글 삭제하기
   const deleteNotice = async () => {
     try {
-      await customAxios.delete(`/api/notice/${id}`).then(() => {
+      await privateApi.delete(`/api/notice/${id}`).then(() => {
         navigate("/main/admin");
       });
     } catch (error) {
