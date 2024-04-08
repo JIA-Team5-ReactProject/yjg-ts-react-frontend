@@ -3,7 +3,7 @@ import { UserDataAtom } from "../../recoil/UserDataAtiom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { passwordValues } from "../../types/auth";
 import { trimValues } from "../../utils/validate";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 
 function PasswordConfirmation(props: {
   setPasswordCheck: (value: boolean) => void;
@@ -21,7 +21,7 @@ function PasswordConfirmation(props: {
   const onSubmit: SubmitHandler<passwordValues> = async (data) => {
     const trimData = trimValues(data);
     try {
-      await customAxios.post("/api/admin/verify-password", {
+      await privateApi.post("/api/verify-password", {
         password: trimData.password,
       });
       setPasswordCheck(true);
@@ -64,7 +64,7 @@ function PasswordConfirmation(props: {
           </div>
           <button
             type="submit"
-            className="rounded-xl mt-20 ml-auto px-7 bg-cyan-600 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            className="rounded-xl mt-20 ml-auto px-7 bg-cyan-600/90 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             data-ripple-light="true"
           >
             확인

@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import cook from "../../../assets/cook.png";
 import { ListBtn } from "../../master/UserList";
 import ExcelCard from "./ExcelCard";
 import ModalAddPlan from "./ModalAddPlan";
+import { privateApi } from "../../../services/customAxios";
 
 function DietPlanManagement() {
   // 모달창 상태
   const [onModal, setOnModal] = useState<boolean>(false);
   // 시간 데이터
-  const year = [2022, 2023, 2024];
+  const [year, setYear] = useState<string[]>([]);
   // 선택된 년도
   const [selectedYear, setSelectedYear] = useState<string>();
   // 리스트종류 스테이트
@@ -27,6 +28,22 @@ function DietPlanManagement() {
     "11",
     "12",
   ];
+
+  // 페이지 랜더링할 시
+  useEffect(() => {
+    getYearData();
+  }, []);
+
+  // 식단표 년도 가져오기
+  const getYearData = async () => {
+    try {
+      const yearData = await privateApi.get("/api/restaurant/menu/get/year");
+      console.log(yearData);
+      setYear(yearData.data.years);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex flex-col">
@@ -74,7 +91,7 @@ function DietPlanManagement() {
         <div className="flex-1 text-right">
           <ListBtn
             value="식단표 추가"
-            color="bg-blue-500"
+            color="bg-blue-400/90"
             onClick={() => {
               setOnModal(true);
             }}

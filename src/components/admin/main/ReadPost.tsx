@@ -4,7 +4,7 @@ import PostCardSlider from "../../post/PostCardSlider";
 import CloseIcon from "../../../icons/CloseIcon";
 import { ListBtn } from "../../master/UserList";
 import { useNavigate, useParams } from "react-router-dom";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import { NoticeType } from "../../../types/post";
 
 function ReadPost() {
@@ -24,7 +24,7 @@ function ReadPost() {
   // 게시글 가져오기
   const getNoticeData = async () => {
     try {
-      const getNotice = await customAxios.get(`/api/notice/${id}`);
+      const getNotice = await privateApi.get(`/api/notice/${id}`);
       setNotice(getNotice.data.notice);
     } catch (error) {
       console.log(error);
@@ -34,7 +34,7 @@ function ReadPost() {
   // 게시글 삭제하기
   const deleteNotice = async () => {
     try {
-      await customAxios.delete(`/api/notice/${id}`).then(() => {
+      await privateApi.delete(`/api/notice/${id}`).then(() => {
         navigate("/main/admin");
       });
     } catch (error) {
@@ -55,7 +55,7 @@ function ReadPost() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl relative border border-black/20 px-4 py-6 min-h-96 shadow-md">
+      <div className="bg-white rounded-xl relative border border-black/20 px-4 py-6 min-h-96 max-h-full shadow-md">
         <div className="absolute right-1 top-1">
           {notice?.notice_images.length ? (
             <ImageIcon
@@ -89,18 +89,29 @@ function ReadPost() {
       <div className="flex gap-4">
         <ListBtn
           value="수정"
-          color="bg-sky-500/90"
+          color="bg-sky-400/90"
           onClick={() => {
             navigate(`/main/admin/modifying/${id}`, {
               state: { type: "Post" },
             });
           }}
         />
-        <ListBtn value="삭제" color="bg-red-500/80" onClick={deleteNotice} />
+        <ListBtn
+          value="삭제"
+          color="bg-red-400/90"
+          onClick={() => {
+            if (window.confirm("삭제하시겠습니까?")) {
+              alert("삭제되었습니다");
+              deleteNotice();
+            } else {
+              alert("취소되었습니다.");
+            }
+          }}
+        />
         <div className="flex flex-1 justify-end">
           <ListBtn
             value="나가기"
-            color="bg-pink-700/70"
+            color="bg-gray-400/90"
             onClick={() => {
               navigate("/main/admin");
             }}

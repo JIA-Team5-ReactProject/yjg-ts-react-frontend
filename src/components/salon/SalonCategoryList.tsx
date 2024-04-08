@@ -5,7 +5,7 @@ import {
   GetServiceType,
   SalonServiceType,
 } from "../../types/salon";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import SalonServiceList from "./SalonServiceList";
 import { AxiosRequestConfig } from "axios";
 
@@ -27,6 +27,13 @@ function SalonCategoryList(props: SalonCategoryType) {
   // 서비스 리스트
   const [service, setService] = useState<SalonServiceType[]>([]);
 
+  // 수정할 시
+  useEffect(() => {
+    if (modify) {
+      setNewName(category);
+    }
+  }, [modify]);
+
   // 성별 바뀔 시
   useEffect(() => {
     getServiceData({ category_id: id, gender: gender });
@@ -38,7 +45,7 @@ function SalonCategoryList(props: SalonCategoryType) {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const serviceData = await customAxios.get("/api/salon/service", config);
+      const serviceData = await privateApi.get("/api/salon/service", config);
       setService(serviceData.data.services);
     } catch (error) {
       console.log(error);
@@ -48,7 +55,7 @@ function SalonCategoryList(props: SalonCategoryType) {
   // 서비스 리스트 추가하기
   const createService = async (id: string, service: string, price: string) => {
     try {
-      await customAxios.post("/api/salon/service", {
+      await privateApi.post("/api/salon/service", {
         category_id: id,
         service: service,
         gender: gender,
@@ -62,7 +69,7 @@ function SalonCategoryList(props: SalonCategoryType) {
   // 서비스 리스트 삭제하기
   const deleteService = async (service_id: string) => {
     try {
-      await customAxios.delete(`/api/salon/service/${service_id}`);
+      await privateApi.delete(`/api/salon/service/${service_id}`);
     } catch (error) {
       console.log(error);
     }
@@ -83,7 +90,7 @@ function SalonCategoryList(props: SalonCategoryType) {
             />
             <ListBtn
               value="완료"
-              color="bg-sky-500"
+              color="bg-sky-400/90"
               onClick={() => {
                 setModify(false);
                 modifyCategoryFuc(id, newName).then(() => {
@@ -93,7 +100,7 @@ function SalonCategoryList(props: SalonCategoryType) {
             />
             <ListBtn
               value="취소"
-              color="bg-red-500/90"
+              color="bg-red-400/90"
               onClick={() => {
                 setModify(false);
               }}
@@ -104,18 +111,23 @@ function SalonCategoryList(props: SalonCategoryType) {
             <div className="w-32 text-center">{category}</div>
             <ListBtn
               value="수정"
-              color="bg-pink-500/80"
+              color="bg-orange-400/90"
               onClick={() => {
                 setModify(true);
               }}
             />
             <ListBtn
               value="삭제"
-              color="bg-red-500/90"
+              color="bg-red-400/90"
               onClick={() => {
-                deleteCategoryFuc(id).then(() => {
-                  getCategoryFuc();
-                });
+                if (window.confirm("삭제하시겠습니까?")) {
+                  alert("삭제되었습니다");
+                  deleteCategoryFuc(id).then(() => {
+                    getCategoryFuc();
+                  });
+                } else {
+                  alert("취소되었습니다.");
+                }
               }}
             />
           </>

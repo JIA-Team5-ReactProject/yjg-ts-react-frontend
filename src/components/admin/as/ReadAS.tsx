@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import { useEffect, useState } from "react";
 import { AfterServiceType } from "../../../types/post";
 import PostCardSlider from "../../post/PostCardSlider";
@@ -25,7 +25,7 @@ function ReadAS() {
   // AS글 가져오기
   const getASData = async () => {
     try {
-      const getAS = await customAxios.get(`/api/after-service/${id}`);
+      const getAS = await privateApi.get(`/api/after-service/${id}`);
       setAfterService(getAS.data.afterService);
     } catch (error) {
       console.log(error);
@@ -35,7 +35,7 @@ function ReadAS() {
   // AS 상태 변경하기
   const patchASData = async () => {
     try {
-      await customAxios.patch(`/api/after-service/status/${id}`);
+      await privateApi.patch(`/api/after-service/status/${id}`);
       navigate("/main/admin/repair");
     } catch (error) {
       console.log(error);
@@ -99,12 +99,12 @@ function ReadAS() {
         <div className="flex justify-end gap-4">
           <ListBtn
             value="A/S 완료"
-            color="bg-sky-500/90"
+            color="bg-sky-400/90"
             onClick={patchASData}
           />
           <ListBtn
             value="닫기"
-            color="bg-red-500/80"
+            color="bg-red-400/90"
             onClick={() => {
               navigate("/main/admin/repair");
             }}

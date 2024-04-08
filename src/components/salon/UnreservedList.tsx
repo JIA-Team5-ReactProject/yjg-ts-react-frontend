@@ -3,12 +3,12 @@ import * as S from "../../styles/calender";
 import { ListBtn, ListHead, UserList } from "../master/UserList";
 import dayjs from "dayjs";
 import { AxiosRequestConfig } from "axios";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import { BreakTimeType, GuestType, TimeData } from "../../types/salon";
 
 function UnreservedList() {
   // 캘린더에서 선택한 DATE값
-  const [clickDay, setClickDay] = useState<Value>(new Date());
+  const [clickDay, setClickDay] = useState<Value>();
   // 변경된 DATE 값
   const formattedDate = useRef<string>("");
   // 선택된 날의 시간 데이터
@@ -39,30 +39,45 @@ function UnreservedList() {
     [
       {
         value: "승인",
-        color: "bg-blue-400",
+        color: "bg-blue-400/90",
         onClick: (data: GuestType) => {
-          patchData(data.id, true).then(() => {
-            getData({
-              status: "submit",
-              r_date: formattedDate.current,
+          if (window.confirm("승인하시겠습니까?")) {
+            alert("승인되었습니다");
+            patchData(data.id, true).then(() => {
+              getData({
+                status: "submit",
+                r_date: formattedDate.current,
+              });
             });
-          });
+          } else {
+            alert("취소되었습니다.");
+          }
         },
       },
       {
         value: "거절",
-        color: "bg-red-400",
+        color: "bg-red-400/90",
         onClick: (data: GuestType) => {
           patchData(data.id, false).then(() => {
-            getData({
-              status: "submit",
-              r_date: formattedDate.current,
-            });
+            if (window.confirm("거절하시겠습니까?")) {
+              alert("거절되었습니다");
+              getData({
+                status: "submit",
+                r_date: formattedDate.current,
+              });
+            } else {
+              alert("취소되었습니다.");
+            }
           });
         },
       },
     ],
   ];
+
+  // 렌더링 할 시
+  useEffect(() => {
+    setClickDay(new Date());
+  }, []);
 
   // 날짜 변경 시 발생 함수
   useEffect(() => {
@@ -106,7 +121,7 @@ function UnreservedList() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const reservationData = await customAxios.get(
+      const reservationData = await privateApi.get(
         "/api/salon/reservation",
         config
       );
@@ -119,7 +134,7 @@ function UnreservedList() {
   // 예약 승인/거절 요청하기
   const patchData = async (id: string, status: boolean) => {
     try {
-      await customAxios.patch("/api/salon/reservation", {
+      await privateApi.patch("/api/salon/reservation", {
         id: id,
         status: status,
       });
@@ -131,7 +146,7 @@ function UnreservedList() {
   // 해당 날짜 미용실 영업 시간 전체 가져오기
   const getTimeData = async (data: string) => {
     try {
-      const getTime = await customAxios.get(`/api/salon/hour/${data}`);
+      const getTime = await privateApi.get(`/api/salon/hour/${data}`);
       setTimeData(getTime.data.business_hours);
     } catch (error) {
       console.log(error);
@@ -141,7 +156,7 @@ function UnreservedList() {
   // 예약불가 시간 생성
   const postBreakData = async (data: string) => {
     try {
-      await customAxios.post("/api/salon/break", {
+      await privateApi.post("/api/salon/break", {
         break_time: [data],
         date: formattedDate.current,
       });
@@ -156,7 +171,7 @@ function UnreservedList() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      await customAxios.delete("/api/salon/break", config);
+      await privateApi.delete("/api/salon/break", config);
     } catch (error) {
       console.log(error);
     }
@@ -170,7 +185,7 @@ function UnreservedList() {
       return (
         <ListBtn
           value="마감"
-          color="bg-red-400"
+          color="bg-red-400/90"
           onClick={() => {
             postBreakData(selectedTime.time).then(() => {
               getTimeData(formattedDate.current);
@@ -183,7 +198,7 @@ function UnreservedList() {
       return (
         <ListBtn
           value="오픈"
-          color="bg-sky-400"
+          color="bg-sky-400/90"
           onClick={() => {
             deleteBreakData({
               break_time: [selectedTime.time],
@@ -238,7 +253,7 @@ function UnreservedList() {
       </div>
 
       <div className="flex-1 flex flex-col">
-        <div className="flex align-middle  text-2xl font-bold tracking-tight m-2 text-black">
+        <div className="flex align-middle text-2xl font-bold tracking-tight m-2 text-black">
           <div className="flex-1">{head} 예약대기자</div>
           <div className="flex align-middle">{breakBtn()}</div>
         </div>

@@ -2,22 +2,24 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { UserDataAtom } from "../../recoil/UserDataAtiom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { JoinFormValues, PostUserData } from "../../types/auth";
+import { PatchUserDataType, PostUserData } from "../../types/auth";
 import { nameReg, passwordReg, phoneNumReg } from "../../utils/regex";
 import { trimValues } from "../../utils/validate";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import { ListBtn } from "../master/UserList";
 import { useNavigate } from "react-router-dom";
+import { formatPhoneNumber } from "../../utils/formatPhoneNum";
 
 function MypageForm() {
   const {
     reset,
     register,
     setValue,
+    setError,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<JoinFormValues>();
+  } = useForm<PatchUserDataType>();
   // 수정중인지 아닌지 체크
   const [onChange, setOnChange] = useState(false);
   // 비밀번호 변경하는지 체크
@@ -26,7 +28,7 @@ function MypageForm() {
   const [powerData, setPowerData] = useState<string[]>([]);
   // 유저 데이터
   const userData = useRecoilValue(UserDataAtom);
-  const password = watch("password");
+  const newPassword = watch("newPW");
   const navigate = useNavigate();
 
   // 권한 업데이트
@@ -42,13 +44,14 @@ function MypageForm() {
   }, [onChange]);
 
   // 정보수정 제출 함수
-  const onSubmit: SubmitHandler<JoinFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<PatchUserDataType> = async (data) => {
     const trimData = trimValues(data);
     const postData: PostUserData = {
       admin_id: userData.id,
     };
     if (pwChange) {
-      postData.password = trimData.password;
+      postData.current_password = trimData.currentPW;
+      postData.new_password = trimData.newPW;
     }
     if (userData.name !== trimData.name) {
       postData.name = trimData.name;
@@ -57,22 +60,23 @@ function MypageForm() {
       postData.phone_number = trimData.phone;
     }
     try {
-      await customAxios.patch("/api/admin", postData);
+      await privateApi.patch("/api/admin", postData);
       alert("수정완료");
-    } catch (error) {
+      window.location.reload();
+    } catch (error: any) {
       console.log(error);
+      setError(
+        "currentPW",
+        { message: error.response.data.error },
+        { shouldFocus: true }
+      );
     }
   };
 
   // 회원 탈퇴하기
   const deleteSelf = async () => {
     try {
-      const token = localStorage.getItem("token");
-      await customAxios.delete("/api/admin", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await privateApi.delete("/api/unregister");
     } catch (error) {
       console.log(error);
     }
@@ -158,18 +162,18 @@ function MypageForm() {
             {pwChange ? (
               <>
                 <div>
-                  새로운 비밀번호
-                  {errors?.password && (
+                  현재 비밀번호
+                  {errors?.currentPW && (
                     <span className="text-red-500 text-xs font-bold translate-x-2 tracking-tight mb-2 ml-2">
-                      {errors.password.message}
+                      {errors.currentPW.message}
                     </span>
                   )}
                 </div>
                 <input
                   type="password"
-                  placeholder="비밀번호 입력 ( 영문, 숫자 포함 10자 이상 )"
-                  className=" outline-black border-2 border-gray-300 pl-1"
-                  {...register("password", {
+                  placeholder="( 영문, 숫자 포함 10자 이상 )"
+                  className="outline-black border-2 border-gray-300 pl-1"
+                  {...register("currentPW", {
                     required: "비밀번호를 입력해주세요.",
                     pattern: {
                       value: passwordReg,
@@ -178,7 +182,27 @@ function MypageForm() {
                   })}
                 />
                 <div>
-                  비밀번호체크
+                  새로운 비밀번호
+                  {errors?.newPW && (
+                    <span className="text-red-500 text-xs font-bold translate-x-2 tracking-tight mb-2 ml-2">
+                      {errors.newPW.message}
+                    </span>
+                  )}
+                </div>
+                <input
+                  type="password"
+                  placeholder="( 영문, 숫자 포함 10자 이상 )"
+                  className="outline-black border-2 border-gray-300 pl-1"
+                  {...register("newPW", {
+                    required: "비밀번호를 입력해주세요.",
+                    pattern: {
+                      value: passwordReg,
+                      message: "영문, 숫자를 포함한 10자 이상을 입력해주세요.",
+                    },
+                  })}
+                />
+                <div>
+                  비밀번호 확인
                   {errors?.pwCheck && (
                     <span className="text-red-500 text-xs font-bold translate-x-2 tracking-tight mb-2 ml-2">
                       {errors.pwCheck.message}
@@ -187,12 +211,12 @@ function MypageForm() {
                 </div>
                 <input
                   type="password"
-                  placeholder="비밀번호 재입력"
-                  className=" outline-black border-2 border-gray-300 pl-1"
+                  placeholder="재입력"
+                  className="outline-black border-2 border-gray-300 pl-1"
                   {...register("pwCheck", {
                     required: "비밀번호를 한번 더 입력해주세요.",
                     validate: (value) =>
-                      value === password || "비밀번호가 일치하지 않습니다.",
+                      value === newPassword || "비밀번호가 일치하지 않습니다.",
                   })}
                 />
               </>
@@ -200,13 +224,13 @@ function MypageForm() {
             <div className="col-span-2 space-x-3 justify-self-end">
               <button
                 type="submit"
-                className="rounded-xl mt-6 ml-auto px-7 bg-cyan-600 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                className="rounded-xl mt-6 ml-auto px-7 bg-blue-400/90 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 data-ripple-light="true"
               >
                 확인
               </button>
               <button
-                className="rounded-xl mt-6 ml-auto px-7 bg-cyan-600 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                className="rounded-xl mt-6 ml-auto px-7 bg-red-400/90 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 data-ripple-light="true"
                 onClick={() => {
                   setOnChange(false);
@@ -223,7 +247,7 @@ function MypageForm() {
           <div className="bg-white grid grid-cols-2 p-12 text-xl gap-y-5 font-semibold w-2/3 h-fit rounded-2xl shadow-lg">
             <div className="col-span-2 text-4xl font-bold mb-6">내정보</div>
             <div>이름</div> <div>{userData.name}</div>
-            <div>전화번호</div> <div>{userData.phone}</div>
+            <div>전화번호</div> <div>{formatPhoneNumber(userData.phone)}</div>
             <div>이메일</div> <div>{userData.email}</div>
             <div>권한</div>
             <div className="flex flex-col gap-1">
@@ -234,12 +258,16 @@ function MypageForm() {
             <div className="col-span-2 flex justify-end gap-3 mt-3">
               <ListBtn
                 value="수정"
-                color="bg-cyan-600"
+                color="bg-orange-400/80"
                 onClick={() => {
                   setOnChange(true);
                 }}
               />
-              <ListBtn value="회원탈퇴" color="bg-red-600" onClick={onRemove} />
+              <ListBtn
+                value="회원탈퇴"
+                color="bg-red-400/90"
+                onClick={onRemove}
+              />
             </div>
           </div>
         </div>

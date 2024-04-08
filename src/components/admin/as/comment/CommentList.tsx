@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { customAxios } from "../../../../services/customAxios";
+import { privateApi } from "../../../../services/customAxios";
 import { GetCommentDataType } from "../../../../types/admin";
 import Comments from "./Comments";
+import SendIcon from "../../../../icons/SendIcon";
 
 function CommentList(props: { id?: string }) {
   const { id } = props;
@@ -18,7 +19,7 @@ function CommentList(props: { id?: string }) {
   // 댓글 가져오기
   const getComment = async () => {
     try {
-      const commentData = await customAxios.get(
+      const commentData = await privateApi.get(
         `/api/after-service/${id}/comment`
       );
       setCommentData(commentData.data.after_service_comments);
@@ -30,7 +31,7 @@ function CommentList(props: { id?: string }) {
   // 댓글 작성하기
   const postComment = async () => {
     try {
-      await customAxios.post(`/api/after-service/${id}/comment`, {
+      await privateApi.post(`/api/after-service/${id}/comment`, {
         comment: comment,
       });
     } catch (error) {
@@ -41,7 +42,7 @@ function CommentList(props: { id?: string }) {
   // 댓글 삭제하기
   const deleteComment = async (id: string) => {
     try {
-      await customAxios.delete(`/api/after-service/comment/${id}`);
+      await privateApi.delete(`/api/after-service/comment/${id}`);
     } catch (error) {
       console.log(error);
     }
@@ -50,30 +51,42 @@ function CommentList(props: { id?: string }) {
   return (
     <div className="flex flex-wrap -mx-3 mb-6 py-2 px-4">
       <h2 className="px-4 text-gray-800 text-sm font-bold">댓글쓰기</h2>
-      <div className="w-full px-3 mb-2 mt-1">
+      <div className="relative w-full px-3 mb-2 mt-1">
+        <div
+          className="bg-gray-100 absolute right-5 bottom-3 border border-black rounded-full border-opacity-40 p-1 cursor-pointer hover:bg-slate-200"
+          onClick={() => {
+            postComment().then(() => {
+              getComment();
+            });
+            setComment("");
+          }}
+        >
+          <SendIcon />
+        </div>
         <textarea
-          className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+          className="bg-white rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
           value={comment}
           onChange={(e) => {
             setComment(e.target.value);
           }}
         ></textarea>
       </div>
-      <div className="w-full flex items-start px-3">
-        <div className="ml-auto">
-          <input
-            type="button"
-            className="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-300 cursor-pointer"
-            value="작성"
-            onClick={() => {
-              postComment().then(() => {
-                getComment();
-              });
-              setComment("");
-            }}
-          />
-        </div>
-      </div>
+
+      {/* <div className="flex items-end py-3">
+          <div className="ml-auto">
+            <input
+              type="button"
+              className="bg-sky-100/60 text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-300 cursor-pointer"
+              value="작성"
+              onClick={() => {
+                postComment().then(() => {
+                  getComment();
+                });
+                setComment("");
+              }}
+            />
+          </div>
+        </div> */}
       <h2 className="px-4 mb-2 text-gray-800 text-xl font-bold">
         댓글({commentData.length})
       </h2>

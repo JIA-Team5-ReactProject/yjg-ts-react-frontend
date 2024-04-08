@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CommentsType } from "../../../../types/admin";
 import { useRecoilValue } from "recoil";
 import { UserDataAtom } from "../../../../recoil/UserDataAtiom";
-import { customAxios } from "../../../../services/customAxios";
+import { privateApi } from "../../../../services/customAxios";
 
 function Comments(props: CommentsType) {
   const { comment, getComment, deleteComment } = props;
@@ -16,7 +16,7 @@ function Comments(props: CommentsType) {
   // 댓글 수정하기
   const patchComment = async (id: string) => {
     try {
-      await customAxios.patch(`/api/after-service/comment/${id}`, {
+      await privateApi.patch(`/api/after-service/comment/${id}`, {
         comment: newComment,
       });
     } catch (error) {
@@ -63,7 +63,7 @@ function Comments(props: CommentsType) {
         <div className="flex gap-3 border-b border-black/30 pt-2 pl-3 pb-1 font-bold">
           <div>▪</div>
           <div className="flex-1">{comment.comment}</div>
-          {String(userData.id) === String(comment.admin_id) ? (
+          {String(userData.id) === String(comment.user_id) ? (
             <div className="flex gap-2 text-sm items-end text-black/40">
               <div
                 className="cursor-pointer hover:text-black"

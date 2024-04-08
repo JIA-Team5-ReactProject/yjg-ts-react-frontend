@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ChoiceList from "./ChoiceList";
 import { ListBtn } from "../../master/UserList";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
 import { BusCategotyType, GetBusCategoryType } from "../../../types/admin";
 import BusCategoryList from "./BusCategoryList";
@@ -58,7 +58,7 @@ function BusManagement() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const categoryData = await customAxios.get("/api/bus/round", config);
+      const categoryData = await privateApi.get("/api/bus/round", config);
       setCategory(categoryData.data.roundDate);
     } catch (error) {
       console.log(error);
@@ -68,7 +68,7 @@ function BusManagement() {
   //카테고리 추가하기
   const createCategory = async () => {
     try {
-      await customAxios.post("/api/bus/round", {
+      await privateApi.post("/api/bus/round", {
         round: newCategoryName,
         weekend: weekend,
         semester: semester,
@@ -82,7 +82,7 @@ function BusManagement() {
   // 카테고리 삭제하기
   const deletteCategory = async (id: string) => {
     try {
-      await customAxios.delete(`/api/bus/round/${id}`);
+      await privateApi.delete(`/api/bus/round/${id}`);
     } catch (error) {
       console.log(error);
     }
@@ -91,7 +91,7 @@ function BusManagement() {
   // 카테고리 이름 수정하기
   const modifyCategory = async (id: string, newName: string) => {
     try {
-      await customAxios.patch(`/api/bus/round/${id}`, {
+      await privateApi.patch(`/api/bus/round/${id}`, {
         round: newName,
       });
     } catch (error) {
@@ -141,7 +141,7 @@ function BusManagement() {
             <div>
               <ListBtn
                 value="생성"
-                color="bg-blue-500"
+                color="bg-blue-400/90"
                 onClick={() => {
                   createCategory().then(() => {
                     getCategoryData({

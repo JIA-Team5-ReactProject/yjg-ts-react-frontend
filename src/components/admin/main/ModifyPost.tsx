@@ -4,7 +4,7 @@ import { ListBtn } from "../../master/UserList";
 import PostImg from "../../post/PostImg";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { NoticeType, ModifyFormType } from "../../../types/post";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PostPrevImg from "../../post/PostPrevImg";
@@ -59,7 +59,7 @@ function ModifyPost() {
       if (data.urgent) {
         formData.append("urgent", "1");
       }
-      await customAxios.post(`/api/notice/${id}`, formData, {
+      await privateApi.post(`/api/notice/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -73,7 +73,7 @@ function ModifyPost() {
   // 공지사항 가져오기
   const getNotice = async () => {
     try {
-      const noticeData = await customAxios.get(`/api/notice/${id}`);
+      const noticeData = await privateApi.get(`/api/notice/${id}`);
       setNotice(noticeData.data.notice);
     } catch (error) {
       console.log(error);
@@ -88,13 +88,13 @@ function ModifyPost() {
         <div className="flex gap-5 h-fit">
           <ListBtn
             value="수정완료"
-            color="bg-blue-500/90"
+            color="bg-blue-400/90"
             type="submit"
             onClick={() => {}}
           />
           <ListBtn
             value="취소"
-            color="bg-red-500/90"
+            color="bg-red-400/90"
             onClick={() => {
               navigate(-1);
             }}

@@ -1,5 +1,5 @@
 function SemesterMeal() {
-  return <div>d</div>;
+  return <div></div>;
 }
 
 export default SemesterMeal;

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ListBtn, ListHead, UserList } from "../../master/UserList";
 import CountCard from "../../salon/CountCard";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import { useEffect, useState } from "react";
 import { AxiosRequestConfig } from "axios";
 import {
@@ -104,7 +104,7 @@ function AdminMain() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const notice = await customAxios.get("/api/notice", config);
+      const notice = await privateApi.get("/api/notice", config);
       setNoticeList(notice.data.notices.data);
       setLastPage(notice.data.notices.last_page);
     } catch (error) {
@@ -116,7 +116,7 @@ function AdminMain() {
   const getCountData = async (data: { date: string }) => {
     try {
       const config: AxiosRequestConfig = { params: data };
-      const countData = await customAxios.get("/api/absence/count", config);
+      const countData = await privateApi.get("/api/absence/count", config);
       setGoMember(countData.data.go_count);
       setSleepMember(countData.data.sleep_count);
     } catch (error) {
@@ -130,7 +130,7 @@ function AdminMain() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const reservationData = await customAxios.get(
+      const reservationData = await privateApi.get(
         "/api/meeting-room/reservation",
         config
       );
@@ -146,7 +146,7 @@ function AdminMain() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const ASData = await customAxios.get("/api/after-service", config);
+      const ASData = await privateApi.get("/api/after-service", config);
       setUnprocessedCase(ASData.data.after_services.total);
     } catch (error) {
       console.log(error);
@@ -174,7 +174,7 @@ function AdminMain() {
           </div>
           <ListBtn
             value="작성"
-            color="bg-cyan-600"
+            color="bg-cyan-500/90"
             onClick={() => {
               navigate("/main/admin/writing", { state: { type: "Post" } });
             }}

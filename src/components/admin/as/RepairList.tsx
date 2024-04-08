@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ListHead, UserList } from "../../master/UserList";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../post/page/Pagination";
@@ -100,7 +100,7 @@ function RepairList() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const ASData = await customAxios.get("/api/after-service", config);
+      const ASData = await privateApi.get("/api/after-service", config);
       setASList(ASData.data.after_services.data);
       setLastPage(ASData.data.after_services.last_page);
     } catch (error) {

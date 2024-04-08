@@ -15,6 +15,14 @@ export type FormInputPropsType = {
   errorMessage?: string | undefined;
 };
 
+export type PatchUserDataType = {
+  name: string;
+  phone: string;
+  currentPW: string;
+  newPW: string;
+  pwCheck: string;
+};
+
 export type JoinFormValues = {
   name: string;
   pwCheck: string;
@@ -27,6 +35,7 @@ export type LoginFormValues = {
 
 export type passwordValues = {
   password: string;
+  pwCheck?: string;
 };
 
 export type FindingFormValues = {
@@ -61,7 +70,8 @@ export type PostUserData = {
   admin_id: number;
   name?: string;
   phone_number?: string;
-  password?: string;
+  current_password?: string;
+  new_password?: string;
 };
 
 export type PrivilegeType = {

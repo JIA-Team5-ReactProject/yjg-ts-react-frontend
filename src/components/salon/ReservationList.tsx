@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as S from "../../styles/calender";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
 import { ListHead, UserList } from "../master/UserList";
 import CountCard from "./CountCard";
@@ -9,7 +9,7 @@ import { ReservationUserType } from "../../types/salon";
 
 function ReservationList() {
   //캘린더에서 선택한 DATE값
-  const [clickDay, setClickDay] = useState<Value>(new Date());
+  const [clickDay, setClickDay] = useState<Value>();
   //예약이 승인된 유저 리스트
   const [reservationUser, setReservationUser] = useState<ReservationUserType[]>(
     []
@@ -25,13 +25,18 @@ function ReservationList() {
   ];
   const dataList = [
     { value: "user_name", col: "col-span-1" },
-    { value: "phone_number", col: "col-span-2" },
+    { value: "phone_number", col: "col-span-2", type: "phoneNum" },
     { value: "reservation_time", col: "col-span-1" },
     { value: "service_name", col: "col-span-2" },
   ];
 
+  // 렌더링 할 시
   useEffect(() => {
-    // 날짜 변경 시 발생
+    setClickDay(new Date());
+  }, []);
+
+  // 날짜 변경 시 발생
+  useEffect(() => {
     if (clickDay instanceof Date) {
       const formattedData = dayjs(clickDay).format("YYYY-MM-DD");
       getData({
@@ -52,7 +57,7 @@ function ReservationList() {
         params: data,
       };
 
-      const reservationData = await customAxios.get(
+      const reservationData = await privateApi.get(
         "/api/salon/reservation",
         config
       );

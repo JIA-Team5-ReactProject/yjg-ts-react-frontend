@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import CloseIcon from "../../icons/CloseIcon";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import {
   PriceTagType,
   ServiceTagType,
@@ -15,7 +15,7 @@ function PriceTag(props: PriceTagType) {
   // 서비스 리스트 가져오기
   const getServiceData = async () => {
     try {
-      const serviceData = await customAxios.get("/api/salon/service");
+      const serviceData = await privateApi.get("/api/salon/service");
       setService(serviceData.data.services);
     } catch (error) {
       console.log(error);
