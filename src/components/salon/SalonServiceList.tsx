@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PlusIcon from "../../icons/PlusIcon";
 import { SalonServiceListType, ServiceListType } from "../../types/salon";
 import { ListBtn, ListHead } from "../master/UserList";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import { formatCurrency } from "../../utils/formatCurrency";
 
 function SalonServiceList(props: SalonServiceListType) {
@@ -115,7 +115,7 @@ function ServiceList(props: ServiceListType) {
   // 서비스 수정하기
   const patchService = async (id: string) => {
     try {
-      await customAxios.patch(`/api/salon/service/${id}`, {
+      await privateApi.patch(`/api/salon/service/${id}`, {
         service: newService,
         price: newPrice,
         gender: gender,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { customAxios } from "../../../../services/customAxios";
+import { privateApi } from "../../../../services/customAxios";
 import { GetCommentDataType } from "../../../../types/admin";
 import Comments from "./Comments";
 import SendIcon from "../../../../icons/SendIcon";
@@ -19,7 +19,7 @@ function CommentList(props: { id?: string }) {
   // 댓글 가져오기
   const getComment = async () => {
     try {
-      const commentData = await customAxios.get(
+      const commentData = await privateApi.get(
         `/api/after-service/${id}/comment`
       );
       setCommentData(commentData.data.after_service_comments);
@@ -31,7 +31,7 @@ function CommentList(props: { id?: string }) {
   // 댓글 작성하기
   const postComment = async () => {
     try {
-      await customAxios.post(`/api/after-service/${id}/comment`, {
+      await privateApi.post(`/api/after-service/${id}/comment`, {
         comment: comment,
       });
     } catch (error) {
@@ -42,7 +42,7 @@ function CommentList(props: { id?: string }) {
   // 댓글 삭제하기
   const deleteComment = async (id: string) => {
     try {
-      await customAxios.delete(`/api/after-service/comment/${id}`);
+      await privateApi.delete(`/api/after-service/comment/${id}`);
     } catch (error) {
       console.log(error);
     }

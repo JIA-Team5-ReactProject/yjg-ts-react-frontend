@@ -3,7 +3,7 @@ import * as S from "../../styles/calender";
 import { ListBtn, ListHead, UserList } from "../master/UserList";
 import dayjs from "dayjs";
 import { AxiosRequestConfig } from "axios";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import { BreakTimeType, GuestType, TimeData } from "../../types/salon";
 
 function UnreservedList() {
@@ -121,7 +121,7 @@ function UnreservedList() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const reservationData = await customAxios.get(
+      const reservationData = await privateApi.get(
         "/api/salon/reservation",
         config
       );
@@ -134,7 +134,7 @@ function UnreservedList() {
   // 예약 승인/거절 요청하기
   const patchData = async (id: string, status: boolean) => {
     try {
-      await customAxios.patch("/api/salon/reservation", {
+      await privateApi.patch("/api/salon/reservation", {
         id: id,
         status: status,
       });
@@ -146,7 +146,7 @@ function UnreservedList() {
   // 해당 날짜 미용실 영업 시간 전체 가져오기
   const getTimeData = async (data: string) => {
     try {
-      const getTime = await customAxios.get(`/api/salon/hour/${data}`);
+      const getTime = await privateApi.get(`/api/salon/hour/${data}`);
       setTimeData(getTime.data.business_hours);
     } catch (error) {
       console.log(error);
@@ -156,7 +156,7 @@ function UnreservedList() {
   // 예약불가 시간 생성
   const postBreakData = async (data: string) => {
     try {
-      await customAxios.post("/api/salon/break", {
+      await privateApi.post("/api/salon/break", {
         break_time: [data],
         date: formattedDate.current,
       });
@@ -171,7 +171,7 @@ function UnreservedList() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      await customAxios.delete("/api/salon/break", config);
+      await privateApi.delete("/api/salon/break", config);
     } catch (error) {
       console.log(error);
     }

@@ -1,4 +1,4 @@
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 import * as S from "../../../styles/calender";
 import { useEffect, useRef, useState } from "react";
 import { ListBtn } from "../../master/UserList";
@@ -86,7 +86,7 @@ function RoomReservation() {
   // 회의실 목록 가져오기
   const getRoomData = async () => {
     try {
-      const roomData = await customAxios.get("/api/meeting-room");
+      const roomData = await privateApi.get("/api/meeting-room");
       setRooms(roomData.data.meeting_rooms);
     } catch (error) {
       console.log(error);
@@ -96,7 +96,7 @@ function RoomReservation() {
   // 회의실 목록 추가하기
   const createRoomData = async () => {
     try {
-      await customAxios.post("/api/meeting-room", {
+      await privateApi.post("/api/meeting-room", {
         room_number: newRoomName,
       });
       let state = { room: String(newRoomName), fucKind: "create" };
@@ -109,7 +109,7 @@ function RoomReservation() {
   // 회의실 삭제하기
   const deleteRoomData = async () => {
     try {
-      await customAxios.delete(`/api/meeting-room/${room?.room_number}`);
+      await privateApi.delete(`/api/meeting-room/${room?.room_number}`);
       let state = { room: rooms[0].room_number, fucKind: "delete" };
       setSelectedBtn(state);
     } catch (error) {
@@ -120,7 +120,7 @@ function RoomReservation() {
   // 회의실 닫고 열기
   const patchRoom = async (data: number) => {
     try {
-      await customAxios.patch(`/api/meeting-room/${room?.room_number}`, {
+      await privateApi.patch(`/api/meeting-room/${room?.room_number}`, {
         open: data,
       });
       if (room) {
@@ -138,7 +138,7 @@ function RoomReservation() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const reservationData = await customAxios.get(
+      const reservationData = await privateApi.get(
         "/api/meeting-room/reservation",
         config
       );
@@ -151,7 +151,7 @@ function RoomReservation() {
   // 회의시 예약자 거절하기
   const patchReservation = async (id: string) => {
     try {
-      await customAxios.patch(`/api/meeting-room/reservation/reject/${id}`);
+      await privateApi.patch(`/api/meeting-room/reservation/reject/${id}`);
     } catch (error) {
       console.log(error);
     }

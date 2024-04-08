@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import { GetUserData, PrivilegeType } from "../../types/auth";
 import { ListBtn, ListHead, UserList } from "./UserList";
 import CheckIcon from "../../icons/CheckIcon";
@@ -75,7 +75,7 @@ function OVerallUser() {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const approvedData = await customAxios.get("/api/admin/list", config);
+      const approvedData = await privateApi.get("/api/admin/list", config);
       setApprovedUsers(approvedData.data.admins);
     } catch (error) {
       console.log(error);
@@ -85,7 +85,7 @@ function OVerallUser() {
   // 유저데이터 삭제하기
   const deleteData = async (data: number) => {
     try {
-      await customAxios.delete(`/api/admin/master/${data}`);
+      await privateApi.delete(`/api/admin/master/${data}`);
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +94,7 @@ function OVerallUser() {
   //선택된 유저 권한 변경 요청
   const patchPower = async (data: string[]) => {
     try {
-      await customAxios.patch("/api/admin/privilege", {
+      await privateApi.patch("/api/admin/privilege", {
         admin_id: userId.current,
         privileges: userPower,
       });
@@ -106,7 +106,7 @@ function OVerallUser() {
   // 권한 목록 가져오기
   const getPrivilegeData = async () => {
     try {
-      const privilegeData = await customAxios.get("/api/admin/privilege");
+      const privilegeData = await privateApi.get("/api/admin/privilege");
       setPrivilegesData(privilegeData.data.privileges);
     } catch (error) {
       console.log(error);

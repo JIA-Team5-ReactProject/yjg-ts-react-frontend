@@ -5,15 +5,16 @@ import { FindingFormValues, FindingPasswordValues } from "../../types/auth";
 import { trimValues } from "../../utils/validate";
 import { formatTime } from "../../utils/timer";
 import { emailReg, nameReg, phoneNumReg } from "../../utils/regex";
-import CloseIcon from "../../icons/CloseIcon";
 import { useNavigate } from "react-router-dom";
-import { customAxios } from "../../services/customAxios";
+import { publicApi } from "../../services/customAxios";
+import { AxiosRequestConfig } from "axios";
 
 function FindMyAccountForm(): JSX.Element {
   const {
     register,
     watch,
     handleSubmit,
+    setError,
     formState: { errors },
     reset,
   } = useForm<FindingFormValues>();
@@ -23,24 +24,24 @@ function FindMyAccountForm(): JSX.Element {
   };
 
   const navigate = useNavigate();
-  // 아이디와 비밀번호 어느쪽인지 저장
+  // 아이디와 비밀번호 어느 쪽인지 저장
   const [findingAccount, setFindingAccount] = useState("findingId");
   // 인증번호 발송 체크
   const [sendCodeCheck, setSendCodeCheck] = useState(false);
   // 타이머 시작
   const [onTimer, setOnTimer] = useState(true);
-  //타이머 스테이트
+  // 타이머 스테이트
   const [timer, setTimer] = useState<number>(180);
   const timerId = useRef<NodeJS.Timeout | null>(null);
 
-  //0초 일때 타이머 종료
+  // 0초 일때 타이머 종료
   useEffect(() => {
     if (timer === 0 && timerId.current) {
       clearTimeout(timerId.current);
       setOnTimer(false);
     }
   }, [timer]);
-  //페이지 전환시 초기화
+  // 페이지 전환시 초기화
   useEffect(() => {
     reset();
     setSendCodeCheck(false);
@@ -66,21 +67,31 @@ function FindMyAccountForm(): JSX.Element {
   // 인증번호 발송 api
   const sendCode = async (userData: FindingPasswordValues) => {
     // 존재하는 유저 정보인지 확인 후 인증번호 발송
-    if (false) {
-      return Promise.reject(new Error("일치하는 유저 정보가 없습니다."));
+    try {
+      await publicApi.post("/api/reset-password", {
+        name: userData.name,
+        email: userData.email,
+      });
+      setSendCodeCheck(true);
+      startTimer();
+      setError("email", { message: "" }, { shouldFocus: true });
+    } catch (error: any) {
+      console.log(error);
+      setError(
+        "email",
+        { message: "이메일과 이름을 다시 확인해주세요." },
+        { shouldFocus: true }
+      );
     }
-    setSendCodeCheck(true);
-
-    startTimer();
   };
 
   // 아이디/비밀번호 찾기 제출 함수
   const onSubmit: SubmitHandler<FindingFormValues> = async (data) => {
     const trimData = trimValues(data);
     if (findingAccount === "findingId") {
-      //아이디 찾기 제출 함수
+      //아이디 찾기 제출
       try {
-        const checkId = await customAxios.post("/api/admin/find-email", {
+        const checkId = await publicApi.post("/api/find-email", {
           name: trimData.name,
           phone_number: trimData.phone,
         });
@@ -89,13 +100,43 @@ function FindMyAccountForm(): JSX.Element {
           name: checkId.data.admin.name,
           email: checkId.data.admin.email,
         };
-        navigate("/findIdPw/result", { state: { user: userData } });
+        navigate("/findIdPw/result", {
+          state: { state: "id", value: userData },
+        });
+      } catch (error: any) {
+        console.log(error);
+        setError(
+          "name",
+          { message: error.response.data.error },
+          { shouldFocus: true }
+        );
+      }
+    } else if (findingAccount === "findingPassword") {
+      // 비밀번호 찾기 제출
+      try {
+        const config: AxiosRequestConfig = {
+          params: {
+            email: trimData.email,
+            code: trimData.verificationCode,
+          },
+        };
+        const checkPw = await publicApi.get(
+          "/api/reset-password/verify",
+          config
+        );
+        console.log(checkPw);
+        navigate("/findIdPw/result", {
+          state: { state: "pw", value: checkPw.data.email_token },
+        });
       } catch (error) {
         console.log(error);
+        setError(
+          "verificationCode",
+          { message: "인증번호가 일치하지 않습니다." },
+          { shouldFocus: true }
+        );
       }
     }
-
-    //인증번호와 유저 정보 확인 함수
   };
 
   return (
@@ -186,9 +227,7 @@ function FindMyAccountForm(): JSX.Element {
                 textF: "인증번호",
                 textT: "재전송",
                 onCheck: () => {
-                  sendCode(userNameEmail).catch((error) => {
-                    alert(error);
-                  });
+                  sendCode(userNameEmail);
                 },
                 buttonState: sendCodeCheck,
               }}

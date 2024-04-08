@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import { ListBtn } from "../master/UserList";
 import { BusinessTimeType } from "../../types/salon";
 
@@ -64,7 +64,7 @@ function SetBusinessTime() {
   // 모든 요일의 미용실 영업 시간 가져오기
   const getBusinessTimeData = async () => {
     try {
-      const BusinessTimeData = await customAxios.get("/api/salon/hour");
+      const BusinessTimeData = await privateApi.get("/api/salon/hour");
       setBusinessTime(BusinessTimeData.data.business_hours);
     } catch (error) {
       console.log(error);
@@ -74,7 +74,7 @@ function SetBusinessTime() {
   // 영업시간 업데이트하기
   const patchBusinessTimeData = async () => {
     try {
-      await customAxios.patch("/api/salon/hour", {
+      await privateApi.patch("/api/salon/hour", {
         b_hour_id: selectedWeek?.id,
         s_time: selectedSHour,
         e_time: selectedEHour,

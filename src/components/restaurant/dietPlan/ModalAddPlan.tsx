@@ -2,7 +2,7 @@ import { ChangeEvent, useRef, useState } from "react";
 import CloseIcon from "../../../icons/CloseIcon";
 import PlusIcon from "../../../icons/PlusIcon";
 import { ListBtn } from "../../master/UserList";
-import { customAxios } from "../../../services/customAxios";
+import { privateApi } from "../../../services/customAxios";
 
 function ModalAddPlan(props: { setOnModal: (onModal: boolean) => void }) {
   const { setOnModal } = props;
@@ -15,11 +15,11 @@ function ModalAddPlan(props: { setOnModal: (onModal: boolean) => void }) {
     if (files.length > 0) {
       const formData = new FormData();
       files.forEach((file) => {
-        formData.append("file", file);
+        formData.append("excel_file", file);
       });
-      console.log(formData);
+      console.log(files);
       try {
-        await customAxios.post("/api/restaurant/menu", formData, {
+        await privateApi.post("/api/restaurant/menu", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -123,14 +123,14 @@ function ModalAddPlan(props: { setOnModal: (onModal: boolean) => void }) {
         <footer className="flex flex-1 justify-end bottom-0 px-8 gap-2 mt-16 ">
           <ListBtn
             value="업로드"
-            color="bg-blue-500"
+            color="bg-blue-400/90"
             onClick={() => {
               postExcelFile();
             }}
           />
           <ListBtn
             value="취소"
-            color="bg-red-500"
+            color="bg-red-400/90"
             onClick={() => {
               setOnModal(false);
             }}

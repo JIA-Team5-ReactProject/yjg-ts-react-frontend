@@ -1,5 +1,5 @@
 import { ListBtn } from "../master/UserList";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import { useEffect, useState } from "react";
 import SalonCategoryList from "./SalonCategoryList";
 import { SalonCategoryType } from "../../types/salon";
@@ -35,7 +35,7 @@ function PriceCorrection() {
   // 카테고리 리스트 가져오기
   const getCategoryData = async () => {
     try {
-      const categoryData = await customAxios.get("/api/salon/category");
+      const categoryData = await privateApi.get("/api/salon/category");
       setCategory(categoryData.data.categories);
     } catch (error) {
       console.log(error);
@@ -45,7 +45,7 @@ function PriceCorrection() {
   // 카테고리 생성
   const createCategory = async () => {
     try {
-      await customAxios.post("/api/salon/category", {
+      await privateApi.post("/api/salon/category", {
         category: newCategoryName,
       });
     } catch (error) {
@@ -56,7 +56,7 @@ function PriceCorrection() {
   // 카테고리 이름 수정하기
   const modifyCategory = async (id: string, newName: string) => {
     try {
-      await customAxios.patch("/api/salon/category", {
+      await privateApi.patch("/api/salon/category", {
         category_id: id,
         category: newName,
       });
@@ -68,7 +68,7 @@ function PriceCorrection() {
   // 카테고리 삭제
   const deleteCategory = async (id: string) => {
     try {
-      await customAxios.delete(`/api/salon/category/${id}`);
+      await privateApi.delete(`/api/salon/category/${id}`);
     } catch (error) {
       console.log(error);
     }

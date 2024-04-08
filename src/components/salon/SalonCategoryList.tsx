@@ -5,7 +5,7 @@ import {
   GetServiceType,
   SalonServiceType,
 } from "../../types/salon";
-import { customAxios } from "../../services/customAxios";
+import { privateApi } from "../../services/customAxios";
 import SalonServiceList from "./SalonServiceList";
 import { AxiosRequestConfig } from "axios";
 
@@ -45,7 +45,7 @@ function SalonCategoryList(props: SalonCategoryType) {
       const config: AxiosRequestConfig = {
         params: data,
       };
-      const serviceData = await customAxios.get("/api/salon/service", config);
+      const serviceData = await privateApi.get("/api/salon/service", config);
       setService(serviceData.data.services);
     } catch (error) {
       console.log(error);
@@ -55,7 +55,7 @@ function SalonCategoryList(props: SalonCategoryType) {
   // 서비스 리스트 추가하기
   const createService = async (id: string, service: string, price: string) => {
     try {
-      await customAxios.post("/api/salon/service", {
+      await privateApi.post("/api/salon/service", {
         category_id: id,
         service: service,
         gender: gender,
@@ -69,7 +69,7 @@ function SalonCategoryList(props: SalonCategoryType) {
   // 서비스 리스트 삭제하기
   const deleteService = async (service_id: string) => {
     try {
-      await customAxios.delete(`/api/salon/service/${service_id}`);
+      await privateApi.delete(`/api/salon/service/${service_id}`);
     } catch (error) {
       console.log(error);
     }
