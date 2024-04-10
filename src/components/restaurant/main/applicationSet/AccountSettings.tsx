@@ -111,7 +111,7 @@ function AccountSettings() {
         <div className="flex items-start ">
           <div className="flex flex-col flex-1 gap-1 p-4 font-semibold text-lg">
             <div className="flex gap-2">
-              <div>은행 명 : </div>
+              <div>은행 : </div>
               <div>{accountData.bank_name}</div>
             </div>
             <div className="flex gap-2">
@@ -119,7 +119,7 @@ function AccountSettings() {
               <div>{accountData.account}</div>
             </div>
             <div className="flex gap-2">
-              <div>예금자 명 : </div>
+              <div>예금주 : </div>
               <div>{accountData.name}</div>
             </div>
           </div>
