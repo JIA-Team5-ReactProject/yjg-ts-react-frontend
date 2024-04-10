@@ -3,7 +3,6 @@ import axios, { AxiosInstance, AxiosResponse } from "axios";
 // 토큰 안 보낼 때
 export const publicApi: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URI,
-  withCredentials: true,
 });
 
 // 토큰 보낼 때
@@ -25,35 +24,26 @@ privateApi.interceptors.response.use(
     return response;
   },
   async (error) => {
-    const {
-      config,
-      response: { status },
-    } = error;
+    const originalRequest = error.config;
 
-    if (status === 401) {
-      console.log("g");
-      const originRequest = config;
+    // 오류 && 401인 경우
+    if (error.response && error.response.status === 401) {
       try {
-        console.log("d");
-        const tokenResponse = await publicApi.get("/api/refresh", {
+        const tokenRes = await publicApi("/api/refresh", {
           withCredentials: true,
         });
-        if (tokenResponse.status === 201) {
-          const newAccessToken = tokenResponse.data.token;
+        if (tokenRes.status === 200) {
+          const newAccessToken = tokenRes.data.token;
           sessionStorage.setItem("userToken", newAccessToken);
+          return axios(originalRequest);
         }
-        return axios(originRequest);
       } catch (error) {
-        console.log(error);
-        // if (axios.isAxiosError(error)) {
-        //   if (error.response?.status === 401) {
-        //     alert("로그인이 만료되었습니다.");
-        //     window.location.replace("/");
-        //   } else {
-        //     console.log(error);
-        //   }
-        // }
+        console.error(error);
+        sessionStorage.removeItem("userToken");
+        window.location.replace("/");
+        return Promise.reject(error);
       }
     }
+    return Promise.reject(error);
   }
 );

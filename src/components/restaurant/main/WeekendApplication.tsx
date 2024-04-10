@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CountCard from "../../salon/CountCard";
 import { privateApi } from "../../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
+import { useHorizontalScroll } from "../../../hook/useSideScroll";
 
 function WeekendApplication() {
   // 주말 식수 신청 인원
@@ -18,6 +19,8 @@ function WeekendApplication() {
       head: "일요일",
     },
   ];
+  // 가로스크롤 훅
+  const scrollRef = useHorizontalScroll<HTMLDivElement>();
 
   // 페이지 렌더링 시
   useEffect(() => {
@@ -43,7 +46,10 @@ function WeekendApplication() {
   return (
     <div>
       <div className="font-bold text-lg pl-4 pb-2">• 주말 식수 신청 현황</div>
-      <div className="bg-white flex flex-col gap-5 w-[33rem] h-72 shadow-lg px-10 py-5 border border-black/10 rounded-xl overflow-auto">
+      <div
+        ref={scrollRef}
+        className="bg-white flex flex-col gap-5 w-[33rem] h-72 shadow-lg px-10 py-5 border border-black/10 rounded-xl whitespace-nowrap overflow-x-auto"
+      >
         <div className="flex gap-4 items-end">
           {kind.map((v) => {
             return (

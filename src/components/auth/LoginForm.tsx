@@ -7,7 +7,11 @@ import { trimValues } from "../../utils/validate";
 import { publicApi } from "../../services/customAxios";
 import { emailReg } from "../../utils/regex";
 import { useSetRecoilState } from "recoil";
-import { LoginStateAtom, UserDataAtom } from "../../recoil/UserDataAtiom";
+import {
+  LoadinStateAtom,
+  LoginStateAtom,
+  UserDataAtom,
+} from "../../recoil/UserDataAtiom";
 
 function LoginForm(): JSX.Element {
   const {
@@ -26,6 +30,8 @@ function LoginForm(): JSX.Element {
   const setUserData = useSetRecoilState(UserDataAtom);
   // 로그인 상태 전역 저장변수
   const setLoginState = useSetRecoilState(LoginStateAtom);
+  // 로딩 페이지 전역 저장 변수
+  const setLoadingState = useSetRecoilState(LoadinStateAtom);
 
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
@@ -48,13 +54,18 @@ function LoginForm(): JSX.Element {
     const trimData = trimValues(data);
     handleOnChange();
     try {
-      const loginPost = await publicApi.post("/api/admin/login/web", {
-        email: trimData.email,
-        password: trimData.password,
-      });
+      const loginPost = await publicApi.post(
+        "/api/admin/login/web",
+        {
+          email: trimData.email,
+          password: trimData.password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       const token = loginPost.data.access_token;
       sessionStorage.setItem("userToken", token);
-      setLoginState(true);
       const userData = loginPost.data.user;
       const powerArr: string[] = [];
       userData.privileges.map((v: { privilege: string }) => {
@@ -68,6 +79,8 @@ function LoginForm(): JSX.Element {
         password: userData.password,
         power: powerArr,
       });
+      setLoginState(true);
+      setLoadingState(false);
       navigate("/main");
     } catch (error) {
       console.log(error);

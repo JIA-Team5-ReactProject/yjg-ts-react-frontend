@@ -51,7 +51,7 @@ function GetResult() {
           <div className="font-bold text-xl text-center">아이디 찾기</div>
           <div className="text-lg font-bold text-center">
             <span className="text-blue-800">{value.name}</span>님의 아이디
-            찾기를 완료되었습니다.
+            찾기가 완료되었습니다.
           </div>
           <div className="font-bold text-2xl text-center border-b-4 border-b-black pb-2 mx-20">
             {value.email}
