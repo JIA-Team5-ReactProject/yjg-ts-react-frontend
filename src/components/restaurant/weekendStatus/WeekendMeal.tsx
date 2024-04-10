@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { ListBtn } from "../master/UserList";
-import CloseIcon from "../../icons/CloseIcon";
-import { privateApi } from "../../services/customAxios";
-import { MealType } from "../../types/restaurant";
+import { ListBtn } from "../../master/UserList";
+import CloseIcon from "../../../icons/CloseIcon";
+import { privateApi } from "../../../services/customAxios";
+import { MealType } from "../../../types/restaurant";
+import { useHorizontalScroll } from "../../../hook/useSideScroll";
+import WeekendList from "./WeekendList";
+import { formatCurrency } from "../../../utils/formatCurrency";
 
 function WeekendMeal() {
   // 유형 모달 on/off
@@ -23,6 +26,8 @@ function WeekendMeal() {
     content: "",
     price: "",
   });
+  // 가로스크롤 훅
+  const scrollRef = useHorizontalScroll<HTMLDivElement>();
 
   // 주말 식수 유형 가져오기
   const getWeekendMealTypeData = async () => {
@@ -213,10 +218,10 @@ function WeekendMeal() {
   return (
     <div className="relative">
       {onModal ? (
-        <div className="absolute right-0 w-1/2">
+        <div className="absolute z-20 right-0 w-1/2">
           <div className="bg-white w-full p-10 rounded-md shadow-lg">
             <div className="flex items-center gap-10 mb-7">
-              <div className="font-bold text-2xl">주말 유형 식수 리스트</div>
+              <div className="font-bold text-2xl">주말 식수 유형 리스트</div>
               <div>
                 <ListBtn
                   value="추가하기"
@@ -239,11 +244,14 @@ function WeekendMeal() {
                 }}
               />
             </div>
-            <div className="flex gap-7 w-full justify-start overflow-auto">
+            <div
+              ref={scrollRef}
+              className="flex gap-7 w-full justify-start overflow-auto"
+            >
               {mealType.map((v) => {
                 return (
                   <div
-                    className="flex flex-col min-w-fit bg-white border border-black/20 p-5 tracking-tighter rounded-2xl font-bold shadow-md cursor-pointer"
+                    className="flex flex-col whitespace-nowrap min-w-fit bg-white border border-black/20 py-5 px-8 tracking-tighter rounded-2xl font-bold shadow-md cursor-pointer"
                     onClick={() => {
                       setSelectedType(v);
                       setModalStatus("manage");
@@ -255,7 +263,7 @@ function WeekendMeal() {
                     </div>
                     <div className="flex flex-col gap-2 text-sm mt-2 text-gray-500 ">
                       <div>구성 : {v.content}</div>
-                      <div>가격 : {v.price}</div>
+                      <div>가격 : {formatCurrency(v.price)}</div>
                     </div>
                   </div>
                 );
@@ -265,7 +273,7 @@ function WeekendMeal() {
           {onModalFuc()}
         </div>
       ) : null}
-      <div className="text-right">
+      <div className="absolute right-0">
         <ListBtn
           value="주말 식수 유형"
           color="bg-cyan-500/90"
@@ -275,6 +283,7 @@ function WeekendMeal() {
           }}
         />
       </div>
+      <WeekendList />
     </div>
   );
 }
