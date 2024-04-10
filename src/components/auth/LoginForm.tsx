@@ -54,10 +54,16 @@ function LoginForm(): JSX.Element {
     const trimData = trimValues(data);
     handleOnChange();
     try {
-      const loginPost = await publicApi.post("/api/admin/login/web", {
-        email: trimData.email,
-        password: trimData.password,
-      });
+      const loginPost = await publicApi.post(
+        "/api/admin/login/web",
+        {
+          email: trimData.email,
+          password: trimData.password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       const token = loginPost.data.access_token;
       sessionStorage.setItem("userToken", token);
       const userData = loginPost.data.user;
