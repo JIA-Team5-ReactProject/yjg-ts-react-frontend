@@ -1,5 +1,5 @@
 import MainContainer from "../../components/MainContainer";
-import SemesterMeal from "../../components/restaurant/SemesterMeal";
+import SemesterMeal from "../../components/restaurant/semesterStatus/SemesterMeal";
 
 function RestaurantSemesterMeal() {
   return (

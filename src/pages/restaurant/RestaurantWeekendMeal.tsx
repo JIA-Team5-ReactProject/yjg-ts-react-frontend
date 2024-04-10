@@ -1,5 +1,5 @@
 import MainContainer from "../../components/MainContainer";
-import WeekendMeal from "../../components/restaurant/WeekendMeal";
+import WeekendMeal from "../../components/restaurant/weekendStatus/WeekendMeal";
 
 function RestaurantWeekendMeal() {
   return (

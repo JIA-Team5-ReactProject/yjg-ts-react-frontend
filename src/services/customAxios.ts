@@ -20,40 +20,40 @@ privateApi.interceptors.request.use((config) => {
 });
 
 // 리프레쉬 토큰 처리
-privateApi.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
-  async (error) => {
-    const {
-      config,
-      response: { status },
-    } = error;
+// privateApi.interceptors.response.use(
+//   (response: AxiosResponse) => {
+//     return response;
+//   },
+//   async (error) => {
+//     const {
+//       config,
+//       response: { status },
+//     } = error;
 
-    if (status === 401) {
-      console.log("g");
-      const originRequest = config;
-      try {
-        console.log("d");
-        const tokenResponse = await publicApi.get("/api/refresh", {
-          withCredentials: true,
-        });
-        if (tokenResponse.status === 201) {
-          const newAccessToken = tokenResponse.data.token;
-          sessionStorage.setItem("userToken", newAccessToken);
-        }
-        return axios(originRequest);
-      } catch (error) {
-        console.log(error);
-        // if (axios.isAxiosError(error)) {
-        //   if (error.response?.status === 401) {
-        //     alert("로그인이 만료되었습니다.");
-        //     window.location.replace("/");
-        //   } else {
-        //     console.log(error);
-        //   }
-        // }
-      }
-    }
-  }
-);
+//     if (status === 401) {
+//       console.log("g");
+//       const originRequest = config;
+//       try {
+//         console.log("d");
+//         const tokenResponse = await publicApi.get("/api/refresh", {
+//           withCredentials: true,
+//         });
+//         if (tokenResponse.status === 200) {
+//           const newAccessToken = tokenResponse.data.token;
+//           sessionStorage.setItem("userToken", newAccessToken);
+//         }
+//         return axios(originRequest);
+//       } catch (error) {
+//         console.log(error);
+//         // if (axios.isAxiosError(error)) {
+//         //   if (error.response?.status === 401) {
+//         //     alert("로그인이 만료되었습니다.");
+//         //     window.location.replace("/");
+//         //   } else {
+//         //     console.log(error);
+//         //   }
+//         // }
+//       }
+//     }
+//   }
+// );
