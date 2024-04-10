@@ -13,6 +13,8 @@ import {
 function Main() {
   // 로그인 상태 전역 변수
   const loginState = useRecoilValue(LoginStateAtom);
+  // 로그인 상태 전역 저장변수
+  const setLoginState = useSetRecoilState(LoginStateAtom);
   // 유저 데이터 전역 저장 변수
   const setUserData = useSetRecoilState(UserDataAtom);
   // 로딩 페이지 전역 저장 변수
@@ -21,7 +23,9 @@ function Main() {
   // 페이지 새로고침할 시
   useEffect(() => {
     if (!loginState) {
-      getUserData();
+      getUserData().then(() => {
+        setLoginState(true);
+      });
       const token = sessionStorage.getItem("userToken");
       if (token) {
       }
