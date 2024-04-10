@@ -8,6 +8,7 @@ export const publicApi: AxiosInstance = axios.create({
 // 토큰 보낼 때
 export const privateApi: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URI,
+  withCredentials: false,
 });
 
 // 헤더에 엑세스 토큰 추가하기
@@ -33,7 +34,7 @@ privateApi.interceptors.response.use(
           withCredentials: true,
         });
         if (tokenRes.status === 200) {
-          const newAccessToken = tokenRes.data.token;
+          const newAccessToken = tokenRes.data.access_token;
           sessionStorage.setItem("userToken", newAccessToken);
           return axios(originalRequest);
         }
