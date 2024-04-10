@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/sidebar/Sidebar";
 import { useEffect } from "react";
@@ -11,14 +11,28 @@ import {
 } from "../recoil/UserDataAtiom";
 
 function Main() {
+  const navigate = useNavigate();
+  const location = useLocation(); // 현재 위치 정보를 가져옴
   // 로그인 상태 전역 변수
   const loginState = useRecoilValue(LoginStateAtom);
   // 로그인 상태 전역 저장변수
   const setLoginState = useSetRecoilState(LoginStateAtom);
+  // 유저 데이터 전역 변수
+  const userData = useRecoilValue(UserDataAtom);
   // 유저 데이터 전역 저장 변수
   const setUserData = useSetRecoilState(UserDataAtom);
   // 로딩 페이지 전역 저장 변수
   const setLoadingState = useSetRecoilState(LoadinStateAtom);
+
+  useEffect(() => {
+    if (location.pathname === "/main" || location.pathname === "/main/") {
+      if (userData.power[0]) {
+        navigate(`/main/${userData.power[0]}`);
+      } else {
+        navigate(`/main`);
+      }
+    }
+  }, [userData]);
 
   // 페이지 새로고침할 시
   useEffect(() => {
@@ -26,9 +40,6 @@ function Main() {
       getUserData().then(() => {
         setLoginState(true);
       });
-      const token = sessionStorage.getItem("userToken");
-      if (token) {
-      }
     }
   }, [loginState]);
 
@@ -37,7 +48,6 @@ function Main() {
     setLoadingState(true);
     try {
       const userData = await privateApi.get("/api/user");
-      console.log(userData.data.admin);
       const data = userData.data.admin;
       const powerArr: string[] = [];
       data.privileges.map((v: { privilege: string }) => {
