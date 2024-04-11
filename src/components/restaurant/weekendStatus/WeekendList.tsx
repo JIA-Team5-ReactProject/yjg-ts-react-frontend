@@ -32,8 +32,8 @@ function WeekendList() {
   const [lastPage, setLastPage] = useState(8);
   // 상세보기 유저 값
   const [detailData, setDetailData] = useState<WeekendDetailDataType>();
-  // 상세보기 id 값
-  const [selectedDetail, setSelectedDetail] = useState<string>();
+  // 입금 여부 값
+  const [payment, setPayment] = useState<number>();
 
   // 검색 바 데이터 변경 시
   useEffect(() => {
@@ -56,13 +56,6 @@ function WeekendList() {
     getWeekendListData(data);
   }, [page]);
 
-  // 상세 모달 창 변경 시
-  useEffect(() => {
-    if (detailData) {
-      setSelectedDetail(detailData.id);
-    }
-  }, [selectedDetail]);
-
   // 주말 식수 신청 리스트 가져오기
   const getWeekendListData = async (data: { name?: string; page: number }) => {
     try {
@@ -80,13 +73,12 @@ function WeekendList() {
     }
   };
 
-  // 유저 입금 정보 확인하기
-  const getWeekendUserPayment = async (id: string) => {
-    console.log(id);
+  // 유저 입금 정보 수정하기
+  const postWeekendUserPayment = async (id: string) => {
     try {
-      const weekendUserPayment = await privateApi.get(
-        `/api/restaurant/semester/g/payment/${id}`
-      );
+      await privateApi.post(`/api/restaurant/weekend/p/payment/${id}`, {
+        payment: payment,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -126,9 +118,41 @@ function WeekendList() {
               <div className="text-right pr-10">환불유형 :</div>
               <div>{detailData.refund ? "환불" : "편의점 도시락"}</div>
               <div className="text-right pr-10">입금 :</div>
-              <div></div>
+              <div className="flex gap-5">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-3 w-3 text-gray-600 shadow-sm"
+                    checked={payment ? true : false}
+                    onClick={() => {
+                      setPayment(1);
+                    }}
+                  />
+                  <span className="ml-2 text-gray-700">완료</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-3 w-3 text-gray-600 shadow-sm"
+                    checked={payment ? false : true}
+                    onClick={() => {
+                      setPayment(0);
+                    }}
+                  />
+                  <span className="ml-2 text-gray-700">미완료</span>
+                </label>
+              </div>
               <div className="col-span-2 my-1"></div>
-              <ListBtn value="저장" color="bg-cyan-500/80" onClick={() => {}} />
+              <ListBtn
+                value="저장"
+                color="bg-cyan-500/80"
+                onClick={() => {
+                  postWeekendUserPayment(detailData.id).then(() => {
+                    setDetailData(undefined);
+                    getWeekendListData({ name: search, page: page });
+                  });
+                }}
+              />
               <ListBtn
                 value="닫기"
                 color="bg-red-400/90"
@@ -170,7 +194,7 @@ function WeekendList() {
                         student_id: user.user.student_id,
                         meal_type: user.weekend_meal_type.meal_type,
                       });
-                      getWeekendUserPayment(user.id);
+                      setPayment(user.payment);
                     }}
                   />
                 </div>
