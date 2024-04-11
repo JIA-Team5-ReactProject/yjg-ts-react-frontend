@@ -28,14 +28,25 @@ privateApi.interceptors.response.use(
     const originalRequest = error.config;
 
     // 오류 && 401인 경우
-    if (error.response && error.response.status === 401) {
+    if (
+      !originalRequest._retry &&
+      error.response &&
+      error.response.status === 401
+    ) {
+      originalRequest._retry = true;
       try {
-        const tokenRes = await publicApi("/api/refresh", {
+        const tokenRes = await publicApi.get("/api/refresh", {
           withCredentials: true,
         });
         if (tokenRes.status === 200) {
           const newAccessToken = tokenRes.data.access_token;
           sessionStorage.setItem("userToken", newAccessToken);
+
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${newAccessToken}`;
+          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
           return axios(originalRequest);
         }
       } catch (error) {
