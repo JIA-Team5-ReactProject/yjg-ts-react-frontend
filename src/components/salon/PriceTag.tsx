@@ -30,7 +30,7 @@ function PriceTag(props: PriceTagType) {
   return (
     <div>
       {priceTag ? (
-        <div className="fixed flex items-center justify-center inset-0 z-20 bg-black/35">
+        <div className="fixed flex items-center justify-center inset-0 z-30 bg-black/35">
           <div className="relative flex flex-col bg-emerald-900 w-3/4 h-5/6 py-10 px-10 text-white text-center font-bold overflow-auto">
             <div className="absolute right-4 top-4">
               <CloseIcon

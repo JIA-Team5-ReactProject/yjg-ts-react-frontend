@@ -31,8 +31,8 @@ function SemesterList() {
   const [lastPage, setLastPage] = useState(8);
   // 상세보기 유저 값
   const [detailData, setDetailData] = useState<SemesterDetailDataType>();
-  // 상세보기 id 값
-  const [selectedDetail, setSelectedDetail] = useState<string>();
+  // 입금 여부 값
+  const [payment, setPayment] = useState<number>();
 
   // 검색 바 데이터 변경 시
   useEffect(() => {
@@ -55,13 +55,6 @@ function SemesterList() {
     getSemesterListData(data);
   }, [page]);
 
-  // 상세 모달 창 변경 시
-  useEffect(() => {
-    if (detailData) {
-      setSelectedDetail(detailData.id);
-    }
-  }, [selectedDetail]);
-
   // 주말 식수 신청 리스트 가져오기
   const getSemesterListData = async (data: { name?: string; page: number }) => {
     try {
@@ -74,6 +67,18 @@ function SemesterList() {
       );
       setSemesterList(semesterListData.data.data);
       setLastPage(semesterListData.data.last_page);
+      console.log(semesterListData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 유저 입금 정보 수정하기
+  const postSemesterUserPayment = async (id: string) => {
+    try {
+      await privateApi.post(`/api/restaurant/semester/p/payment/${id}`, {
+        payment: payment,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -106,9 +111,41 @@ function SemesterList() {
               <div className="text-right pr-10">유형 : </div>
               <div>{detailData.meal_type}</div>
               <div className="text-right pr-10">입금 :</div>
-              <div></div>
+              <div className="flex gap-5">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-3 w-3 text-gray-600 shadow-sm"
+                    checked={payment ? true : false}
+                    onClick={() => {
+                      setPayment(1);
+                    }}
+                  />
+                  <span className="ml-2 text-gray-700">완료</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-3 w-3 text-gray-600 shadow-sm"
+                    checked={payment ? false : true}
+                    onClick={() => {
+                      setPayment(0);
+                    }}
+                  />
+                  <span className="ml-2 text-gray-700">미완료</span>
+                </label>
+              </div>
               <div className="col-span-2 my-1"></div>
-              <ListBtn value="저장" color="bg-cyan-500/80" onClick={() => {}} />
+              <ListBtn
+                value="저장"
+                color="bg-cyan-500/80"
+                onClick={() => {
+                  postSemesterUserPayment(detailData.id).then(() => {
+                    setDetailData(undefined);
+                    getSemesterListData({ name: search, page: page });
+                  });
+                }}
+              />
               <ListBtn
                 value="닫기"
                 color="bg-red-400/90"
@@ -143,6 +180,7 @@ function SemesterList() {
                         student_id: user.user.student_id,
                         meal_type: user.semester_meal_type.meal_type,
                       });
+                      setPayment(user.payment);
                     }}
                   />
                 </div>
