@@ -80,7 +80,7 @@ function ReadAS() {
                   </div>
                 </div>
               </div>
-              <div className="absolute right-0 top-0">
+              <div className="absolute right-0 top-0 z-20">
                 <CloseIcon
                   onClick={() => {
                     setOnPicture(!onPicture);
