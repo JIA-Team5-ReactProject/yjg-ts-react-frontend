@@ -72,7 +72,7 @@ function ReadAS() {
           ) : null}
           {onPicture ? (
             <>
-              <div className="absolute right-0 top-0 flex flex-col bg-white border border-black/20 rounded-lg overflow-hidden">
+              <div className="absolute right-0 top-0 z-10 flex flex-col bg-white border border-black/20 rounded-lg overflow-hidden">
                 <div className="w-full h-10 bg-cyan-500"></div>
                 <div className="p-10 pb-14">
                   <div className="flex justify-center bg-black">
@@ -80,7 +80,7 @@ function ReadAS() {
                   </div>
                 </div>
               </div>
-              <div className="absolute right-0 top-0">
+              <div className="absolute right-0 top-0 z-20">
                 <CloseIcon
                   onClick={() => {
                     setOnPicture(!onPicture);

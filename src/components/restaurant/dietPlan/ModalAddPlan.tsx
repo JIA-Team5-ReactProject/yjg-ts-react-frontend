@@ -89,7 +89,7 @@ function ModalAddPlan(props: { setOnModal: (onModal: boolean) => void }) {
   };
 
   return (
-    <div className="fixed flex items-center justify-center z-20 inset-0 bg-black/35">
+    <div className="fixed flex items-center justify-center z-40 inset-0 bg-black/35">
       <div className="bg-white w-4/6 h-4/5 py-12 overflow-auto rounded-xl">
         <section className="relative px-8 gap-6 w-full h-5/6 flex flex-col">
           <div className="font-bold text-3xl">식단표 추가</div>

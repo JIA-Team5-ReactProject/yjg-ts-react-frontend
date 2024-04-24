@@ -28,7 +28,7 @@ function WaitingCard(props: { image: { image: string } }) {
 
   return (
     <div className="w-full h-full flex justify-center">
-      <img src={image.image} alt="logo" className="max-h-full object-contain" />
+      <img src={image.image} alt="logo" className="max-h-96 object-contain" />
     </div>
   );
 }

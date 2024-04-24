@@ -51,7 +51,7 @@ function DietPlanManagement() {
       <div className="flex gap-10 mt-4 ml-4 items-center">
         <div className="font-bold text-3xl">식단표 관리</div>
         <select
-          className="outline-none focus:outline-none px-4 py-1 bg-white font-bold text-xl border-b-2 border-black"
+          className="outline-none focus:outline-none px-4 py-1 bg-transparent font-bold text-xl border-b-2 border-black"
           value={selectedYear}
           onChange={(e) => {
             setSelectedYear(e.target.value);
