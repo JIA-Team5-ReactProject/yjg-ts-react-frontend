@@ -6,7 +6,7 @@ function ExcelCard() {
       <div className="flex justify-center w-full bg-green-600/80">
         <img src={excelLogo} alt="excelLogo" />
       </div>
-      <div className="flex flex-col font-bold p-4">
+      <div className="flex flex-col bg-white font-bold p-4">
         <div>2023-11-첫째주</div>
       </div>
     </div>
