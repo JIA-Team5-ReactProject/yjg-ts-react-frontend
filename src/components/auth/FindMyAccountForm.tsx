@@ -8,6 +8,8 @@ import { emailReg, nameReg, phoneNumReg } from "../../utils/regex";
 import { useNavigate } from "react-router-dom";
 import { publicApi } from "../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
+import GoLogin from "./GoLogin";
+import { useMutation } from "@tanstack/react-query";
 
 function FindMyAccountForm(): JSX.Element {
   const {
@@ -33,6 +35,7 @@ function FindMyAccountForm(): JSX.Element {
   // 타이머 스테이트
   const [timer, setTimer] = useState<number>(180);
   const timerId = useRef<NodeJS.Timeout | null>(null);
+  // 비밀번호 찾기
 
   // 0초 일때 타이머 종료
   useEffect(() => {
@@ -41,6 +44,7 @@ function FindMyAccountForm(): JSX.Element {
       setOnTimer(false);
     }
   }, [timer]);
+
   // 페이지 전환시 초기화
   useEffect(() => {
     reset();
@@ -65,77 +69,108 @@ function FindMyAccountForm(): JSX.Element {
   };
 
   // 인증번호 발송 api
-  const sendCode = async (userData: FindingPasswordValues) => {
+  const sendCodeApi = async (userData: FindingPasswordValues) => {
     // 존재하는 유저 정보인지 확인 후 인증번호 발송
-    try {
-      await publicApi.post("/api/reset-password", {
-        name: userData.name,
-        email: userData.email,
-      });
+    const response = await publicApi.post("/api/reset-password", {
+      name: userData.name,
+      email: userData.email,
+    });
+
+    return response.data;
+  };
+
+  // 아이디 찾기 Api
+  const findIdApi = async (data: FindingFormValues) => {
+    const trimData = trimValues(data);
+    const response = await publicApi.post("/api/find-email", {
+      name: trimData.name,
+      phone_number: trimData.phone,
+    });
+
+    return response.data;
+  };
+
+  // 비밀번호 찾기 Api
+  const findPwApi = async (data: FindingFormValues) => {
+    const trimData = trimValues(data);
+    const response = await publicApi.post("/api/reset-password/verify", {
+      email: trimData.email,
+      code: trimData.verificationCode,
+    });
+
+    return response.data;
+  };
+
+  // 인증번호 발송 Mutation
+  const { mutate: sendCodeMutation } = useMutation({
+    mutationFn: (userData: FindingPasswordValues) => sendCodeApi(userData),
+    // Api 연결 성공
+    onSuccess() {
       setSendCodeCheck(true);
       startTimer();
-      setError("email", { message: "" }, { shouldFocus: true });
-    } catch (error: any) {
-      console.log(error);
+    },
+    // Api 연결 실패
+    onError() {
       setError(
         "email",
         { message: "이메일과 이름을 다시 확인해주세요." },
         { shouldFocus: true }
       );
-    }
-  };
+    },
+  });
+
+  // 아이디 찾기 Mutation
+  const { mutate: findIdMutation } = useMutation({
+    mutationFn: (data: FindingFormValues) => findIdApi(data),
+    // Api 연결 성공
+    onSuccess(data) {
+      const userData = {
+        id: data.admin.id,
+        name: data.admin.name,
+        email: data.admin.email,
+      };
+      navigate("/findIdPw/result", {
+        state: { state: "id", value: userData },
+      });
+    },
+    // Api 연결 실패
+    onError() {
+      setError(
+        "name",
+        { message: "존재하지 않는 유저정보 입니다." },
+        { shouldFocus: true }
+      );
+    },
+  });
+
+  // 비밀번호 찾기 Mutation
+  const { mutate: findPwMutation } = useMutation({
+    mutationFn: (data: FindingFormValues) => findPwApi(data),
+    // Api 연결 성공
+    onSuccess(data) {
+      console.log(data);
+      navigate("/findIdPw/result", {
+        state: { state: "pw", value: data.email_token },
+      });
+    },
+    //Api 연결 실패
+    onError() {
+      setError(
+        "verificationCode",
+        { message: "인증번호가 일치하지 않습니다." },
+        { shouldFocus: true }
+      );
+    },
+  });
 
   // 아이디/비밀번호 찾기 제출 함수
   const onSubmit: SubmitHandler<FindingFormValues> = async (data) => {
-    const trimData = trimValues(data);
     if (findingAccount === "findingId") {
       //아이디 찾기 제출
-      try {
-        const checkId = await publicApi.post("/api/find-email", {
-          name: trimData.name,
-          phone_number: trimData.phone,
-        });
-        const userData = {
-          id: checkId.data.admin.id,
-          name: checkId.data.admin.name,
-          email: checkId.data.admin.email,
-        };
-        navigate("/findIdPw/result", {
-          state: { state: "id", value: userData },
-        });
-      } catch (error: any) {
-        console.log(error);
-        setError(
-          "name",
-          { message: error.response.data.error },
-          { shouldFocus: true }
-        );
-      }
+      findIdMutation(data);
     } else if (findingAccount === "findingPassword") {
       // 비밀번호 찾기 제출
-      try {
-        const config: AxiosRequestConfig = {
-          params: {
-            email: trimData.email,
-            code: trimData.verificationCode,
-          },
-        };
-        const checkPw = await publicApi.get(
-          "/api/reset-password/verify",
-          config
-        );
-        console.log(checkPw);
-        navigate("/findIdPw/result", {
-          state: { state: "pw", value: checkPw.data.email_token },
-        });
-      } catch (error) {
-        console.log(error);
-        setError(
-          "verificationCode",
-          { message: "인증번호가 일치하지 않습니다." },
-          { shouldFocus: true }
-        );
-      }
+      findPwMutation(data);
     }
   };
 
@@ -227,7 +262,7 @@ function FindMyAccountForm(): JSX.Element {
                 textF: "인증번호",
                 textT: "재전송",
                 onCheck: () => {
-                  sendCode(userNameEmail);
+                  sendCodeMutation(userNameEmail);
                 },
                 buttonState: sendCodeCheck,
               }}
@@ -266,19 +301,7 @@ function FindMyAccountForm(): JSX.Element {
         >
           {findingAccount === "findingId" ? "아이디 찾기" : "비밀번호 찾기"}
         </button>
-        <div className="flex justify-center gap-2 mt-3">
-          <div className="text-xs text-right pt-1 font-bold">
-            이미 계정이 있나요?
-          </div>
-          <div
-            className="text-xs text-right pt-1 font-bold underline-offset-2  hover:underline cursor-pointer"
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            로그인
-          </div>
-        </div>
+        <GoLogin />
       </form>
     </>
   );
