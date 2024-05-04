@@ -148,7 +148,6 @@ function FindMyAccountForm(): JSX.Element {
     mutationFn: (data: FindingFormValues) => findPwApi(data),
     // Api 연결 성공
     onSuccess(data) {
-      console.log(data);
       navigate("/findIdPw/result", {
         state: { state: "pw", value: data.email_token },
       });
