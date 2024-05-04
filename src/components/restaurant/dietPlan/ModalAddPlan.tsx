@@ -17,13 +17,14 @@ function ModalAddPlan(props: { setOnModal: (onModal: boolean) => void }) {
       files.forEach((file) => {
         formData.append("excel_file", file);
       });
-      console.log(files);
+      console.log(formData.get("excel_file"));
       try {
-        await privateApi.post("/api/restaurant/menu", formData, {
+        const a = await privateApi.post("/api/restaurant/menu", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        console.log(a);
       } catch (error) {
         console.log(error);
       }

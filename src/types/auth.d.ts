@@ -34,7 +34,7 @@ export type LoginFormValues = {
 } & passwordValues;
 
 export type passwordValues = {
-  password: string;
+  password?: string;
   pwCheck?: string;
 };
 
@@ -55,7 +55,6 @@ export type FindingPasswordValues = {
 
 export type LoginUserData = {
   id: number;
-  img?: string;
   power: string[];
 } & LoginFormValues &
   FindingIdValues;

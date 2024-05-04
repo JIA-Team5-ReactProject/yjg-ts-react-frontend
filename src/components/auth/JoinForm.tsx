@@ -6,6 +6,8 @@ import { trimValues } from "../../utils/validate";
 import { publicApi } from "../../services/customAxios";
 import { emailReg, nameReg, passwordReg, phoneNumReg } from "../../utils/regex";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import GoLogin from "./GoLogin";
 
 function JoinForm(): JSX.Element {
   const {
@@ -26,29 +28,21 @@ function JoinForm(): JSX.Element {
     setDuplicateCheck(false);
   }, [email]);
 
-  // 아이디 중복 체크하기
-  const idDuplicateCheck = async (email: string) => {
+  // 아이디 중복 체크 함수
+  const duplicateCheckApi = async (email: string) => {
     const isValid = emailReg.test(email);
     if (!isValid) {
       return Promise.reject(new Error("이메일을 입력해주세요."));
     }
-    try {
-      const verifyEmail = await publicApi.get(`/api/verify-email/${email}`);
-      if (verifyEmail.data.check) {
-        setDuplicateCheck(verifyEmail.data.check);
-      }
-    } catch (error: any) {
-      console.log(error);
-      setError(
-        "email",
-        { message: error.response.data.error },
-        { shouldFocus: true }
-      );
+
+    const response = await publicApi.get(`/api/verify-email/${email}`);
+    if (response.data.check) {
+      setDuplicateCheck(response.data.check);
     }
   };
 
-  // 회원가입 제출 함수
-  const onSubmit: SubmitHandler<JoinFormValues> = async (data) => {
+  // 회원가입 함수
+  const joinApi = async (data: JoinFormValues) => {
     if (!duplicateCheck) {
       setError(
         "email",
@@ -58,20 +52,47 @@ function JoinForm(): JSX.Element {
       return;
     }
     const trimData = trimValues(data);
-    await publicApi.post("/api/admin", {
+    const response = await publicApi.post("/api/admin", {
       name: trimData.name,
       phone_number: trimData.phone,
       email: trimData.email,
       password: trimData.password,
     });
-    alert("회원가입 신청이 완료되었습니다.");
-    navigate("/");
+
+    return response.data;
+  };
+
+  // 중복체크 mutation
+  const { mutate: duplicateCheckMutation } = useMutation({
+    mutationFn: (email: string) => duplicateCheckApi(email),
+    onError() {
+      setError(
+        "email",
+        { message: "Email이 존재합니다." },
+        { shouldFocus: true }
+      );
+    },
+  });
+
+  // 회원가입 mutation
+  const { mutate: joinMutation } = useMutation({
+    mutationFn: (data: JoinFormValues) => joinApi(data),
+    // Api 연결 성공
+    onSuccess() {
+      alert("회원가입 신청이 완료되었습니다.");
+      navigate("/");
+    },
+  });
+
+  // 회원가입 제출 함수
+  const onSubmit: SubmitHandler<JoinFormValues> = async (data) => {
+    joinMutation(data);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col bg-sky-200/90 rounded-3xl aspect-video p-10 min-w-96 max-w-xl m-auto">
-        <p className="font-bold text-3xl text-center mb-10 mt-2">회원가입</p>
+      <div className="flex flex-col bg-sky-200/90 rounded-3xl p-10 min-w-96 max-w-xl m-auto">
+        <p className="font-bold text-3xl text-center mb-5 mt-2">회원가입</p>
         <FormInput
           type="text"
           name="name"
@@ -94,9 +115,7 @@ function JoinForm(): JSX.Element {
             textF: "중복체크",
             textT: "체크완료",
             onCheck: () => {
-              idDuplicateCheck(email).catch((error) => {
-                alert(error);
-              });
+              duplicateCheckMutation(email);
             },
             buttonState: duplicateCheck,
           }}
@@ -157,19 +176,7 @@ function JoinForm(): JSX.Element {
         >
           가입하기
         </button>
-        <div className="flex justify-center gap-2 mt-3">
-          <div className="text-xs text-right pt-1 font-bold">
-            이미 계정이 있나요?
-          </div>
-          <div
-            className="text-xs text-right pt-1 font-bold underline-offset-2  hover:underline cursor-pointer"
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            로그인
-          </div>
-        </div>
+        <GoLogin />
       </div>
     </form>
   );

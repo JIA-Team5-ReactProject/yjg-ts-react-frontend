@@ -18,8 +18,6 @@ export const UserDataAtom = atom<LoginUserData>({
     name: "",
     phone: "",
     email: "",
-    password: "",
-
     power: [""],
   },
 });

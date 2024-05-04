@@ -5,6 +5,7 @@ import { passwordValues } from "../../types/auth";
 import FormInput from "./FormInput";
 import { passwordReg } from "../../utils/regex";
 import { publicApi } from "../../services/customAxios";
+import { useMutation } from "@tanstack/react-query";
 
 function GetResult() {
   const {
@@ -23,25 +24,36 @@ function GetResult() {
 
   const navigate = useNavigate();
 
-  // 비밀번호 재설정 함수
-  const onSubmit: SubmitHandler<passwordValues> = async (data) => {
-    try {
-      await publicApi.patch(
-        "/api/reset-password",
-        {
-          password: data.password,
+  // 비밀번호 재설정 Api
+  const resetPwApi = async (data: passwordValues) => {
+    const response = await publicApi.patch(
+      "/api/reset-password",
+      {
+        password: data.password,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${value}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${value}`,
-          },
-        }
-      );
+      }
+    );
+
+    return response.data;
+  };
+
+  // 비밀번호 재설정 Mutation
+  const { mutate: resetPwMutation } = useMutation({
+    mutationFn: (data: passwordValues) => resetPwApi(data),
+    // Api 연결 성공
+    onSuccess() {
       alert("비밀번호 변경이 완료되었습니다.");
       navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
+    },
+  });
+
+  // 비밀번호 재설정 제출 함수
+  const onSubmit: SubmitHandler<passwordValues> = async (data) => {
+    resetPwMutation(data);
   };
 
   return (
@@ -68,11 +80,8 @@ function GetResult() {
         </>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-          <div className="font-bold text-xl text-center mb-10">
-            비밀번호 찾기
-          </div>
-          <div className="text-lg font-bold text-center mb-4">
-            비밀번호를 재설정합니다.
+          <div className="text-lg font-bold text-center mb-10">
+            비밀번호 재설정
           </div>
           <FormInput
             type="password"
