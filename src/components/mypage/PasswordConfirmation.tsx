@@ -4,6 +4,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { passwordValues } from "../../types/auth";
 import { trimValues } from "../../utils/validate";
 import { privateApi } from "../../services/customAxios";
+import { useMutation } from "@tanstack/react-query";
+import { ListBtn } from "../master/UserList";
 
 function PasswordConfirmation(props: {
   setPasswordCheck: (value: boolean) => void;
@@ -17,26 +19,40 @@ function PasswordConfirmation(props: {
   } = useForm<passwordValues>();
   const userData = useRecoilValue(UserDataAtom);
 
-  //내정보 비밀번호체크 제출 함수
-  const onSubmit: SubmitHandler<passwordValues> = async (data) => {
+  // 내정보 비밀번호 체크 Api
+  const verifyPwApi = async (data: passwordValues) => {
     const trimData = trimValues(data);
-    try {
-      await privateApi.post("/api/verify-password", {
-        password: trimData.password,
-      });
+    const response = await privateApi.post("/api/verify-password", {
+      password: trimData.password,
+    });
+
+    return response.data;
+  };
+
+  // 내정보 비밀번호 체크 Mutation
+  const { mutate: verifyPwMutation } = useMutation({
+    mutationFn: (data: passwordValues) => verifyPwApi(data),
+    // Api 연결 성공
+    onSuccess(data) {
       setPasswordCheck(true);
-    } catch (error) {
-      console.log(error);
+    },
+    onError() {
       setError("password", {
         type: "manual",
         message: "인증에 실패했습니다. 비밀번호를 확인해주세요.",
       });
-    }
+    },
+  });
+
+  // 내정보 비밀번호체크 제출 함수
+  const onSubmit: SubmitHandler<passwordValues> = async (data) => {
+    verifyPwMutation(data);
   };
+
   return (
     <div className="flex h-full items-center">
       <div className="bg-white rounded-lg shadow-lg border-2 mx-auto border-black/20 py-20 h-fit w-1/2 text-center">
-        <p className="text-4xl font-bold">비밀번호확인</p>
+        <p className="text-4xl font-bold">비밀번호 확인</p>
         <div className="mt-12 text-sm">
           <p>
             {<span className="text-blue-600 text-xl">{userData.name}</span>}님의
@@ -50,9 +66,9 @@ function PasswordConfirmation(props: {
               {errors.password.message}
             </span>
           )}
-          <div>
+          <div className="mb-14">
             <label htmlFor="password" className="font-bold mr-2">
-              ▶비밀번호
+              ▶ 비밀번호
             </label>
             <input
               type="password"
@@ -62,13 +78,12 @@ function PasswordConfirmation(props: {
               })}
             />
           </div>
-          <button
+          <ListBtn
             type="submit"
-            className="rounded-xl mt-20 ml-auto px-7 bg-cyan-600/90 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            data-ripple-light="true"
-          >
-            확인
-          </button>
+            value="확인"
+            color="bg-cyan-600/90"
+            onClick={() => {}}
+          />
         </form>
       </div>
     </div>

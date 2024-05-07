@@ -7,7 +7,6 @@ import { formatTime } from "../../utils/timer";
 import { emailReg, nameReg, phoneNumReg } from "../../utils/regex";
 import { useNavigate } from "react-router-dom";
 import { publicApi } from "../../services/customAxios";
-import { AxiosRequestConfig } from "axios";
 import GoLogin from "./GoLogin";
 import { useMutation } from "@tanstack/react-query";
 
