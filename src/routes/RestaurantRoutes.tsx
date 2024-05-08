@@ -7,7 +7,7 @@ import RestaurantSemesterMeal from "../pages/restaurant/RestaurantSemesterMeal";
 function RestaurantRoutes() {
   return (
     <Routes>
-      <Route path="" element={<Restaurant />} />
+      <Route path="management" element={<Restaurant />} />
       <Route path="dietPlan" element={<RestaurantDietPlan />} />
       <Route path="weekendMeal" element={<RestaurantWeekendMeal />} />
       <Route path="semesterMeal" element={<RestaurantSemesterMeal />} />

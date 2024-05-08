@@ -11,7 +11,7 @@ import Modifying from "../pages/post/Modifying";
 function AdminRoutes() {
   return (
     <Routes>
-      <Route path="" element={<Admin />} />
+      <Route path="/notice" element={<Admin />} />
       <Route path="/repair" element={<Repair />} />
       <Route path="/stayOut" element={<StayOut />} />
       <Route path="/meetingRoom" element={<MeetingRoom />} />
