@@ -6,7 +6,7 @@ import SalonPrice from "../pages/salon/SalonPrice";
 function SalonRoutes() {
   return (
     <Routes>
-      <Route path="" element={<Salon />} />
+      <Route path="/reservation" element={<Salon />} />
       <Route path="/pending" element={<SalonPending />} />
       <Route path="/priceCorrection" element={<SalonPrice />} />
     </Routes>

@@ -5,7 +5,7 @@ import Management from "../pages/master/Management";
 function MasterRoutes() {
   return (
     <Routes>
-      <Route path="" element={<Master />} />
+      <Route path="unapprovedUser" element={<Master />} />
       <Route path="management" element={<Management />} />
     </Routes>
   );
