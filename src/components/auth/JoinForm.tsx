@@ -28,7 +28,7 @@ function JoinForm(): JSX.Element {
     setDuplicateCheck(false);
   }, [email]);
 
-  // 아이디 중복 체크 함수
+  // 아이디 중복 체크 Api
   const duplicateCheckApi = async (email: string) => {
     const isValid = emailReg.test(email);
     if (!isValid) {
@@ -41,7 +41,7 @@ function JoinForm(): JSX.Element {
     }
   };
 
-  // 회원가입 함수
+  // 회원가입 Api
   const joinApi = async (data: JoinFormValues) => {
     if (!duplicateCheck) {
       setError(

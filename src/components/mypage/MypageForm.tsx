@@ -9,6 +9,7 @@ import { privateApi } from "../../services/customAxios";
 import { ListBtn } from "../master/UserList";
 import { useNavigate } from "react-router-dom";
 import { formatPhoneNumber } from "../../utils/formatPhoneNum";
+import { useMutation } from "@tanstack/react-query";
 
 function MypageForm() {
   const {
@@ -43,8 +44,8 @@ function MypageForm() {
     setPwChange(false);
   }, [onChange]);
 
-  // 정보수정 제출 함수
-  const onSubmit: SubmitHandler<PatchUserDataType> = async (data) => {
+  // 정보 수정 Api
+  const patchAdminApi = async (data: PatchUserDataType) => {
     const trimData = trimValues(data);
     const postData: PostUserData = {
       admin_id: userData.id,
@@ -59,36 +60,52 @@ function MypageForm() {
     if (userData.phone !== trimData.phone) {
       postData.phone_number = trimData.phone;
     }
-    try {
-      await privateApi.patch("/api/admin", postData);
+    const response = await privateApi.patch("/api/admin", postData);
+
+    return response.data;
+  };
+
+  // 회원 탈퇴 Api
+  const deleteSelfApi = async () => {
+    const response = await privateApi.delete("/api/unregister");
+
+    return response.data;
+  };
+
+  // 정보 수정 mutation
+  const { mutate: patchAdminMutation } = useMutation({
+    mutationFn: (data: PatchUserDataType) => patchAdminApi(data),
+    // Api 연결 성공
+    onSuccess() {
       alert("수정완료");
       window.location.reload();
-    } catch (error: any) {
-      console.log(error);
-      setError(
-        "currentPW",
-        { message: error.response.data.error },
-        { shouldFocus: true }
-      );
-    }
-  };
+    },
+    // Api 연결 실패
+    onError(error) {
+      setError("currentPW", { message: error.message }, { shouldFocus: true });
+    },
+  });
 
-  // 회원 탈퇴하기
-  const deleteSelf = async () => {
-    try {
-      await privateApi.delete("/api/unregister");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // 탈퇴 제출하기
-  const onRemove = () => {
-    if (window.confirm("회원탈퇴를 하시겠습니까?")) {
+  // 회원 탈퇴 mutation
+  const { mutate: deleteSelfMutation } = useMutation({
+    mutationFn: () => deleteSelfApi(),
+    // Api 연결 성공
+    onSuccess() {
       alert("삭제되었습니다");
-      deleteSelf();
       localStorage.removeItem("token");
       navigate("/");
+    },
+  });
+
+  // 정보수정 제출 함수
+  const onSubmit: SubmitHandler<PatchUserDataType> = async (data) => {
+    patchAdminMutation(data);
+  };
+
+  // 탈퇴 제출 함수
+  const onRemove = () => {
+    if (window.confirm("회원탈퇴를 하시겠습니까?")) {
+      deleteSelfMutation();
     } else {
       alert("취소되었습니다.");
     }
@@ -100,9 +117,9 @@ function MypageForm() {
         <div className="flex h-full items-center">
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="bg-white mx-auto grid grid-cols-2 p-24 text-xl gap-y-5 font-semibold w-2/3 h-fit rounded-2xl shadow-lg"
+            className="bg-white mx-auto grid grid-cols-2 p-20 text-xl gap-y-5 font-semibold w-2/3 h-fit rounded-2xl shadow-lg"
           >
-            <div className="text-4xl font-bold mb-10">내정보</div>
+            <div className="text-4xl font-bold mb-8">내정보</div>
             <div className="flex gap-2 items-center">
               <p className="flex">비밀번호 변경하기</p>
               <label className="relative cursor-pointer items-center">
@@ -222,23 +239,20 @@ function MypageForm() {
               </>
             ) : null}
             <div className="col-span-2 space-x-3 justify-self-end">
-              <button
+              <ListBtn
                 type="submit"
-                className="rounded-xl mt-6 ml-auto px-7 bg-blue-400/90 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                data-ripple-light="true"
-              >
-                확인
-              </button>
-              <button
-                className="rounded-xl mt-6 ml-auto px-7 bg-red-400/90 py-2 text-base font-bold uppercase text-white shadow-md transition-all hover:shadow-lg hover:shadow-black/10 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                data-ripple-light="true"
+                value="확인"
+                color="bg-blue-400/90"
+                onClick={() => {}}
+              />
+              <ListBtn
+                value="취소"
+                color="bg-red-400/90"
                 onClick={() => {
                   setOnChange(false);
                   reset();
                 }}
-              >
-                취소
-              </button>
+              />
             </div>
           </form>
         </div>

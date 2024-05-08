@@ -50,7 +50,7 @@ function LoginForm(): JSX.Element {
     }
   };
 
-  // 로그인 함수
+  // 로그인 Api
   const loginApi = async (data: LoginFormValues) => {
     const trimData = trimValues(data);
     const response = await publicApi.post(
