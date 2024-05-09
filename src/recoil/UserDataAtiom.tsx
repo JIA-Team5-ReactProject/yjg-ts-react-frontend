@@ -1,9 +1,10 @@
 import { atom } from "recoil";
 import { LoginUserData } from "../types/auth";
+import { recoilPersist } from "recoil-persist";
 
-export const LoadinStateAtom = atom<boolean>({
-  key: "LoadingState",
-  default: true,
+const { persistAtom } = recoilPersist({
+  key: "sessionStorage",
+  storage: sessionStorage,
 });
 
 export const LoginStateAtom = atom<boolean>({
@@ -20,4 +21,5 @@ export const UserDataAtom = atom<LoginUserData>({
     email: "",
     power: [""],
   },
+  effects_UNSTABLE: [persistAtom],
 });

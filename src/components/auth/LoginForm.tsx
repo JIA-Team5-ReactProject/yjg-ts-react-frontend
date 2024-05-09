@@ -7,11 +7,7 @@ import { trimValues } from "../../utils/validate";
 import { publicApi } from "../../services/customAxios";
 import { emailReg } from "../../utils/regex";
 import { useSetRecoilState } from "recoil";
-import {
-  LoadinStateAtom,
-  LoginStateAtom,
-  UserDataAtom,
-} from "../../recoil/UserDataAtiom";
+import { LoginStateAtom, UserDataAtom } from "../../recoil/UserDataAtiom";
 import { useMutation } from "@tanstack/react-query";
 
 function LoginForm(): JSX.Element {
@@ -31,8 +27,6 @@ function LoginForm(): JSX.Element {
   const setUserData = useSetRecoilState(UserDataAtom);
   // 로그인 상태 전역 저장변수
   const setLoginState = useSetRecoilState(LoginStateAtom);
-  // 로딩 페이지 전역 저장 변수
-  const setLoadingState = useSetRecoilState(LoadinStateAtom);
 
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
@@ -87,7 +81,6 @@ function LoginForm(): JSX.Element {
         power: powerArr,
       });
       setLoginState(true);
-      setLoadingState(false);
       navigate("/main");
     },
     // Api 연결 실패
