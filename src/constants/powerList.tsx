@@ -1,4 +1,3 @@
-import path from "path";
 import AdminIcon from "../icons/AdminIcon";
 import MasterIcon from "../icons/MasterIcon";
 import RestaurantIcon from "../icons/RestaurantIcon";
