@@ -1,7 +1,7 @@
 import { privateApi } from "../../../services/customAxios";
 import * as S from "../../../styles/calender";
 import { useEffect, useRef, useState } from "react";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import { AxiosRequestConfig } from "axios";
 import {
   GetReservationDataType,

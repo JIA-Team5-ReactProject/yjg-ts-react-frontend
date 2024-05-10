@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateApi } from "../../../services/customAxios";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import { AbsenceType } from "../../../types/admin";
 
 function ReadAbsence() {

@@ -1,6 +1,6 @@
 import FormInput from "../../auth/FormInput";
 import Editor from "../../post/Editor";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import PostImg from "../../post/PostImg";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { NoticeType, ModifyFormType } from "../../../types/post";

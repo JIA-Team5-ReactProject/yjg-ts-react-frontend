@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ListBtn } from "../master/UserList";
+import { ListBtn } from "../table/Table";
 import {
   SalonCategoryType,
   GetServiceType,

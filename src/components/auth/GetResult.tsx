@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { ListBtn } from "../master/UserList";
+import { ListBtn } from "../table/Table";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { passwordValues } from "../../types/auth";
 import FormInput from "./FormInput";

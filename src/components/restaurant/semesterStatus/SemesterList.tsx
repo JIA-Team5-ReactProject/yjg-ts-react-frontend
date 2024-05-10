@@ -6,7 +6,7 @@ import {
 import { AxiosRequestConfig } from "axios";
 import { privateApi } from "../../../services/customAxios";
 import Pagination from "../../post/page/Pagination";
-import { ListBtn, ListHead } from "../../master/UserList";
+import { ListBtn, ListHead } from "../../table/Table";
 import { formatPhoneNumber } from "../../../utils/formatPhoneNum";
 import SearchBar from "../../post/page/SearchBar";
 

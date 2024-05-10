@@ -3,7 +3,7 @@ import { MealType } from "../../../types/restaurant";
 import { useHorizontalScroll } from "../../../hook/useSideScroll";
 import { privateApi } from "../../../services/customAxios";
 import CloseIcon from "../../../icons/CloseIcon";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import { formatCurrency } from "../../../utils/formatCurrency";
 import SemesterList from "./SemesterList";
 

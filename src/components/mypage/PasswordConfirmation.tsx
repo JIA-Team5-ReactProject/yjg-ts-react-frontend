@@ -5,7 +5,7 @@ import { passwordValues } from "../../types/auth";
 import { trimValues } from "../../utils/validate";
 import { privateApi } from "../../services/customAxios";
 import { useMutation } from "@tanstack/react-query";
-import { ListBtn } from "../master/UserList";
+import { ListBtn } from "../table/Table";
 
 function PasswordConfirmation(props: {
   setPasswordCheck: (value: boolean) => void;

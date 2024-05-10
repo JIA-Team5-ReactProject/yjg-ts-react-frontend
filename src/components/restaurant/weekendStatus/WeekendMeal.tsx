@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import CloseIcon from "../../../icons/CloseIcon";
 import { privateApi } from "../../../services/customAxios";
 import { MealType } from "../../../types/restaurant";

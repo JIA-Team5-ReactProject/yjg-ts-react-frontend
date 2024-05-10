@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AfterServiceType } from "../../../types/post";
 import PostCardSlider from "../../post/PostCardSlider";
 import CloseIcon from "../../../icons/CloseIcon";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import ImageIcon from "../../../icons/ImageIcon";
 import CommentList from "./comment/CommentList";
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PlusIcon from "../../icons/PlusIcon";
 import { SalonServiceListType, ServiceListType } from "../../types/salon";
-import { ListBtn, ListHead } from "../master/UserList";
+import { ListBtn, ListHead } from "../table/Table";
 import { privateApi } from "../../services/customAxios";
 import { formatCurrency } from "../../utils/formatCurrency";
 

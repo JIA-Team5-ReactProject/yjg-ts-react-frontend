@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AccountType } from "../../../../types/restaurant";
 import { privateApi } from "../../../../services/customAxios";
-import { ListBtn } from "../../../master/UserList";
+import { ListBtn } from "../../../table/Table";
 
 function AccountSettings() {
   // 계좌정보 데이터

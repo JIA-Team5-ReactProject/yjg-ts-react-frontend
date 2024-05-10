@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import * as S from "../../styles/calender";
 import { privateApi } from "../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
-import { ListHead, UserList } from "../master/UserList";
+import { ListHead, UserList } from "../table/Table";
 import CountCard from "./CountCard";
 import dayjs from "dayjs";
 import { ReservationUserType } from "../../types/salon";

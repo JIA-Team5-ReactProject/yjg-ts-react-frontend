@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ListHead, UserList } from "../../master/UserList";
+import { ListHead, UserList } from "../../table/Table";
 import { privateApi } from "../../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
 import { useNavigate } from "react-router-dom";

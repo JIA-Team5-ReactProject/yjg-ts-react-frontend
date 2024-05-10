@@ -1,4 +1,4 @@
-import { ListBtn } from "../master/UserList";
+import { ListBtn } from "../table/Table";
 import { privateApi } from "../../services/customAxios";
 import { useEffect, useState } from "react";
 import SalonCategoryList from "./SalonCategoryList";

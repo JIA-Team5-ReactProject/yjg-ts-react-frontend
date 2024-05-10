@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as S from "../../styles/calender";
-import { ListBtn, ListHead, UserList } from "../master/UserList";
+import { ListBtn, ListHead, UserList } from "../table/Table";
 import dayjs from "dayjs";
 import { AxiosRequestConfig } from "axios";
 import { privateApi } from "../../services/customAxios";
