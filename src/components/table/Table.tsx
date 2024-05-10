@@ -10,7 +10,7 @@ function UserList(props: UserListType) {
     if (data.type === "phoneNum") {
       return (
         <div
-          className={`border-b border-r py-5 px-6 bg-white font-semibold text-lg ${data.col}
+          className={`m-auto py-5 px-6 bg-white font-semibold text-lg ${data.col}
               `}
         >
           {formatPhoneNumber(user[data.value])}
@@ -19,7 +19,7 @@ function UserList(props: UserListType) {
     } else {
       return (
         <div
-          className={`border-b border-r py-5 px-6 bg-white font-semibold text-lg ${data.col}
+          className={`m-auto py-5 px-6 bg-white font-semibold text-lg ${data.col}
               `}
         >
           {user[data.value]}
@@ -34,7 +34,7 @@ function UserList(props: UserListType) {
         return (
           <>
             {v instanceof Array ? (
-              <div className="m-auto border-b py-4 w-full space-x-5 text-center">
+              <div className="flex items-center m-auto gap-2 flex-grow">
                 {v.map((v) => {
                   return (
                     <ListBtn

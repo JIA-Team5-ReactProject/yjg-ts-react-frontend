@@ -6,7 +6,7 @@ import { PatchUserDataType, PostUserData } from "../../types/auth";
 import { nameReg, passwordReg, phoneNumReg } from "../../utils/regex";
 import { trimValues } from "../../utils/validate";
 import { privateApi } from "../../services/customAxios";
-import { ListBtn } from "../master/UserList";
+import { ListBtn } from "../table/Table";
 import { useNavigate } from "react-router-dom";
 import { formatPhoneNumber } from "../../utils/formatPhoneNum";
 import { useMutation } from "@tanstack/react-query";

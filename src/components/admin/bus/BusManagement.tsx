@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ChoiceList from "./ChoiceList";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import { privateApi } from "../../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
 import { BusCategotyType, GetBusCategoryType } from "../../../types/admin";

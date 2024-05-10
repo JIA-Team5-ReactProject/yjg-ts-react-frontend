@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ImageIcon from "../../../icons/ImageIcon";
 import PostCardSlider from "../../post/PostCardSlider";
 import CloseIcon from "../../../icons/CloseIcon";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateApi } from "../../../services/customAxios";
 import { NoticeType } from "../../../types/post";

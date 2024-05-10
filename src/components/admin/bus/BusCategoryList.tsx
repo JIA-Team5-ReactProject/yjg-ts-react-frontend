@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BusCategoryListType, ScheduleType } from "../../../types/admin";
 import { privateApi } from "../../../services/customAxios";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import BusScheduleList from "./BusScheduleList";
 
 function BusCategoryList(props: BusCategoryListType) {

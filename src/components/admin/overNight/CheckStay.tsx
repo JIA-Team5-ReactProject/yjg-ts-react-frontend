@@ -2,7 +2,7 @@ import { HTMLProps, useEffect, useRef, useState } from "react";
 import * as S from "../../../styles/calender";
 import CountCard from "../../salon/CountCard";
 import dayjs from "dayjs";
-import { ListHead, UserList } from "../../master/UserList";
+import { ListHead, UserList } from "../../table/Table";
 import { privateApi } from "../../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
 import { AbsenceListType, GetAbsenceDataType } from "../../../types/admin";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BusScheduleListType, ScheduleListType } from "../../../types/admin";
-import { ListBtn, ListHead } from "../../master/UserList";
+import { ListBtn, ListHead } from "../../table/Table";
 import PlusIcon from "../../../icons/PlusIcon";
 import { privateApi } from "../../../services/customAxios";
 

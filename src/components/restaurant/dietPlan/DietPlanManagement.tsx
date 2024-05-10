@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import cook from "../../../assets/cook.png";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import ExcelCard from "./ExcelCard";
 import ModalAddPlan from "./ModalAddPlan";
 import { privateApi } from "../../../services/customAxios";

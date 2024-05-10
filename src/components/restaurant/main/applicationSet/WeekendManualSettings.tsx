@@ -4,7 +4,7 @@ import {
   WeekendManualSettingsType,
 } from "../../../../types/restaurant";
 import { getDayOfWeek } from "../../../../utils/getDayOfWeek";
-import { ListBtn } from "../../../master/UserList";
+import { ListBtn } from "../../../table/Table";
 import { privateApi } from "../../../../services/customAxios";
 
 function WeekendManualSettings(props: WeekendManualSettingsType) {

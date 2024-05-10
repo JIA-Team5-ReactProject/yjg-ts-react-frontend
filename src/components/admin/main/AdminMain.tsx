@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ListBtn, ListHead, UserList } from "../../master/UserList";
+import { ListBtn, ListHead, UserList } from "../../table/Table";
 import CountCard from "../../salon/CountCard";
 import { privateApi } from "../../../services/customAxios";
 import { useEffect, useState } from "react";

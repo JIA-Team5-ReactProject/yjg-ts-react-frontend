@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import CloseIcon from "../../../icons/CloseIcon";
 import PlusIcon from "../../../icons/PlusIcon";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import { privateApi } from "../../../services/customAxios";
 
 function ModalAddPlan(props: { setOnModal: (onModal: boolean) => void }) {
