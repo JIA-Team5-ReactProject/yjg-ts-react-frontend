@@ -103,9 +103,7 @@ function RepairList() {
       const ASData = await privateApi.get("/api/after-service", config);
       setASList(ASData.data.after_services.data);
       setLastPage(ASData.data.after_services.last_page);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom";
-import MainContainer from "../../components/MainContainer";
-import ReadPost from "../../components/admin/main/ReadPost";
+import ReadPost from "../../components/admin/notice/ReadPost";
 import ReadAS from "../../components/admin/as/ReadAS";
 import ReadAbsence from "../../components/admin/overNight/ReadAbsence";
 
@@ -20,7 +19,7 @@ function Reading() {
     }
   };
 
-  return <MainContainer>{switchComponent()}</MainContainer>;
+  return <>{switchComponent()}</>;
 }
 
 export default Reading;

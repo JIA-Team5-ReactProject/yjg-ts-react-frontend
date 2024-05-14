@@ -8,6 +8,7 @@ import { privateApi } from "../../../services/customAxios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PostPrevImg from "../../post/PostPrevImg";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 function ModifyPost() {
   // 수정하는 게시글 ID
@@ -23,11 +24,6 @@ function ModifyPost() {
   } = useForm<ModifyFormType>();
   const navigate = useNavigate();
 
-  // 페이지 렌더링 시
-  useEffect(() => {
-    getNotice();
-  }, []);
-
   // 공지사항 마운트 시
   useEffect(() => {
     if (notice) {
@@ -38,46 +34,63 @@ function ModifyPost() {
     }
   }, [notice]);
 
-  // 공지사항 수정 제출 함수
-  const onSubmit: SubmitHandler<ModifyFormType> = async (data) => {
-    try {
-      const formData = new FormData();
-      if (data.images && data.images.length > 0) {
-        data.images.forEach((image, index) => {
-          formData.append(`images[${index}]`, image);
-        });
-      }
-      if (data.delete_images && data.delete_images.length > 0) {
-        data.delete_images.forEach((id, index) => {
-          formData.append(`delete_images[${index}]`, id);
-        });
-      }
-      formData.append("title", data.title);
-      formData.append("content", data.content);
-      formData.append("tag", data.tag);
-      formData.append("_method", "PATCH");
-      if (data.urgent) {
-        formData.append("urgent", "1");
-      }
-      await privateApi.post(`/api/notice/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      navigate(`/main/admin/reading/${id}`, { state: { type: "Post" } });
-    } catch (error) {
-      console.log(error);
-    }
+  // 공지사항 상세 조회 APi
+  const getNoticeContentApi = async () => {
+    const response = await privateApi.get(`/api/notice/${id}`);
+
+    return response.data;
   };
 
-  // 공지사항 가져오기
-  const getNotice = async () => {
-    try {
-      const noticeData = await privateApi.get(`/api/notice/${id}`);
-      setNotice(noticeData.data.notice);
-    } catch (error) {
-      console.log(error);
+  // 공지사항 수정 Api
+  const postNoticeApi = async (data: ModifyFormType) => {
+    const formData = new FormData();
+    if (data.images && data.images.length > 0) {
+      data.images.forEach((image, index) => {
+        formData.append(`images[${index}]`, image);
+      });
     }
+    if (data.delete_images && data.delete_images.length > 0) {
+      data.delete_images.forEach((id, index) => {
+        formData.append(`delete_images[${index}]`, id);
+      });
+    }
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    formData.append("tag", data.tag);
+    formData.append("_method", "PATCH");
+    if (data.urgent) {
+      formData.append("urgent", "1");
+    }
+    const response = await privateApi.post(`/api/notice/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+  };
+
+  // 상세 공지사항 query
+  const { data } = useQuery({
+    queryKey: ["noticeContent"],
+    queryFn: getNoticeContentApi,
+  });
+
+  useEffect(() => {
+    if (data) setNotice(data.notice);
+  }, [data]);
+
+  // 공지사항 수정 mutation
+  const { mutate: postNoticeMutation } = useMutation({
+    mutationFn: (data: ModifyFormType) => postNoticeApi(data),
+    onSuccess() {
+      navigate(`/main/admin/reading/${id}`, { state: { type: "Post" } });
+    },
+  });
+
+  // 공지사항 수정 제출 함수
+  const onSubmit: SubmitHandler<ModifyFormType> = async (data) => {
+    postNoticeMutation(data);
   };
 
   return (

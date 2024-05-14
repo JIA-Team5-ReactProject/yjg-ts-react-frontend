@@ -59,27 +59,11 @@ export type ScheduleType = {
 export type BusScheduleListType = {
   id: string;
   schedule: ScheduleType[];
-  createScheduleFuc: (
-    id: string,
-    station: string,
-    time: string
-  ) => Promise<void>;
-  deleteScheduleFuc: (id: string) => Promise<void>;
-  getScheduleFuc: () => Promise<void>;
-};
-
-export type ScheduleListType = {
-  schedule: ScheduleType;
-  deleteScheduleFuc: (id: string) => Promise<void>;
-  getScheduleFuc: () => Promise<void>;
 };
 
 export type BusCategoryListType = {
   id: string;
   round: string;
-  getCategoryFuc: (data: GetBusCategoryType) => Promise<void>;
-  deleteCategoryFuc: (id: string) => Promise<void>;
-  modifyCategotyFuc: (id: string, newName: string) => Promise<void>;
 } & GetBusCategoryType;
 
 // 외박,외출 관련
