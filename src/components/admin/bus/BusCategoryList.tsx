@@ -6,7 +6,7 @@ import BusScheduleList from "./BusScheduleList";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 function BusCategoryList(props: BusCategoryListType) {
-  const { id, round, semester, weekend, bus_route_direction } = props;
+  const { id, round } = props;
   // 카테고리 이름 수정 상태
   const [modify, setModify] = useState(false);
   // 수정 내용
