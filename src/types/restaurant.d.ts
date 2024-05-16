@@ -16,6 +16,14 @@ export type AccountType = {
   name: string;
 };
 
+export type ExcelPlanType = {
+  id: number;
+  date_id: string;
+  date: string;
+  menu: string;
+  meal_time: string;
+};
+
 export type WeekendAutoDataType = {
   start_week: string;
   start_time: string;

@@ -19,12 +19,13 @@ function ModalAddPlan(props: { setOnModal: (onModal: boolean) => void }) {
       });
       console.log(formData.get("excel_file"));
       try {
-        const a = await privateApi.post("/api/restaurant/menu", formData, {
+        await privateApi.post("/api/restaurant/menu", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        console.log(a);
+        alert("업로드 완료");
+        setOnModal(false);
       } catch (error) {
         console.log(error);
       }

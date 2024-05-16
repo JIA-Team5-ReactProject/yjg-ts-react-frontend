@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import * as S from "../../styles/calender";
-import { privateApi } from "../../services/customAxios";
-import { AxiosRequestConfig } from "axios";
-import { ListHead, UserList } from "../table/Table";
-import CountCard from "./CountCard";
-import dayjs from "dayjs";
 import { ReservationUserType } from "../../types/salon";
+import dayjs from "dayjs";
+import { AxiosRequestConfig } from "axios";
+import { privateApi } from "../../services/customAxios";
+import CountCard from "../../components/salon/CountCard";
+import * as S from "../../styles/calender";
+import { ListHead, UserList } from "../../components/table/Table";
 
 function ReservationList() {
   //캘린더에서 선택한 DATE값

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BusCategotyType, GetBusCategoryType } from "../../types/admin";
+import { BusCategotyType } from "../../types/admin";
 import { AxiosRequestConfig } from "axios";
 import { privateApi } from "../../services/customAxios";
 import ChoiceList from "../../components/admin/bus/ChoiceList";
