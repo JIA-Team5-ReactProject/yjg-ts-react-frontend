@@ -1,3 +1,4 @@
+import path from "path";
 import AdminIcon from "../icons/AdminIcon";
 import MasterIcon from "../icons/MasterIcon";
 import RestaurantIcon from "../icons/RestaurantIcon";
@@ -81,6 +82,10 @@ export const restaurant = {
     {
       name: "학기 식수 현황",
       path: basePath("restaurant/semesterMeal"),
+    },
+    {
+      name: "식수 신청자 QR체크",
+      path: basePath("restaurant/qrCheck"),
     },
   ],
 };
