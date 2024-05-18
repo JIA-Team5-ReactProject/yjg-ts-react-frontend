@@ -47,7 +47,7 @@ function ReadPost() {
   const { mutate: noticeDeleteMutation } = useMutation({
     mutationFn: deleteNoticeApi,
     onSuccess() {
-      navigate("/main/admin");
+      navigate("/main/admin/notice");
     },
   });
 
@@ -122,7 +122,7 @@ function ReadPost() {
             value="나가기"
             color="bg-gray-400/90"
             onClick={() => {
-              navigate("/main/admin");
+              navigate("/main/admin/notice");
             }}
           />
         </div>
