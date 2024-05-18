@@ -45,7 +45,7 @@ function Writing() {
     mutationFn: (data: PostFormType) => noticeApi(data),
     // Api 연결 성공
     onSuccess() {
-      navigate("/main/admin");
+      navigate("/main/admin/notice");
     },
   });
 
