@@ -10,24 +10,15 @@ function SidePowerModal(props: { power: Power }) {
 
   return (
     <div className=" bg-cyan-900/75 mx-4 flex-col rounded-t-xl select-none ">
-      <div className="bg-cyan-600/70 h-16 pl-3 flex items-center text-white text-2xl rounded-t-xl shadow-md shadow-inherit">
-        <div className="flex-none">{power.icon}</div>
-        <div
-          className="grow text-center cursor-pointer"
-          onClick={() => {
-            navigate(power.path);
-          }}
-        >
-          {power.power}
-        </div>
-        <div
-          className="flex-none cursor-pointer "
-          onClick={() => {
-            setOnModal(!onModal);
-          }}
-        >
-          <DropDown />
-        </div>
+      <div
+        className="bg-cyan-600/70 h-16 pl-3 flex items-center text-white text-2xl rounded-t-xl shadow-md shadow-inherit cursor-pointer"
+        onClick={() => {
+          setOnModal(!onModal);
+        }}
+      >
+        <div>{power.icon}</div>
+        <div className="grow text-center">{power.power}</div>
+        <DropDown />
       </div>
       {onModal
         ? power.list.map((v, i) => (

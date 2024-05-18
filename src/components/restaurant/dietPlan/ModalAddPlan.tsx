@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import CloseIcon from "../../../icons/CloseIcon";
 import PlusIcon from "../../../icons/PlusIcon";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import { privateApi } from "../../../services/customAxios";
 
 function ModalAddPlan(props: { setOnModal: (onModal: boolean) => void }) {
@@ -17,13 +17,15 @@ function ModalAddPlan(props: { setOnModal: (onModal: boolean) => void }) {
       files.forEach((file) => {
         formData.append("excel_file", file);
       });
-      console.log(files);
+      console.log(formData.get("excel_file"));
       try {
         await privateApi.post("/api/restaurant/menu", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        alert("업로드 완료");
+        setOnModal(false);
       } catch (error) {
         console.log(error);
       }

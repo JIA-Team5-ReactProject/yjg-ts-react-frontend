@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { privateApi } from "../../../services/customAxios";
 import { AxiosRequestConfig } from "axios";
 import SearchBar from "../../post/page/SearchBar";
-import { ListBtn, ListHead } from "../../master/UserList";
+import { ListBtn, ListHead } from "../../table/Table";
 import Pagination from "../../post/page/Pagination";
 import {
   WeekendDetailDataType,

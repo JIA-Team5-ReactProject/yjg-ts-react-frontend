@@ -1,3 +1,4 @@
+import path from "path";
 import AdminIcon from "../icons/AdminIcon";
 import MasterIcon from "../icons/MasterIcon";
 import RestaurantIcon from "../icons/RestaurantIcon";
@@ -10,11 +11,14 @@ const basePath = (address: string): string => {
 export const master = {
   power: "총관리자",
   icon: <MasterIcon />,
-  path: basePath("master"),
   list: [
     {
       name: "전체 사용자 관리",
       path: basePath("master/management"),
+    },
+    {
+      name: "미승인 사용자 관리",
+      path: basePath("master/unapprovedUser"),
     },
   ],
 };
@@ -22,8 +26,8 @@ export const master = {
 export const salon = {
   power: "미용실",
   icon: <SalonIcon />,
-  path: basePath("salon"),
   list: [
+    { name: "승인 예약 목록", path: basePath("salon/reservation") },
     {
       name: "미승인 예약 목록",
       path: basePath("salon/pending"),
@@ -38,8 +42,8 @@ export const salon = {
 export const admin = {
   power: "행정",
   icon: <AdminIcon />,
-  path: basePath("admin"),
   list: [
+    { name: "공지사항", path: basePath("admin/notice") },
     {
       name: "외박 / 외출",
       path: basePath("admin/stayOut"),
@@ -62,8 +66,11 @@ export const admin = {
 export const restaurant = {
   power: "식수",
   icon: <RestaurantIcon />,
-  path: basePath("restaurant"),
   list: [
+    {
+      name: "영업 관리",
+      path: basePath("restaurant/management"),
+    },
     {
       name: "식단표 추가",
       path: basePath("restaurant/dietPlan"),
@@ -75,6 +82,10 @@ export const restaurant = {
     {
       name: "학기 식수 현황",
       path: basePath("restaurant/semesterMeal"),
+    },
+    {
+      name: "식수 신청자 QR체크",
+      path: basePath("restaurant/qrCheck"),
     },
   ],
 };

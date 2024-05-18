@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { privateApi } from "../../services/customAxios";
-import { ListBtn } from "../master/UserList";
+import { ListBtn } from "../table/Table";
 import { BusinessTimeType } from "../../types/salon";
 
 function SetBusinessTime() {

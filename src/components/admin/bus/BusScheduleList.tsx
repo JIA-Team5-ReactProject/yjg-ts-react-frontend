@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import { BusScheduleListType, ScheduleListType } from "../../../types/admin";
-import { ListBtn, ListHead } from "../../master/UserList";
+import { BusScheduleListType, ScheduleType } from "../../../types/admin";
+import { ListBtn, ListHead } from "../../table/Table";
 import PlusIcon from "../../../icons/PlusIcon";
 import { privateApi } from "../../../services/customAxios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 function BusScheduleList(props: BusScheduleListType) {
-  const { schedule, id, createScheduleFuc, deleteScheduleFuc, getScheduleFuc } =
-    props;
+  const { schedule, id } = props;
   const headList = [
     { value: "역이름", col: "col-span-1" },
     { value: "시간", col: "col-span-1" },
     { value: "", col: "col-span-1" },
   ];
+
+  const queryClient = useQueryClient();
 
   // 스케줄 생성 상태
   const [createSchedule, setCreateSchedule] = useState(false);
@@ -25,6 +27,27 @@ function BusScheduleList(props: BusScheduleListType) {
     setNewStation("");
     setNewTime("");
   }, [createSchedule]);
+
+  // 스케줄 생성 Api
+  const createScheduleApi = async () => {
+    const response = await privateApi.post("/api/bus/schedule", {
+      round_id: id,
+      station: newStation,
+      bus_time: newTime,
+    });
+
+    return response.data;
+  };
+
+  // 스케줄 생성 mutation
+  const { mutate: createScheduleMutation } = useMutation({
+    mutationFn: createScheduleApi,
+    // Api 연결 성공
+    onSuccess() {
+      setCreateSchedule(false);
+      queryClient.invalidateQueries({ queryKey: ["salonSchedule"] });
+    },
+  });
 
   return (
     <>
@@ -62,10 +85,7 @@ function BusScheduleList(props: BusScheduleListType) {
                 value="생성"
                 color="bg-blue-400/90"
                 onClick={() => {
-                  createScheduleFuc(id, newStation, newTime).then(() => {
-                    getScheduleFuc();
-                  });
-                  setCreateSchedule(false);
+                  createScheduleMutation();
                 }}
               />
               <ListBtn
@@ -79,13 +99,7 @@ function BusScheduleList(props: BusScheduleListType) {
           </>
         ) : null}
         {schedule.map((schedule) => {
-          return (
-            <ScheduleList
-              schedule={schedule}
-              getScheduleFuc={getScheduleFuc}
-              deleteScheduleFuc={deleteScheduleFuc}
-            />
-          );
+          return <ScheduleList schedule={schedule} />;
         })}
       </div>
     </>
@@ -94,8 +108,8 @@ function BusScheduleList(props: BusScheduleListType) {
 
 export default BusScheduleList;
 
-function ScheduleList(props: ScheduleListType) {
-  const { schedule, getScheduleFuc, deleteScheduleFuc } = props;
+function ScheduleList(props: { schedule: ScheduleType }) {
+  const { schedule } = props;
   // 수정 상태
   const [onModify, setOnModify] = useState(false);
   // 수정된 역이름
@@ -103,17 +117,43 @@ function ScheduleList(props: ScheduleListType) {
   // 수정된 시간
   const [newTime, setNewTime] = useState("");
 
-  // 댓글 수정하기
-  const patchSchedule = async (id: string) => {
-    try {
-      await privateApi.patch(`/api/bus/schedule/update/${id}`, {
-        station: newStation,
-        bus_time: newTime,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+  const queryClient = useQueryClient();
+
+  // 스케줄 삭제 Api
+  const deleteScheduleApi = async (id: string) => {
+    const response = await privateApi.delete(`/api/bus/schedule/${id}`);
+
+    return response.data;
   };
+
+  // 스케줄 수정 Api
+  const patchScheduleApi = async (id: string) => {
+    const response = await privateApi.patch(`/api/bus/schedule/update/${id}`, {
+      station: newStation,
+      bus_time: newTime,
+    });
+
+    return response.data;
+  };
+
+  // 스케줄 삭제 mutation
+  const { mutate: deleteScheduleMutation } = useMutation({
+    mutationFn: deleteScheduleApi,
+    // Api 연결 성공
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["salonSchedule"] });
+    },
+  });
+
+  // 스케줄 수정 mutation
+  const { mutate: patchScheduleMutation } = useMutation({
+    mutationFn: patchScheduleApi,
+    // Api 연결 성공
+    onSuccess() {
+      setOnModify(false);
+      queryClient.invalidateQueries({ queryKey: ["salonSchedule"] });
+    },
+  });
 
   return (
     <>
@@ -144,10 +184,7 @@ function ScheduleList(props: ScheduleListType) {
               value="수정완료"
               color="bg-sky-400/90"
               onClick={() => {
-                patchSchedule(schedule.id).then(() => {
-                  setOnModify(false);
-                  getScheduleFuc();
-                });
+                patchScheduleMutation(schedule.id);
               }}
             />
             <ListBtn
@@ -181,9 +218,7 @@ function ScheduleList(props: ScheduleListType) {
               value="삭제"
               color="bg-red-400/90"
               onClick={() => {
-                deleteScheduleFuc(schedule.id).then(() => {
-                  getScheduleFuc();
-                });
+                deleteScheduleMutation(schedule.id);
               }}
             />
           </div>

@@ -1,20 +1,17 @@
-import { useNavigate } from "react-router-dom";
-import { ListBtn, ListHead, UserList } from "../../master/UserList";
-import CountCard from "../../salon/CountCard";
-import { privateApi } from "../../../services/customAxios";
 import { useEffect, useState } from "react";
+import { NoticeListType, getNoticeDataType } from "../../types/post";
+import { useNavigate } from "react-router-dom";
 import { AxiosRequestConfig } from "axios";
-import {
-  NoticeListType,
-  getAfterServiceType,
-  getNoticeDataType,
-} from "../../../types/post";
-import Pagination from "../../post/page/Pagination";
-import SearchBar from "../../post/page/SearchBar";
+import { privateApi } from "../../services/customAxios";
 import dayjs from "dayjs";
-import { GetReservationDataType } from "../../../types/admin";
+import { useQuery } from "@tanstack/react-query";
+import CountCard from "../../components/salon/CountCard";
+import SearchBar from "../../components/post/page/SearchBar";
+import { ListBtn, ListHead, UserList } from "../../components/table/Table";
+import LoadingPage from "../../components/LoadingPage";
+import Pagination from "../../components/post/page/Pagination";
 
-function AdminMain() {
+function Notice() {
   const headList = [
     { value: "제목", col: "col-span-4" },
     { value: "태그", col: "col-span-1" },
@@ -45,6 +42,10 @@ function AdminMain() {
     { value: "restaurant", name: "식당" },
     { value: "bus", name: "버스" },
   ];
+  // 공지사항 파라미터 값
+  const [noticeParams, setNoticeParams] = useState<getNoticeDataType>({
+    page: 1,
+  });
   // 검색 바 태그 값
   const [tag, setTag] = useState("");
   // 검색 바 제목 값
@@ -63,14 +64,6 @@ function AdminMain() {
   const [unprocessedCase, setUnprocessedCase] = useState(0);
   const navigate = useNavigate();
 
-  //페이지 렌더링 시
-  useEffect(() => {
-    let currentDate = dayjs(new Date()).format("YYYY-MM-DD");
-    getCountData({ date: currentDate });
-    getASData({ status: 0, page: 1 });
-    getReservationData({ date: currentDate });
-  }, []);
-
   // 검색 바 데이터 변경 시
   useEffect(() => {
     if (page === 1) {
@@ -81,7 +74,7 @@ function AdminMain() {
       if (search) {
         data = { ...data, title: search };
       }
-      getNoticeListData(data);
+      setNoticeParams(data);
     }
     setPage(1);
   }, [tag, search]);
@@ -95,63 +88,98 @@ function AdminMain() {
     if (search) {
       data = { ...data, title: search };
     }
-    getNoticeListData(data);
+    setNoticeParams(data);
   }, [page]);
 
-  // 공지사항 데이터 가져오기
-  const getNoticeListData = async (data: getNoticeDataType) => {
-    try {
-      const config: AxiosRequestConfig = {
-        params: data,
-      };
-      const notice = await privateApi.get("/api/notice", config);
-      setNoticeList(notice.data.notices.data);
-      setLastPage(notice.data.notices.last_page);
-    } catch (error) {
-      console.log(error);
-    }
+  // 공지사항 데이터 get Api
+  const getNoticeListApi = async () => {
+    const config: AxiosRequestConfig = {
+      params: noticeParams,
+    };
+    const response = await privateApi.get("/api/notice", config);
+    return response.data;
   };
 
-  // 외출, 외박 신청자 수 가져오기
-  const getCountData = async (data: { date: string }) => {
-    try {
-      const config: AxiosRequestConfig = { params: data };
-      const countData = await privateApi.get("/api/absence/count", config);
-      setGoMember(countData.data.go_count);
-      setSleepMember(countData.data.sleep_count);
-    } catch (error) {
-      console.log(error);
-    }
+  // 외출, 외박 신청자 수 get Api
+  const getOverNightCountApi = async () => {
+    let currentDate = dayjs(new Date()).format("YYYY-MM-DD");
+    const config: AxiosRequestConfig = { params: { date: currentDate } };
+    const response = await privateApi.get("/api/absence/count", config);
+
+    return response.data;
   };
 
-  // 회의실 예약자 리스트 가져오기
-  const getReservationData = async (data: GetReservationDataType) => {
-    try {
-      const config: AxiosRequestConfig = {
-        params: data,
-      };
-      const reservationData = await privateApi.get(
-        "/api/meeting-room/reservation",
-        config
-      );
-      setRoomReservation(reservationData.data.reservations.total);
-    } catch (error) {
-      console.log(error);
-    }
+  // 회의실 예약자 수 get Api
+  const getReservationCountApi = async () => {
+    let currentDate = dayjs(new Date()).format("YYYY-MM-DD");
+    const config: AxiosRequestConfig = { params: { date: currentDate } };
+    const response = await privateApi.get(
+      "/api/meeting-room/reservation",
+      config
+    );
+
+    return response.data;
   };
 
-  // AS 데이터 가져오기
-  const getASData = async (data?: getAfterServiceType) => {
-    try {
-      const config: AxiosRequestConfig = {
-        params: data,
-      };
-      const ASData = await privateApi.get("/api/after-service", config);
-      setUnprocessedCase(ASData.data.after_services.total);
-    } catch (error) {
-      console.log(error);
-    }
+  // A/S 신청 수 get Api
+  const getASCountApi = async () => {
+    const config: AxiosRequestConfig = {
+      params: { status: 0, page: 1 },
+    };
+    const response = await privateApi.get("/api/after-service", config);
+
+    return response.data;
   };
+
+  // 공지사항 데이터 query
+  const { data: notice, isLoading } = useQuery({
+    queryKey: ["noticeData", noticeParams],
+    queryFn: getNoticeListApi,
+  });
+
+  useEffect(() => {
+    if (notice) {
+      setNoticeList(notice.notices.data);
+      setLastPage(notice.notices.last_page);
+    }
+  }, [notice]);
+
+  // 외출, 외박 신청자 query
+  const { data: overNightCount } = useQuery({
+    queryKey: ["overNightCountData"],
+    queryFn: getOverNightCountApi,
+  });
+
+  useEffect(() => {
+    if (overNightCount) {
+      setGoMember(overNightCount.go_count);
+      setSleepMember(overNightCount.sleep_count);
+    }
+  }, [overNightCount]);
+
+  // 회의실 예약자 query
+  const { data: reservationCount } = useQuery({
+    queryKey: ["reservationCountData"],
+    queryFn: getReservationCountApi,
+  });
+
+  useEffect(() => {
+    if (reservationCount) {
+      setRoomReservation(reservationCount.reservations.total);
+    }
+  }, [reservationCount]);
+
+  // A/S 신청 수 query
+  const { data: ASCount } = useQuery({
+    queryKey: ["ASCountData"],
+    queryFn: getASCountApi,
+  });
+
+  useEffect(() => {
+    if (ASCount) {
+      setUnprocessedCase(ASCount.after_services.total);
+    }
+  }, [ASCount]);
 
   return (
     <div className="flex gap-7 pr-10">
@@ -181,12 +209,16 @@ function AdminMain() {
           />
         </div>
         <div className="bg-white flex flex-col gap-2 p-4 h-full rounded-2xl overflow-auto shadow-lg">
-          <div className="grid grid-cols-6 border-x border-black/10 shadow-lg overflow-hidden rounded-2xl">
-            {<ListHead headList={headList} />}
-            {noticeList.map((user) => {
-              return <UserList user={user} dataList={dataList} />;
-            })}
-          </div>
+          {isLoading ? (
+            <LoadingPage />
+          ) : (
+            <div className="grid grid-cols-6 border-x border-black/10 shadow-lg overflow-hidden rounded-2xl">
+              {<ListHead headList={headList} />}
+              {noticeList.map((user) => {
+                return <UserList user={user} dataList={dataList} />;
+              })}
+            </div>
+          )}
           <div className="flex-1 justify-end flex flex-col gap-2">
             <Pagination page={page} setPage={setPage} lastPage={lastPage} />
             <div className="text-center font-bold text-xs">{`1 - ${lastPage}`}</div>
@@ -197,4 +229,4 @@ function AdminMain() {
   );
 }
 
-export default AdminMain;
+export default Notice;

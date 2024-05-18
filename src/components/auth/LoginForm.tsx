@@ -7,11 +7,8 @@ import { trimValues } from "../../utils/validate";
 import { publicApi } from "../../services/customAxios";
 import { emailReg } from "../../utils/regex";
 import { useSetRecoilState } from "recoil";
-import {
-  LoadinStateAtom,
-  LoginStateAtom,
-  UserDataAtom,
-} from "../../recoil/UserDataAtiom";
+import { LoginStateAtom, UserDataAtom } from "../../recoil/UserDataAtiom";
+import { useMutation } from "@tanstack/react-query";
 
 function LoginForm(): JSX.Element {
   const {
@@ -30,8 +27,6 @@ function LoginForm(): JSX.Element {
   const setUserData = useSetRecoilState(UserDataAtom);
   // 로그인 상태 전역 저장변수
   const setLoginState = useSetRecoilState(LoginStateAtom);
-  // 로딩 페이지 전역 저장 변수
-  const setLoadingState = useSetRecoilState(LoadinStateAtom);
 
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
@@ -49,24 +44,31 @@ function LoginForm(): JSX.Element {
     }
   };
 
-  // 로그인 제출 함수
-  const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
+  // 로그인 Api
+  const loginApi = async (data: LoginFormValues) => {
     const trimData = trimValues(data);
-    handleOnChange();
-    try {
-      const loginPost = await publicApi.post(
-        "/api/admin/login/web",
-        {
-          email: trimData.email,
-          password: trimData.password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      const token = loginPost.data.access_token;
+    const response = await publicApi.post(
+      "/api/admin/login/web",
+      {
+        email: trimData.email,
+        password: trimData.password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data;
+  };
+
+  // 로그인 mutation
+  const { mutate: loginMutation } = useMutation({
+    mutationFn: (data: LoginFormValues) => loginApi(data),
+    // Api 연결 성공
+    onSuccess(data) {
+      const token = data.access_token;
       sessionStorage.setItem("userToken", token);
-      const userData = loginPost.data.user;
+      const userData = data.user;
       const powerArr: string[] = [];
       userData.privileges.map((v: { privilege: string }) => {
         powerArr.push(v.privilege);
@@ -76,19 +78,26 @@ function LoginForm(): JSX.Element {
         name: userData.name,
         phone: userData.phone_number,
         email: userData.email,
-        password: userData.password,
         power: powerArr,
       });
       setLoginState(true);
-      setLoadingState(false);
       navigate("/main");
-    } catch (error) {
-      console.log(error);
+    },
+    // Api 연결 실패
+    onError() {
       setError("email", {
         type: "manual",
         message: "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
       });
-    }
+    },
+  });
+
+  // 로그인 제출 함수
+  const onSubmit: SubmitHandler<LoginFormValues> = async (
+    data: LoginFormValues
+  ) => {
+    handleOnChange();
+    loginMutation(data);
   };
 
   return (

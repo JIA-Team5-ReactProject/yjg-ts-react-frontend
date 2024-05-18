@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import ImageIcon from "../../../icons/ImageIcon";
 import PostCardSlider from "../../post/PostCardSlider";
 import CloseIcon from "../../../icons/CloseIcon";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import { useNavigate, useParams } from "react-router-dom";
 import { privateApi } from "../../../services/customAxios";
 import { NoticeType } from "../../../types/post";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 function ReadPost() {
   // 글 ID 값
@@ -16,31 +17,39 @@ function ReadPost() {
   const [notice, setNotice] = useState<NoticeType>();
   const navigate = useNavigate();
 
-  // 페이지 렌더링 시
+  // 게시글 get Api
+  const getNoticeContentApi = async () => {
+    const response = await privateApi.get(`/api/notice/${id}`);
+
+    return response.data;
+  };
+
+  // 게시글 delete Api
+  const deleteNoticeApi = async () => {
+    const response = await privateApi.delete(`/api/notice/${id}`);
+
+    return response.data;
+  };
+
+  // 게시글 query
+  const { data } = useQuery({
+    queryKey: ["noticeContent"],
+    queryFn: getNoticeContentApi,
+  });
+
   useEffect(() => {
-    getNoticeData();
-  }, []);
-
-  // 게시글 가져오기
-  const getNoticeData = async () => {
-    try {
-      const getNotice = await privateApi.get(`/api/notice/${id}`);
-      setNotice(getNotice.data.notice);
-    } catch (error) {
-      console.log(error);
+    if (data) {
+      setNotice(data.notice);
     }
-  };
+  }, [data]);
 
-  // 게시글 삭제하기
-  const deleteNotice = async () => {
-    try {
-      await privateApi.delete(`/api/notice/${id}`).then(() => {
-        navigate("/main/admin");
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // 게시글 delete mutation
+  const { mutate: noticeDeleteMutation } = useMutation({
+    mutationFn: deleteNoticeApi,
+    onSuccess() {
+      navigate("/main/admin/notice");
+    },
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -102,7 +111,7 @@ function ReadPost() {
           onClick={() => {
             if (window.confirm("삭제하시겠습니까?")) {
               alert("삭제되었습니다");
-              deleteNotice();
+              noticeDeleteMutation();
             } else {
               alert("취소되었습니다.");
             }
@@ -113,7 +122,7 @@ function ReadPost() {
             value="나가기"
             color="bg-gray-400/90"
             onClick={() => {
-              navigate("/main/admin");
+              navigate("/main/admin/notice");
             }}
           />
         </div>

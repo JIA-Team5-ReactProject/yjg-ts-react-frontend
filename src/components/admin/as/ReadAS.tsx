@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { AfterServiceType } from "../../../types/post";
 import PostCardSlider from "../../post/PostCardSlider";
 import CloseIcon from "../../../icons/CloseIcon";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import ImageIcon from "../../../icons/ImageIcon";
 import CommentList from "./comment/CommentList";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 function ReadAS() {
   // 글 ID 값
@@ -17,30 +18,38 @@ function ReadAS() {
   const [afterService, setAfterService] = useState<AfterServiceType>();
   const navigate = useNavigate();
 
-  // 페이지 렌더링 시
+  // A/S get Api
+  const getASApi = async () => {
+    const response = await privateApi.get(`/api/after-service/${id}`);
+
+    return response.data;
+  };
+
+  // A/S 상태 변경 Api
+  const patchASApi = async () => {
+    const response = await privateApi.patch(`/api/after-service/status/${id}`);
+
+    return response.data;
+  };
+
+  // A/S query
+  const { data } = useQuery({
+    queryKey: ["A/SData"],
+    queryFn: getASApi,
+  });
+
   useEffect(() => {
-    getASData();
-  }, []);
+    if (data) setAfterService(data.afterService);
+  }, [data]);
 
-  // AS글 가져오기
-  const getASData = async () => {
-    try {
-      const getAS = await privateApi.get(`/api/after-service/${id}`);
-      setAfterService(getAS.data.afterService);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // AS 상태 변경하기
-  const patchASData = async () => {
-    try {
-      await privateApi.patch(`/api/after-service/status/${id}`);
+  // A/S 상태 변경 mutation
+  const { mutate: patchASMutation } = useMutation({
+    mutationFn: patchASApi,
+    // Api 연결 성공
+    onSuccess() {
       navigate("/main/admin/repair");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    },
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -100,7 +109,7 @@ function ReadAS() {
           <ListBtn
             value="A/S 완료"
             color="bg-sky-400/90"
-            onClick={patchASData}
+            onClick={patchASMutation}
           />
           <ListBtn
             value="닫기"

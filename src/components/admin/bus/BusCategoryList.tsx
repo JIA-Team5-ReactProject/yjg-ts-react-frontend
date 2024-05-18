@@ -1,20 +1,12 @@
 import { useEffect, useState } from "react";
 import { BusCategoryListType, ScheduleType } from "../../../types/admin";
 import { privateApi } from "../../../services/customAxios";
-import { ListBtn } from "../../master/UserList";
+import { ListBtn } from "../../table/Table";
 import BusScheduleList from "./BusScheduleList";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 function BusCategoryList(props: BusCategoryListType) {
-  const {
-    id,
-    round,
-    semester,
-    weekend,
-    bus_route_direction,
-    getCategoryFuc,
-    deleteCategoryFuc,
-    modifyCategotyFuc,
-  } = props;
+  const { id, round } = props;
   // 카테고리 이름 수정 상태
   const [modify, setModify] = useState(false);
   // 수정 내용
@@ -24,9 +16,10 @@ function BusCategoryList(props: BusCategoryListType) {
   // 스케줄 데이터
   const [schedule, setSchedule] = useState<ScheduleType[]>([]);
 
+  const queryClient = useQueryClient();
+
   // 렌더링 시
   useEffect(() => {
-    getScheduleData();
     setDropdown(false);
   }, [id]);
 
@@ -37,39 +30,57 @@ function BusCategoryList(props: BusCategoryListType) {
     }
   }, [modify]);
 
-  // 스케줄 데이터 가져오기
-  const getScheduleData = async () => {
-    try {
-      const scheduleData = await privateApi.get(
-        `/api/bus/round/schedule/${id}`
-      );
-      setSchedule(scheduleData.data.schedules);
-    } catch (error) {
-      console.log(error);
-    }
+  // 카테고리 수정 Api
+  const modifyCategoryApi = async (data: { id: string; newName: string }) => {
+    const response = await privateApi.patch(`/api/bus/round/${id}`, {
+      round: newName,
+    });
+
+    return response.data;
   };
 
-  // 스케줄 생성하기
-  const createSchedule = async (id: string, station: string, time: string) => {
-    try {
-      await privateApi.post("/api/bus/schedule", {
-        round_id: id,
-        station: station,
-        bus_time: time,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+  // 카테고리 삭제 Api
+  const deleteCategoryApi = async (id: string) => {
+    const response = await privateApi.delete(`/api/bus/round/${id}`);
+
+    return response.data;
   };
 
-  // 스케줄 삭제하기
-  const deleteSchedule = async (id: string) => {
-    try {
-      await privateApi.delete(`/api/bus/schedule/${id}`);
-    } catch (error) {
-      console.log(error);
-    }
+  // 스케줄 get api
+  const getScheduleApi = async () => {
+    const response = await privateApi.get(`/api/bus/round/schedule/${id}`);
+
+    return response.data;
   };
+
+  // 카테고리 수정 mutation
+  const { mutate: modifyCategotyMutation } = useMutation({
+    mutationFn: modifyCategoryApi,
+    // Api 연결 성공
+    onSuccess() {
+      setModify(false);
+      queryClient.invalidateQueries({ queryKey: ["salonCategory"] });
+    },
+  });
+
+  // 카테고리 삭제 mutation
+  const { mutate: deleteCategoryMutation } = useMutation({
+    mutationFn: deleteCategoryApi,
+    // Api 연결 성공
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["salonCategory"] });
+    },
+  });
+
+  // 스케줄 query
+  const { data } = useQuery({
+    queryKey: ["salonSchedule", id],
+    queryFn: getScheduleApi,
+  });
+
+  useEffect(() => {
+    if (data) setSchedule(data.schedules);
+  }, [data]);
 
   return (
     <div>
@@ -88,14 +99,7 @@ function BusCategoryList(props: BusCategoryListType) {
               value="완료"
               color="bg-sky-400/90"
               onClick={() => {
-                modifyCategotyFuc(id, newName).then(() => {
-                  setModify(false);
-                  getCategoryFuc({
-                    semester: semester,
-                    weekend: weekend,
-                    bus_route_direction: bus_route_direction,
-                  });
-                });
+                modifyCategotyMutation({ id: id, newName: newName });
               }}
             />
             <ListBtn
@@ -122,13 +126,7 @@ function BusCategoryList(props: BusCategoryListType) {
               onClick={() => {
                 if (window.confirm("삭제하시겠습니까?")) {
                   alert("삭제되었습니다");
-                  deleteCategoryFuc(id).then(() => {
-                    getCategoryFuc({
-                      semester: semester,
-                      weekend: weekend,
-                      bus_route_direction: bus_route_direction,
-                    });
-                  });
+                  deleteCategoryMutation(id);
                 } else {
                   alert("취소되었습니다.");
                 }
@@ -147,15 +145,7 @@ function BusCategoryList(props: BusCategoryListType) {
           </span>
         </div>
       </div>
-      {dropdown ? (
-        <BusScheduleList
-          id={id}
-          schedule={schedule}
-          createScheduleFuc={createSchedule}
-          deleteScheduleFuc={deleteSchedule}
-          getScheduleFuc={getScheduleData}
-        />
-      ) : null}
+      {dropdown ? <BusScheduleList id={id} schedule={schedule} /> : null}
     </div>
   );
 }

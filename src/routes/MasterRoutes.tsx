@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-import Master from "../pages/master/Master";
+import NotApproved from "../pages/master/NotApproved";
 import Management from "../pages/master/Management";
 
 function MasterRoutes() {
   return (
     <Routes>
-      <Route path="" element={<Master />} />
       <Route path="management" element={<Management />} />
+      <Route path="unapprovedUser" element={<NotApproved />} />
     </Routes>
   );
 }

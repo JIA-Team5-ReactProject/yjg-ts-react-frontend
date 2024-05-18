@@ -3,7 +3,7 @@ import {
   SemesterAutoDataType,
   SemesterManualSettingsType,
 } from "../../../../types/restaurant";
-import { ListBtn } from "../../../master/UserList";
+import { ListBtn } from "../../../table/Table";
 import { privateApi } from "../../../../services/customAxios";
 
 function SemesterManualSettings(props: SemesterManualSettingsType) {

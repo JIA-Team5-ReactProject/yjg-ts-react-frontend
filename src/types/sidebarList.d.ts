@@ -6,6 +6,5 @@ export type PowerListItem = {
 export type Power = {
   power: string;
   icon?: JSX.Element;
-  path: string;
   list: PowerListItem[];
 };
