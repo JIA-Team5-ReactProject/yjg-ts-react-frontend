@@ -30,6 +30,8 @@ function Writing() {
     formData.append("tag", data.tag);
     if (data.urgent) {
       formData.append("urgent", "1");
+    } else {
+      formData.append("urgent", "0");
     }
     const response = await privateApi.post("/api/notice", formData, {
       headers: {

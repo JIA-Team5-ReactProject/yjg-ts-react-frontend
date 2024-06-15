@@ -100,7 +100,6 @@ function ApplicationSettings() {
           end_month: endParts[0],
           end_date: endParts[1],
         });
-        console.log(semesterApply);
       }
     } catch (error) {
       console.log(error);
