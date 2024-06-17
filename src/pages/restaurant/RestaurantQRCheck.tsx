@@ -32,8 +32,7 @@ function RestaurantQRCheck() {
     >
       <input
         type="text"
-        className="w-full h-full text-3xlhttps://cs-apj.ext.hp.com/digital-support/region_page/digital_kr.html
-         text-center"
+        className="w-full h-full text-2xl text-center"
         ref={inputRef}
         onChange={(e) => {
           setId(e.target.value);
