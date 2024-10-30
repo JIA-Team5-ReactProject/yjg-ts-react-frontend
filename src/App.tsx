@@ -8,8 +8,8 @@ function App() {
     namespace: 'test.sse',
     broadcaster: WaveConnector,
     debug: true,
-    endpoint: '/wave',
-    authEndpoint: '/broadcasting/auth',
+    endpoint: process.env.REACT_APP_SERVER_URI + '/api/wave',
+    authEndpoint: process.env.REACT_APP_SERVER_URI + '/broadcasting/auth',
   })
 
   return (
